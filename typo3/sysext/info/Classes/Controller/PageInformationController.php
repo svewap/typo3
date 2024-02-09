@@ -283,7 +283,7 @@ class PageInformationController extends InfoModuleController
             ->from('pages')
             ->where(
                 $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($pid, Connection::PARAM_INT)),
-                $queryBuilder->expr()->eq('sys_language_uid', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT)),
+                $queryBuilder->expr()->eq('language_tag', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT)),
                 $this->getBackendUser()->getPagePermsClause(Permission::PAGE_SHOW)
             );
 

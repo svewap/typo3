@@ -215,7 +215,7 @@ class StandardContentPreviewRenderer implements PreviewRendererInterface, Logger
 
     protected function translateShortcutRecord(array $targetRecord, array $shortcutRecord, string $tableName, int $uid): array
     {
-        $targetLanguage = (int)($targetRecord['sys_language_uid'] ?? 0);
+        $targetLanguage = ($targetRecord['language_tag'] ?? 0);
         if ($targetLanguage === 0 || !BackendUtility::isTableLocalizable($tableName)) {
             return $shortcutRecord;
         }

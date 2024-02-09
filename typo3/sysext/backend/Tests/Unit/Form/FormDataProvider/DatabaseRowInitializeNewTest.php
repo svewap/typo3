@@ -566,7 +566,7 @@ final class DatabaseRowInitializeNewTest extends UnitTestCase
             ],
             'processedTca' => [
                 'ctrl' => [
-                    'languageField' => 'sys_language_uid',
+                    'languageField' => 'language_tag',
                     'transOrigPointerField' => 'l10n_parent',
                 ],
                 'columns' => [],
@@ -597,7 +597,7 @@ final class DatabaseRowInitializeNewTest extends UnitTestCase
             ],
             'processedTca' => [
                 'ctrl' => [
-                    'languageField' => 'sys_language_uid',
+                    'languageField' => 'language_tag',
                     'transOrigPointerField' => 'l10n_parent',
                 ],
                 'columns' => [],
@@ -605,7 +605,7 @@ final class DatabaseRowInitializeNewTest extends UnitTestCase
         ];
         $expected = $input;
         $expected['databaseRow'] = [
-            'sys_language_uid' => 42,
+            'language_tag' => 42,
             'pid' => 1,
         ];
         $result = (new DatabaseRowInitializeNew())->addData($input);

@@ -77,7 +77,7 @@ class FormSlugAjaxController extends AbstractFormEngineAjaxController
         $pid = (int)$queryParameters['pageId'];
         $parentPageId = (int)$queryParameters['parentPageId'];
         $recordId = (int)$queryParameters['recordId'];
-        $languageId = (int)$queryParameters['language'];
+        $languageTag = (int)$queryParameters['language'];
         $fieldName = $queryParameters['fieldName'];
 
         $fieldConfig = $GLOBALS['TCA'][$tableName]['columns'][$fieldName]['config'] ?? [];
@@ -107,7 +107,7 @@ class FormSlugAjaxController extends AbstractFormEngineAjaxController
         }
         $recordData['pid'] = $pid;
         if (!empty($GLOBALS['TCA'][$tableName]['ctrl']['languageField'])) {
-            $recordData[$GLOBALS['TCA'][$tableName]['ctrl']['languageField']] = $languageId;
+            $recordData[$GLOBALS['TCA'][$tableName]['ctrl']['languageField']] = $languageTag;
         }
         if ($tableName === 'pages' && empty($recordData['is_siteroot'])) {
             $recordData['is_siteroot'] = $row['is_siteroot'] ?? false;

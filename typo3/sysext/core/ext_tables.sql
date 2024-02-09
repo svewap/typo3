@@ -55,10 +55,10 @@ CREATE TABLE pages (
 	content_from_pid int(10) unsigned DEFAULT '0' NOT NULL,
 	mount_pid int(10) unsigned DEFAULT '0' NOT NULL,
 
-	KEY determineSiteRoot (is_siteroot),
-	KEY language_identifier (l10n_parent,sys_language_uid),
+	KEY language_identifier (l10n_parent,language_tag),
 	KEY slug (slug(127))
 );
+
 
 #
 # Table structure for table 'sys_registry'
@@ -146,7 +146,7 @@ CREATE TABLE sys_file_metadata (
 	alternative text,
 
 	KEY file (file),
-	KEY fal_filelist (l10n_parent,sys_language_uid)
+	KEY fal_filelist (l10n_parent,language_tag)
 );
 
 
@@ -321,7 +321,7 @@ CREATE TABLE sys_category (
 	items int(11) DEFAULT '0' NOT NULL,
 
 	KEY category_parent (parent),
-	KEY category_list (pid,deleted,sys_language_uid)
+	KEY category_list (pid,deleted,language_tag)
 );
 
 #

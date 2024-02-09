@@ -135,12 +135,12 @@ class PageLayoutContext
     public function setSiteLanguage(SiteLanguage $siteLanguage): void
     {
         $this->siteLanguage = $siteLanguage;
-        $languageId = $siteLanguage->getLanguageId();
-        if ($languageId > 0) {
+        $languageTag = $siteLanguage->getLanguageCode();
+        if ($languageTag > 0) {
             $pageLocalizationRecord = BackendUtility::getRecordLocalization(
                 'pages',
                 $this->getPageId(),
-                $languageId
+                $languageTag
             );
             $pageLocalizationRecord = reset($pageLocalizationRecord);
             if (!empty($pageLocalizationRecord)) {
@@ -188,7 +188,7 @@ class PageLayoutContext
      */
     public function getLanguagesToShow(): iterable
     {
-        $selectedLanguageId = $this->drawingConfiguration->getSelectedLanguageId();
+        $selectedLanguageId = $this->drawingConfiguration->getSelectedLanguageTag();
         if ($selectedLanguageId === -1) {
             $languages = $this->getSiteLanguages();
             if (!isset($languages[0])) {
@@ -205,21 +205,21 @@ class PageLayoutContext
             // A specific language is selected; compose a list of default language plus selected language
             return [
                 $this->site->getDefaultLanguage(),
-                $this->site->getLanguageById($selectedLanguageId),
+                $this->site->getLanguageByCode($selectedLanguageId),
             ];
         }
         return [$this->site->getDefaultLanguage()];
     }
 
-    public function getSiteLanguage(?int $languageId = null): SiteLanguage
+    public function getSiteLanguage(?string $languageTag = null): SiteLanguage
     {
-        if ($languageId === null) {
+        if ($languageTag === null) {
             return $this->siteLanguage;
         }
-        if ($languageId === -1) {
+        if ($languageTag === -1) {
             return $this->siteLanguages[-1];
         }
-        return $this->site->getLanguageById($languageId);
+        return $this->site->getLanguageByCode($languageTag);
     }
 
     public function isPageEditable(): bool
@@ -264,9 +264,9 @@ class PageLayoutContext
 
     public function getLanguageModeLabelClass(): string
     {
-        $languageId = $this->siteLanguage->getLanguageId();
-        $contentRecordsPerColumn = $this->contentFetcher->getFlatContentRecords($languageId);
-        $translationData = $this->contentFetcher->getTranslationData($contentRecordsPerColumn, $languageId);
+        $languageTag = $this->siteLanguage->getLanguageCode();
+        $contentRecordsPerColumn = $this->contentFetcher->getFlatContentRecords($languageTag);
+        $translationData = $this->contentFetcher->getTranslationData($contentRecordsPerColumn, $languageTag);
         return $translationData['mode'] === 'mixed' ? 'danger' : 'info';
     }
 
@@ -290,9 +290,9 @@ class PageLayoutContext
 
     public function getLanguageModeIdentifier(): string
     {
-        $contentRecordsPerColumn = $this->contentFetcher->getContentRecordsPerColumn(null, $this->siteLanguage->getLanguageId());
+        $contentRecordsPerColumn = $this->contentFetcher->getContentRecordsPerColumn(null, $this->siteLanguage->getLanguageCode());
         $contentRecords = empty($contentRecordsPerColumn) ? [] : array_merge(...$contentRecordsPerColumn);
-        $translationData = $this->contentFetcher->getTranslationData($contentRecords, $this->siteLanguage->getLanguageId());
+        $translationData = $this->contentFetcher->getTranslationData($contentRecords, $this->siteLanguage->getLanguageCode());
         return $translationData['mode'] ?? '';
     }
 
@@ -306,10 +306,10 @@ class PageLayoutContext
         // First, select all languages that are available for the current user
         $availableTranslations = [];
         foreach ($this->getSiteLanguages() as $language) {
-            if ($language->getLanguageId() <= 0) {
+            if ($language->getLanguageCode() <= 0) {
                 continue;
             }
-            $availableTranslations[$language->getLanguageId()] = $language->getTitle();
+            $availableTranslations[$language->getLanguageCode()] = $language->getTitle();
         }
 
         // Then, subtract the languages which are already on the page:

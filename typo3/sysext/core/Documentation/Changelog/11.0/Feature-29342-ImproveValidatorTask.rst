@@ -108,7 +108,7 @@ information for the email. Following additional information is provided by defau
 * :php:`full_record` The full record, the broken link was found in (e.g. pages or tt_content)
 * :php:`record_title` Value of the :php:`full_record` title field
 * :php:`record_type` The title of the record type (e.g. "Page" or "Page Content")
-* :php:`language_code` The language code of the broken link
+* :php:`language_tag` The language code of the broken link
 * :php:`real_pid` The real page id of the record the broken link was found in
 * :php:`page_record` The whole page row of records parent page
 
@@ -119,7 +119,7 @@ broken links fetched according to the task configuration. This list consists of
 following columns:
 
 * `Record` The :php:`record_uid` and :php:`record_title`
-* `Language` The :php:`language_code` and language id
+* `Language` The :php:`language_tag` and language id
 * `Page` The :php:`real_pid` and :php:`page_record.title` of the parent page
 * `Record Type` The :php:`record_type`
 * `Link Target` The :php:`target`

@@ -57,11 +57,11 @@ final class TcaSlugTest extends UnitTestCase
                         ],
                     ]),
                     'databaseRow' => [
-                        'sys_language_uid' => [0],
+                        'language_tag' => [0],
                     ],
                     'processedTca' => [
                         'ctrl' => [
-                            'languageField' => 'sys_language_uid',
+                            'languageField' => 'language_tag',
                         ],
                         'columns' => [
                             'slugField' => [
@@ -89,11 +89,11 @@ final class TcaSlugTest extends UnitTestCase
                         ],
                     ]),
                     'databaseRow' => [
-                        'sys_language_uid' => [0],
+                        'language_tag' => [0],
                     ],
                     'processedTca' => [
                         'ctrl' => [
-                            'languageField' => 'sys_language_uid',
+                            'languageField' => 'language_tag',
                         ],
                         'columns' => [
                             'slugField' => [
@@ -131,11 +131,11 @@ final class TcaSlugTest extends UnitTestCase
                         ],
                     ]),
                     'databaseRow' => [
-                        'sys_language_uid' => [1],
+                        'language_tag' => [1],
                     ],
                     'processedTca' => [
                         'ctrl' => [
-                            'languageField' => 'sys_language_uid',
+                            'languageField' => 'language_tag',
                         ],
                         'columns' => [
                             'slugField' => [
@@ -163,11 +163,11 @@ final class TcaSlugTest extends UnitTestCase
                         ],
                     ]),
                     'databaseRow' => [
-                        'sys_language_uid' => [1],
+                        'language_tag' => [1],
                     ],
                     'processedTca' => [
                         'ctrl' => [
-                            'languageField' => 'sys_language_uid',
+                            'languageField' => 'language_tag',
                         ],
                         'columns' => [
                             'slugField' => [
@@ -205,11 +205,11 @@ final class TcaSlugTest extends UnitTestCase
                         ],
                     ]),
                     'databaseRow' => [
-                        'sys_language_uid' => [-1],
+                        'language_tag' => [-1],
                     ],
                     'processedTca' => [
                         'ctrl' => [
-                            'languageField' => 'sys_language_uid',
+                            'languageField' => 'language_tag',
                         ],
                         'columns' => [
                             'slugField' => [
@@ -237,11 +237,11 @@ final class TcaSlugTest extends UnitTestCase
                         ],
                     ]),
                     'databaseRow' => [
-                        'sys_language_uid' => [-1],
+                        'language_tag' => [-1],
                     ],
                     'processedTca' => [
                         'ctrl' => [
-                            'languageField' => 'sys_language_uid',
+                            'languageField' => 'language_tag',
                         ],
                         'columns' => [
                             'slugField' => [
@@ -279,11 +279,11 @@ final class TcaSlugTest extends UnitTestCase
                         ],
                     ]),
                     'databaseRow' => [
-                        'sys_language_uid' => [0],
+                        'language_tag' => [0],
                     ],
                     'processedTca' => [
                         'ctrl' => [
-                            'languageField' => 'sys_language_uid',
+                            'languageField' => 'language_tag',
                         ],
                         'columns' => [
                             'slugField' => [
@@ -297,7 +297,7 @@ final class TcaSlugTest extends UnitTestCase
                                                 . '-'
                                                 . $parameters['table']
                                                 . '-'
-                                                . $parameters['row']['sys_language_uid'][0];
+                                                . $parameters['row']['language_tag'][0];
                                         },
                                     ],
                                 ],
@@ -322,11 +322,11 @@ final class TcaSlugTest extends UnitTestCase
                         ],
                     ]),
                     'databaseRow' => [
-                        'sys_language_uid' => [0],
+                        'language_tag' => [0],
                     ],
                     'processedTca' => [
                         'ctrl' => [
-                            'languageField' => 'sys_language_uid',
+                            'languageField' => 'language_tag',
                         ],
                         'columns' => [
                             'slugField' => [

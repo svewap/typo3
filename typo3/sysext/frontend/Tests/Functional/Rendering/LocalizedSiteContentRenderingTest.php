@@ -32,7 +32,7 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
  *
  * Previously the language was given by TypoScript settings which were overridden via GP parameters for language
  *
- * config.sys_language_uid = [0,1,2,3,4...]
+ * config.language_tag = [0,1,2,3,4...]
  * config.sys_language_mode = [strict, content_fallback;2,3, ignore, '']
  * config.sys_language_overlay = [0, 1, hideNonTranslated]
  *
@@ -69,7 +69,7 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
  *    but does not render the ones that have no translation in the specific language.
  *
  * General notes regarding content fetching:
- * - Records marked as "All Languages" (sys_language_uid = -1) are always fetched (this wasn't always the case before!).
+ * - Records marked as "All Languages" (language_tag = -1) are always fetched (this wasn't always the case before!).
  * - Records without a language parent (l10n_parent) are rendered at any time.
  *
  * Relevant parts for site handling:

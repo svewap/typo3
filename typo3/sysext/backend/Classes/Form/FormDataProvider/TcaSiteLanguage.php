@@ -35,7 +35,7 @@ use TYPO3\CMS\Core\Utility\MathUtility;
 class TcaSiteLanguage extends AbstractDatabaseRecordProvider implements FormDataProviderInterface
 {
     private const FOREIGN_TABLE = 'site_language';
-    private const FOREIGN_FIELD = 'languageId';
+    private const FOREIGN_FIELD = 'languageCode';
 
     public function addData(array $result): array
     {
@@ -186,7 +186,7 @@ class TcaSiteLanguage extends AbstractDatabaseRecordProvider implements FormData
             // If edit, find out if a default language ("0") exists, else add it on top
             $defaultSysSiteLanguageChildFound = false;
             foreach ($result['processedTca']['columns'][$fieldName]['children'] as $child) {
-                if (isset($child['databaseRow']['languageId'][0]) && (int)$child['databaseRow']['languageId'][0] === 0) {
+                if (isset($child['databaseRow']['languageCode'][0]) && (int)$child['databaseRow']['languageCode'][0] === 0) {
                     $defaultSysSiteLanguageChildFound = true;
                 }
             }
@@ -304,7 +304,7 @@ class TcaSiteLanguage extends AbstractDatabaseRecordProvider implements FormData
 
         foreach (GeneralUtility::makeInstance(SiteFinder::class)->getAllSites() as $site) {
             foreach ($site->getAllLanguages() as $language) {
-                if ($language->getLanguageId() === 0) {
+                if ($language->getLanguageCode() === 0) {
                     $defaultDatabaseRow['locale'] = $language->getLocale()->posixFormatted();
                     if ($language->getTitle() !== '') {
                         $defaultDatabaseRow['title'] = $language->getTitle();

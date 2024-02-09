@@ -84,7 +84,7 @@ class SlugService implements LoggerAwareInterface
                 $sourceHosts = $this->createRedirects(
                     $changeItem,
                     $changeItem->getDefaultLanguagePageId(),
-                    (int)$changeItem->getChanged()['sys_language_uid']
+                    (int)$changeItem->getChanged()['language_tag']
                 );
             }
             if ($this->autoUpdateSlugs) {
@@ -198,7 +198,7 @@ class SlugService implements LoggerAwareInterface
     protected function checkSubPages(array $currentPageRecord, SlugRedirectChangeItem $parentChangeItem): array
     {
         $sourceHosts = [];
-        $languageUid = (int)$currentPageRecord['sys_language_uid'];
+        $languageUid = (int)$currentPageRecord['language_tag'];
         // resolveSubPages needs the page id of the default language
         $pageId = $languageUid === 0 ? (int)$currentPageRecord['uid'] : (int)$currentPageRecord['l10n_parent'];
         $subPageRecords = $this->resolveSubPages($pageId, $languageUid);
@@ -212,7 +212,7 @@ class SlugService implements LoggerAwareInterface
             }
             $updatedPageRecord = $this->updateSlug($subPageRecord, $parentChangeItem);
             if ($updatedPageRecord !== null && $this->autoCreateRedirects) {
-                $subPageId = (int)$subPageRecord['sys_language_uid'] === 0 ? (int)$subPageRecord['uid'] : (int)$subPageRecord['l10n_parent'];
+                $subPageId = (int)$subPageRecord['language_tag'] === 0 ? (int)$subPageRecord['uid'] : (int)$subPageRecord['l10n_parent'];
                 $changeItem = $changeItem->withChanged($updatedPageRecord);
                 $sourceHosts += array_values($this->createRedirects($changeItem, $subPageId, $languageUid));
             }
@@ -229,7 +229,7 @@ class SlugService implements LoggerAwareInterface
             ->from('pages')
             ->where(
                 $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($id, Connection::PARAM_INT)),
-                $queryBuilder->expr()->eq('sys_language_uid', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT))
+                $queryBuilder->expr()->eq('language_tag', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT))
             )
             ->orderBy('uid', 'ASC')
             ->executeQuery()
@@ -243,7 +243,7 @@ class SlugService implements LoggerAwareInterface
                 ->from('pages')
                 ->where(
                     $queryBuilder->expr()->in('l10n_parent', $queryBuilder->createNamedParameter(array_column($subPages, 'uid'), Connection::PARAM_INT_ARRAY)),
-                    $queryBuilder->expr()->eq('sys_language_uid', $queryBuilder->createNamedParameter($languageUid, Connection::PARAM_INT))
+                    $queryBuilder->expr()->eq('language_tag', $queryBuilder->createNamedParameter($languageUid, Connection::PARAM_INT))
                 )
                 ->orderBy('uid', 'ASC')
                 ->executeQuery()

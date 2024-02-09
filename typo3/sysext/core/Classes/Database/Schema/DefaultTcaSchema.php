@@ -276,15 +276,15 @@ class DefaultTcaSchema
                 );
             }
 
-            // sys_language_uid column
+            // language_tag column
             if (!empty($tableDefinition['ctrl']['languageField'])
                 && !$this->isColumnDefinedForTable($tables, $tableName, $tableDefinition['ctrl']['languageField'])
             ) {
                 $tables[$tablePosition]->addColumn(
                     $this->quote((string)$tableDefinition['ctrl']['languageField']),
-                    Types::INTEGER,
+                    Types::STRING,
                     [
-                        'default' => 0,
+                        'default' => '',
                         'notnull' => true,
                         'unsigned' => false,
                     ]

@@ -68,7 +68,7 @@ class SiteListCommand extends Command
                 $languages[] = sprintf(
                     '%s (id:%d)',
                     $language->getTitle(),
-                    $language->getLanguageId()
+                    $language->getLanguageCode()
                 );
                 $locales[] = (string)$language->getLocale();
                 $status[] = $language->isEnabled()

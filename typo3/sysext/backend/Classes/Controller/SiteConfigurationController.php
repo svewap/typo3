@@ -317,11 +317,11 @@ class SiteConfigurationController
                         if (!isset($siteTca['site_language'])) {
                             throw new \RuntimeException('Required foreign table site_language does not exist', 1624286811);
                         }
-                        if (!isset($siteTca['site_language']['columns']['languageId'])
-                            || ($siteTca['site_language']['columns']['languageId']['config']['type'] ?? '') !== 'select'
+                        if (!isset($siteTca['site_language']['columns']['languageCode'])
+                            || ($siteTca['site_language']['columns']['languageCode']['config']['type'] ?? '') !== 'select'
                         ) {
                             throw new \RuntimeException(
-                                'Required foreign field languageId does not exist or is not of type select',
+                                'Required foreign field languageCode does not exist or is not of type select',
                                 1624286812
                             );
                         }
@@ -341,7 +341,7 @@ class SiteConfigurationController
                                     // pid is added by default, but not relevant for yml storage
                                     continue;
                                 }
-                                if ($childFieldName === 'languageId'
+                                if ($childFieldName === 'languageCode'
                                     && (int)$childFieldValue === PHP_INT_MAX
                                     && str_starts_with($childRowId, 'NEW')
                                 ) {
@@ -606,19 +606,19 @@ class SiteConfigurationController
         $uniqueCriteria = [];
         $validChildren = [];
         foreach ($newSysSiteData['languages'] as $child) {
-            if (!isset($child['languageId'])) {
-                throw new \RuntimeException('languageId not found', 1521789455);
+            if (!isset($child['languageCode'])) {
+                throw new \RuntimeException('languageCode not found', 1521789455);
             }
-            if (!in_array((int)$child['languageId'], $uniqueCriteria, true)) {
-                $uniqueCriteria[] = (int)$child['languageId'];
-                $child['languageId'] = (int)$child['languageId'];
+            if (!in_array($child['languageCode'], $uniqueCriteria, true)) {
+                $uniqueCriteria[] = $child['languageCode'];
+                $child['languageCode'] = $child['languageCode'];
                 $validChildren[] = $child;
             } else {
                 $message = sprintf(
-                    $languageService->sL('LLL:EXT:backend/Resources/Private/Language/locallang_siteconfiguration.xlf:validation.duplicateLanguageId.title'),
-                    $child['languageId']
+                    $languageService->sL('LLL:EXT:backend/Resources/Private/Language/locallang_siteconfiguration.xlf:validation.duplicateLanguageCode.title'),
+                    $child['languageCode']
                 );
-                $messageTitle = $languageService->sL('LLL:EXT:backend/Resources/Private/Language/locallang_siteconfiguration.xlf:validation.duplicateLanguageId.title');
+                $messageTitle = $languageService->sL('LLL:EXT:backend/Resources/Private/Language/locallang_siteconfiguration.xlf:validation.duplicateLanguageCode.title');
                 $flashMessage = GeneralUtility::makeInstance(FlashMessage::class, $message, $messageTitle, ContextualFeedbackSeverity::WARNING, true);
                 $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
                 $defaultFlashMessageQueue = $flashMessageService->getMessageQueueByIdentifier();
@@ -628,7 +628,7 @@ class SiteConfigurationController
         // On new site configurations, ensure that the only existing language has the languageId set to 0
         // @todo: this shouldn't be done here, but rather properly handled in saveAction() where 'siteLanguage' is handled
         if ($isNewConfiguration && count($validChildren) === 1) {
-            $validChildren[0]['languageId'] = 0;
+            $validChildren[0]['languageCode'] = 0;
         }
         $newSysSiteData['languages'] = $validChildren;
 
@@ -719,7 +719,7 @@ class SiteConfigurationController
             ->select('*')
             ->from('pages')
             ->where(
-                $queryBuilder->expr()->eq('sys_language_uid', 0),
+                $queryBuilder->expr()->eq('language_tag', 0),
                 $queryBuilder->expr()->or(
                     $queryBuilder->expr()->and(
                         $queryBuilder->expr()->eq('pid', 0),
@@ -788,8 +788,8 @@ class SiteConfigurationController
         $lastLanguageId = 0;
         foreach (GeneralUtility::makeInstance(SiteFinder::class)->getAllSites() as $site) {
             foreach ($site->getAllLanguages() as $language) {
-                if ($language->getLanguageId() > $lastLanguageId) {
-                    $lastLanguageId = $language->getLanguageId();
+                if ($language->getLanguageCode() > $lastLanguageId) {
+                    $lastLanguageId = $language->getLanguageCode();
                 }
             }
         }
@@ -828,24 +828,24 @@ class SiteConfigurationController
         $existingLanguagesWithLegacyProperties = [];
         foreach ($currentSiteConfiguration['languages'] ?? [] as $languageConfiguration) {
             if (isset($languageConfiguration['baseVariants'])) {
-                $existingLanguageConfigurationsWithBaseVariants[$languageConfiguration['languageId']] = $languageConfiguration['baseVariants'];
+                $existingLanguageConfigurationsWithBaseVariants[$languageConfiguration['languageCode']] = $languageConfiguration['baseVariants'];
             }
             if (isset($languageConfiguration['typo3Language'])) {
-                $existingLanguagesWithLegacyProperties[$languageConfiguration['languageId']]['typo3Language'] = $languageConfiguration['typo3Language'];
+                $existingLanguagesWithLegacyProperties[$languageConfiguration['languageCode']]['typo3Language'] = $languageConfiguration['typo3Language'];
             }
             if (isset($languageConfiguration['iso-639-1'])) {
-                $existingLanguagesWithLegacyProperties[$languageConfiguration['languageId']]['iso-639-1'] = $languageConfiguration['iso-639-1'];
+                $existingLanguagesWithLegacyProperties[$languageConfiguration['languageCode']]['iso-639-1'] = $languageConfiguration['iso-639-1'];
             }
             if (isset($languageConfiguration['direction'])) {
-                $existingLanguagesWithLegacyProperties[$languageConfiguration['languageId']]['direction'] = $languageConfiguration['direction'];
+                $existingLanguagesWithLegacyProperties[$languageConfiguration['languageCode']]['direction'] = $languageConfiguration['direction'];
             }
         }
         foreach ($newSysSiteData['languages'] ?? [] as $key => $languageConfiguration) {
-            $languageId = $languageConfiguration['languageId'];
-            if (isset($existingLanguageConfigurationsWithBaseVariants[$languageId])) {
-                $newSysSiteData['languages'][$key]['baseVariants'] = $existingLanguageConfigurationsWithBaseVariants[$languageId];
+            $languageTag = $languageConfiguration['languageCode'];
+            if (isset($existingLanguageConfigurationsWithBaseVariants[$languageTag])) {
+                $newSysSiteData['languages'][$key]['baseVariants'] = $existingLanguageConfigurationsWithBaseVariants[$languageTag];
             }
-            foreach ($existingLanguagesWithLegacyProperties[$languageId] ?? [] as $propertyName => $propertyValue) {
+            foreach ($existingLanguagesWithLegacyProperties[$languageTag] ?? [] as $propertyName => $propertyValue) {
                 $newSysSiteData['languages'][$key][$propertyName] = $propertyValue;
             }
         }

@@ -81,12 +81,11 @@ final readonly class FrontendGenerationPageIndexingTrigger
             return;
         }
         $languageAspect = $this->context->getAspect('language');
-        if ($languageAspect->getId() !== $languageAspect->getContentId()) {
+        if ($languageAspect->getCode() !== $languageAspect->getContentLanguageCode()) {
             $this->timeTracker->setTSlogMessage(
                 'Index page? No, languageId was different from contentId which indicates that the page contains'
                 . ' fall-back content and that would be falsely indexed as localized content.'
-            );
-            return;
+            );            return;
         }
 
         $this->indexer->forceIndexing = $forceIndexing;
@@ -97,7 +96,7 @@ final readonly class FrontendGenerationPageIndexingTrigger
             // Page type
             'type' => $pageArguments->getPageType(),
             // site language id of the language of the indexing.
-            'sys_language_uid' => $languageAspect->getId(),
+            'language_tag' => $languageAspect->getCode(),
             // MP variable, if any (Mount Points)
             'MP' => $pageInformation->getMountPoint(),
             // Group list

@@ -426,7 +426,7 @@ class LanguageMenuProcessor implements DataProcessorInterface
         $site = $this->getCurrentSite();
 
         // Throws InvalidArgumentException in case language is not found which is fine
-        $languageObject = $site->getLanguageById((int)$conf['language']);
+        $languageObject = $site->getLanguageByCode((int)$conf['language']);
         if ($languageObject->enabled()) {
             $language = $languageObject->toArray();
             // Harmonizing the namings from the site configuration value with the TypoScript setting

@@ -12,7 +12,7 @@ return [
         'crdate' => 'crdate',
         'versioningWS' => true,
         'origUid' => 't3_origuid',
-        'languageField' => 'sys_language_uid',
+        'languageField' => 'language_tag',
         'transOrigPointerField' => 'l18n_parent',
         'transOrigDiffSourceField' => 'l18n_diffsource',
         'delete' => 'deleted',
@@ -27,10 +27,10 @@ return [
         'maxSingleDBListItems' => 500,
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, hidden, blog, title, date, author, second_author, content, tags, comments, related_posts, additional_name, additional_info, additional_comments, categories'],
+        '1' => ['showitem' => 'language_tag, hidden, blog, title, date, author, second_author, content, tags, comments, related_posts, additional_name, additional_info, additional_comments, categories'],
     ],
     'columns' => [
-        'sys_language_uid' => [
+        'language_tag' => [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
@@ -44,7 +44,7 @@ return [
             ],
         ],
         'l18n_parent' => [
-            'displayCond' => 'FIELD:sys_language_uid:>:0',
+            'displayCond' => 'FIELD:language_tag:>:0',
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'select',
@@ -53,7 +53,7 @@ return [
                     ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => 'tx_blogexample_domain_model_post',
-                'foreign_table_where' => 'AND {#tx_blogexample_domain_model_post}.{#uid}=###REC_FIELD_l18n_parent### AND {#tx_blogexample_domain_model_post}.{#sys_language_uid} IN (-1,0)',
+                'foreign_table_where' => 'AND {#tx_blogexample_domain_model_post}.{#uid}=###REC_FIELD_l18n_parent### AND {#tx_blogexample_domain_model_post}.{#language_tag} IN (-1,0)',
             ],
         ],
         'l18n_diffsource' => [

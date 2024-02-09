@@ -46,7 +46,7 @@ final class DatabasePageLanguageOverlayRowsTest extends UnitTestCase
             0 => [
                 'uid' => '1',
                 'pid' => '42',
-                'sys_language_uid' => '2',
+                'language_tag' => '2',
             ],
         ];
         $this->subject->expects(self::once())

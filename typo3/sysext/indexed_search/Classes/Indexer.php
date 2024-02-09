@@ -998,7 +998,7 @@ class Indexer
             'crdate' => $GLOBALS['EXEC_TIME'],
             'item_crdate' => $this->conf['crdate'],
             // Creation date of page
-            'sys_language_uid' => $this->conf['sys_language_uid'],
+            'language_tag' => $this->conf['language_tag'],
             // Sys language uid of the page. Should reflect which language it DOES actually display!
             'externalUrl' => 0,
             'recordUid' => (int)$this->conf['recordUid'],
@@ -1151,7 +1151,7 @@ class Indexer
             'recordUid' => (int)$this->conf['recordUid'],
             'freeIndexUid' => (int)$this->conf['freeIndexUid'],
             'freeIndexSetId' => (int)$this->conf['freeIndexSetId'],
-            'sys_language_uid' => (int)$this->conf['sys_language_uid'],
+            'language_tag' => (int)$this->conf['language_tag'],
         ];
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getConnectionForTable('index_phash');
@@ -1620,7 +1620,7 @@ class Indexer
         $hArray = [
             'id' => (int)$this->conf['id'],
             'type' => (int)$this->conf['type'],
-            'sys_lang' => (int)$this->conf['sys_language_uid'],
+            'sys_lang' => (int)$this->conf['language_tag'],
             'MP' => (string)$this->conf['MP'],
             'staticPageArguments' => is_array($this->conf['staticPageArguments']) ? json_encode($this->conf['staticPageArguments']) : null,
         ];

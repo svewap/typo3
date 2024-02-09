@@ -366,7 +366,7 @@ class FileReferenceContainer extends AbstractContainer
                 && $backendUser->check('tables_modify', 'sys_file_metadata')
                 && $event->isControlEnabled('edit')
             ) {
-                $languageId = (int)(is_array($databaseRow[$languageField] ?? null)
+                $languageTag = (int)(is_array($databaseRow[$languageField] ?? null)
                     ? ($databaseRow[$languageField][0] ?? 0)
                     : ($databaseRow[$languageField] ?? 0));
                 $queryBuilder = $this->connectionPool->getQueryBuilderForTable('sys_file_metadata');
@@ -380,7 +380,7 @@ class FileReferenceContainer extends AbstractContainer
                         ),
                         $queryBuilder->expr()->eq(
                             $languageField,
-                            $queryBuilder->createNamedParameter($languageId, Connection::PARAM_INT)
+                            $queryBuilder->createNamedParameter($languageTag, Connection::PARAM_INT)
                         )
                     )
                     ->setMaxResults(1)

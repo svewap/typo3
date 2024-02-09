@@ -70,7 +70,7 @@ class PageLayoutController
      */
     protected array|bool $pageinfo = false;
 
-    protected int $currentSelectedLanguage;
+    protected string $currentSelectedLanguage;
     protected array $MOD_MENU;
 
     /**
@@ -124,7 +124,7 @@ class PageLayoutController
 
         $tsConfig = BackendUtility::getPagesTSconfig($this->id);
         $this->menuConfig($request);
-        $this->currentSelectedLanguage = (int)$this->moduleData->get('language');
+        $this->currentSelectedLanguage = (string)$this->moduleData->get('language');
         $this->addJavaScriptModuleInstructions();
         $this->makeActionMenu($view, $tsConfig);
         $this->makeButtons($view, $request, $tsConfig);
@@ -166,7 +166,7 @@ class PageLayoutController
         $configuration->setActiveColumns($this->getActiveColumnsArray($pageLayoutContext, $tsConfig));
         $configuration->setShowHidden((bool)$this->moduleData->get('showHidden'));
         $configuration->setLanguageColumns($this->MOD_MENU['language']);
-        $configuration->setSelectedLanguageId($this->currentSelectedLanguage);
+        $configuration->setSelectedLanguageTag($this->currentSelectedLanguage);
         $configuration->setAllowInconsistentLanguageHandling((bool)($tsConfig['mod.']['web_layout.']['allowInconsistentLanguageHandling'] ?? false));
         if ((int)$this->moduleData->get('function') === 2) {
             $configuration->setLanguageMode(true);
@@ -200,9 +200,9 @@ class PageLayoutController
             // since pid 0 can't be localized.
             $pageTranslations = $this->getExistingPageTranslations();
             foreach ($pageTranslations as $pageTranslation) {
-                $languageId = $pageTranslation[$GLOBALS['TCA']['pages']['ctrl']['languageField']];
-                if (isset($this->availableLanguages[$languageId])) {
-                    $this->MOD_MENU['language'][$languageId] = $this->availableLanguages[$languageId]->getTitle();
+                $languageTag = $pageTranslation[$GLOBALS['TCA']['pages']['ctrl']['languageField']];
+                if (isset($this->availableLanguages[$languageTag])) {
+                    $this->MOD_MENU['language'][$languageTag] = $this->availableLanguages[$languageTag]->getTitle();
                 }
             }
 
@@ -270,9 +270,9 @@ class PageLayoutController
         return $rows;
     }
 
-    protected function getLocalizedPageRecord(int $languageId): ?array
+    protected function getLocalizedPageRecord(string $languageTag): ?array
     {
-        if ($languageId === 0) {
+        if ($languageTag === "0") {
             return null;
         }
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
@@ -290,7 +290,7 @@ class PageLayoutController
                 ),
                 $queryBuilder->expr()->eq(
                     $GLOBALS['TCA']['pages']['ctrl']['languageField'],
-                    $queryBuilder->createNamedParameter($languageId, Connection::PARAM_INT)
+                    $queryBuilder->createNamedParameter($languageTag, Connection::PARAM_INT)
                 )
             )
             ->setMaxResults(1)
@@ -498,7 +498,7 @@ class PageLayoutController
         return implode(', ', $links);
     }
 
-    protected function getLocalizedPageTitle(int $currentSelectedLanguage, array $pageInfo): string
+    protected function getLocalizedPageTitle(string $currentSelectedLanguage, array $pageInfo): string
     {
         if ($currentSelectedLanguage <= 0) {
             return $pageInfo['title'];
@@ -702,12 +702,12 @@ class PageLayoutController
             }
             /** @var DropDownItemInterface $languageItem */
             $languageItem = GeneralUtility::makeInstance(DropDownRadio::class)
-                ->setActive($this->currentSelectedLanguage === $siteLanguage->getLanguageId())
+                ->setActive($this->currentSelectedLanguage === $siteLanguage->getLanguageCode())
                 ->setIcon($this->iconFactory->getIcon($siteLanguage->getFlagIdentifier()))
                 ->setHref((string)$this->uriBuilder->buildUriFromRoute('web_layout', [
                     'id' => $this->id,
                     'function' => (int)$this->moduleData->get('function'),
-                    'language' => $siteLanguage->getLanguageId(),
+                    'language' => $siteLanguage->getLanguageCode(),
                 ]))
                 ->setLabel($siteLanguage->getTitle());
             $languageDropDownButton->addItem($languageItem);
@@ -825,7 +825,7 @@ class PageLayoutController
     /**
      * Check if page can be edited by current user.
      */
-    protected function isPageEditable(int $languageId): bool
+    protected function isPageEditable(string $languageTag): bool
     {
         if ($GLOBALS['TCA']['pages']['ctrl']['readOnly'] ?? false) {
             return false;
@@ -841,14 +841,14 @@ class PageLayoutController
             && $this->pageinfo !== []
             && !(bool)($this->pageinfo[$GLOBALS['TCA']['pages']['ctrl']['editlock'] ?? null] ?? false)
             && $backendUser->doesUserHaveAccess($this->pageinfo, Permission::PAGE_EDIT)
-            && $backendUser->checkLanguageAccess($languageId)
+            && $backendUser->checkLanguageAccess($languageTag)
             && $backendUser->check('tables_modify', 'pages');
     }
 
     /**
      * Check if content can be edited by current user
      */
-    protected function isContentEditable(int $languageId): bool
+    protected function isContentEditable(string $languageTag): bool
     {
         if ($this->getBackendUser()->isAdmin()) {
             return true;
@@ -856,7 +856,7 @@ class PageLayoutController
         return !($this->pageinfo['editlock'] ?? false)
             && $this->getBackendUser()->doesUserHaveAccess($this->pageinfo, Permission::CONTENT_EDIT)
             && $this->getBackendUser()->check('tables_modify', 'tt_content')
-            && $this->getBackendUser()->checkLanguageAccess($languageId);
+            && $this->getBackendUser()->checkLanguageAccess($languageTag);
     }
 
     /**

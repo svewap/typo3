@@ -607,7 +607,7 @@ class DatabaseRecordList
         // Use a custom table title for translated pages
         if ($table === 'pages' && $this->showOnlyTranslatedRecords) {
             // pages records in list module are split into two own sections, one for pages with
-            // sys_language_uid = 0 "Page" and an own section for sys_language_uid > 0 "Page Translation".
+            // language_tag = 0 "Page" and an own section for language_tag > 0 "Page Translation".
             // This if sets the different title for the page translation case and a unique table identifier
             // which is used in DOM as id.
             $tableTitle = htmlspecialchars($lang->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:pageTranslation'));
@@ -704,7 +704,7 @@ class DatabaseRecordList
                     // Reset translations
                     $translations = [];
                     // Initialize with FALSE which causes the localization panel to not be displayed as
-                    // the record is already localized, in free mode or has sys_language_uid -1 set.
+                    // the record is already localized, in free mode or has language_tag -1 set.
                     // Only set to TRUE if TranslationConfigurationProvider::translationInfo() returns
                     // an array indicating the record can be translated.
                     $translationEnabled = false;
@@ -1474,7 +1474,7 @@ class DatabaseRecordList
             $iconIdentifier = 'actions-open';
             if ($table === 'pages') {
                 // Disallow manual adjustment of the language field for pages
-                $params['overrideVals']['pages']['sys_language_uid'] = $row[$GLOBALS['TCA']['pages']['ctrl']['languageField'] ?? null] ?? 0;
+                $params['overrideVals']['pages']['language_tag'] = $row[$GLOBALS['TCA']['pages']['ctrl']['languageField'] ?? null] ?? 0;
                 $iconIdentifier = 'actions-page-open';
             }
             $params['returnUrl'] = $this->listURL();
@@ -1967,8 +1967,8 @@ class DatabaseRecordList
         $possibleTranslations = $this->possibleTranslations;
         if ($table === 'pages') {
             // Calculate possible translations for pages
-            $possibleTranslations = array_map(static fn(SiteLanguage $siteLanguage): int => $siteLanguage->getLanguageId(), $this->languagesAllowedForUser);
-            $possibleTranslations = array_filter($possibleTranslations, static fn(int $languageUid): bool => $languageUid > 0);
+            $possibleTranslations = array_map(static fn (SiteLanguage $siteLanguage): string => $siteLanguage->getLanguageCode(), $this->languagesAllowedForUser);
+            $possibleTranslations = array_filter($possibleTranslations, static fn (string $languageTag): bool => $languageTag > 0);
         }
 
         // Traverse page translations and add icon for each language that does NOT yet exist and is included in site configuration:
@@ -2375,7 +2375,10 @@ class DatabaseRecordList
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->in(
                     $GLOBALS['TCA']['pages']['ctrl']['languageField'],
-                    array_keys($this->languagesAllowedForUser)
+                    $queryBuilder->createNamedParameter(
+                        array_keys($this->languagesAllowedForUser),
+                        Connection::PARAM_STR_ARRAY
+                    )
                 )
             );
         }
@@ -2950,8 +2953,8 @@ class DatabaseRecordList
     protected function getPossibleTranslations(int $pageUid): array
     {
         // Store languages that are included in the site configuration for the current page.
-        $availableSystemLanguageUids = array_keys($this->translateTools->getSystemLanguages($pageUid));
-        if ($availableSystemLanguageUids === []) {
+        $availableSystemLanguageCodes = array_keys($this->translateTools->getSystemLanguages($pageUid));
+        if ($availableSystemLanguageCodes === []) {
             return [];
         }
         // Look up page overlays:
@@ -2969,7 +2972,7 @@ class DatabaseRecordList
             ->where(
                 $queryBuilder->expr()->and(
                     $queryBuilder->expr()->eq($localizationParentField, $queryBuilder->createNamedParameter($pageUid, Connection::PARAM_INT)),
-                    $queryBuilder->expr()->in($languageField, $queryBuilder->createNamedParameter($availableSystemLanguageUids, Connection::PARAM_INT_ARRAY)),
+                    $queryBuilder->expr()->in($languageField, $queryBuilder->createNamedParameter($availableSystemLanguageCodes, Connection::PARAM_STR_ARRAY)),
                     $queryBuilder->expr()->gt(
                         $languageField,
                         $queryBuilder->createNamedParameter(0, Connection::PARAM_INT)

@@ -68,7 +68,7 @@ class ContentCreationPagePositionMap extends AbstractContentPagePositionMap
                         StringUtility::getUniqueId('NEW') => array_replace($this->defVals, [
                             'colPos' => $colPos,
                             'pid' => (is_array($row) ? -$row['uid'] : $pid),
-                            'sys_language_uid' => $this->cur_sys_language,
+                            'language_tag' => $this->cur_sys_language,
                         ]),
                     ],
                 ],
@@ -85,7 +85,7 @@ class ContentCreationPagePositionMap extends AbstractContentPagePositionMap
                 'defVals' => [
                     'tt_content' => array_replace($this->defVals, [
                         'colPos' => $colPos,
-                        'sys_language_uid' => $this->cur_sys_language,
+                        'language_tag' => $this->cur_sys_language,
                     ]),
                 ],
             ]);

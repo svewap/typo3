@@ -7,7 +7,7 @@ return [
         'hideAtCopy' => false,
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'languageField' => 'sys_language_uid',
+        'languageField' => 'language_tag',
         'transOrigPointerField' => 'l10n_parent',
         'transOrigDiffSourceField' => 'l10n_diffsource',
         'prependAtCopy' => '',
@@ -19,7 +19,7 @@ return [
     ],
     'types' => [
         '0' => [
-            'showitem' => 'title,slug,hidden,sys_language_uid,l10n_parent',
+            'showitem' => 'title,slug,hidden,language_tag,l10n_parent',
         ],
     ],
     'columns' => [
@@ -51,7 +51,7 @@ return [
                 'max' => 255,
             ],
         ],
-        'sys_language_uid' => [
+        'language_tag' => [
             'exclude' => true,
             'label'  => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
@@ -59,7 +59,7 @@ return [
             ],
         ],
         'l10n_parent' => [
-            'displayCond' => 'FIELD:sys_language_uid:>:0',
+            'displayCond' => 'FIELD:language_tag:>:0',
             'label'       => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config'      => [
                 'type'  => 'select',
@@ -68,7 +68,7 @@ return [
                     ['label' => '', 'value' => 0],
                 ],
                 'foreign_table'       => 'tx_testdatahandler_slug',
-                'foreign_table_where' => 'AND {#tx_testdatahandler_slug}.{#pid}=###CURRENT_PID### AND {#tx_testdatahandler_slug}.{#sys_language_uid} IN (-1,0)',
+                'foreign_table_where' => 'AND {#tx_testdatahandler_slug}.{#pid}=###CURRENT_PID### AND {#tx_testdatahandler_slug}.{#language_tag} IN (-1,0)',
                 'default' => 0,
             ],
         ],

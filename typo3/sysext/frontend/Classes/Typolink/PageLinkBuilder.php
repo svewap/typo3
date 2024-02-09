@@ -510,7 +510,7 @@ class PageLinkBuilder extends AbstractTypolinkBuilder
             $targetLanguageId = (int)$targetLanguageId;
         }
         try {
-            $siteLanguageOfTargetPage = $siteOfTargetPage->getLanguageById($targetLanguageId);
+            $siteLanguageOfTargetPage = $siteOfTargetPage->getLanguageByCode($targetLanguageId);
         } catch (\InvalidArgumentException $e) {
             throw new UnableToLinkException('The target page does not have a language with ID ' . $targetLanguageId . ' configured in its site configuration.', 1535477406);
         }

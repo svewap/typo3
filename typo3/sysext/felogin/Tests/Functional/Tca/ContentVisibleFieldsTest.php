@@ -29,7 +29,7 @@ final class ContentVisibleFieldsTest extends FunctionalTestCase
     protected static array $contentFields = [
         'CType',
         'colPos',
-        'sys_language_uid',
+        'language_tag',
         'header',
         'header_layout',
         'date',

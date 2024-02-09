@@ -413,11 +413,11 @@ final class DefaultTcaSchemaTest extends UnitTestCase
     public function enrichAddsSysLanguageUid(): void
     {
         $GLOBALS['TCA']['aTable']['ctrl'] = [
-            'languageField' => 'sys_language_uid',
+            'languageField' => 'language_tag',
         ];
         $result = $this->subject->enrich([$this->defaultTable]);
         $expectedColumn = new Column(
-            '`sys_language_uid`',
+            '`language_tag`',
             Type::getType('integer'),
             [
                 'default' => 0,
@@ -425,7 +425,7 @@ final class DefaultTcaSchemaTest extends UnitTestCase
                 'unsigned' => false,
             ]
         );
-        self::assertSame($expectedColumn->toArray(), $result[0]->getColumn('sys_language_uid')->toArray());
+        self::assertSame($expectedColumn->toArray(), $result[0]->getColumn('language_tag')->toArray());
     }
 
     /**
@@ -434,7 +434,7 @@ final class DefaultTcaSchemaTest extends UnitTestCase
     public function enrichAddsL10nParent(): void
     {
         $GLOBALS['TCA']['aTable']['ctrl'] = [
-            'languageField' => 'sys_language_uid',
+            'languageField' => 'language_tag',
             'transOrigPointerField' => 'l10n_parent',
         ];
         $result = $this->subject->enrich([$this->defaultTable]);
@@ -510,7 +510,7 @@ final class DefaultTcaSchemaTest extends UnitTestCase
     public function enrichAddsL10nSource(): void
     {
         $GLOBALS['TCA']['aTable']['ctrl'] = [
-            'languageField' => 'sys_language_uid',
+            'languageField' => 'language_tag',
             'translationSource' => 'l10n_source',
         ];
         $result = $this->subject->enrich([$this->defaultTable]);
@@ -545,7 +545,7 @@ final class DefaultTcaSchemaTest extends UnitTestCase
     public function enrichAddsL10nState(): void
     {
         $GLOBALS['TCA']['aTable']['ctrl'] = [
-            'languageField' => 'sys_language_uid',
+            'languageField' => 'language_tag',
             'transOrigPointerField' => 'l10n_parent',
         ];
         $result = $this->subject->enrich([$this->defaultTable]);
@@ -579,7 +579,7 @@ final class DefaultTcaSchemaTest extends UnitTestCase
     public function enrichDoesNotAddL10nStateIfTransOrigPointerFieldIsNotDefined(): void
     {
         $GLOBALS['TCA']['aTable']['ctrl'] = [
-            'languageField' => 'sys_language_uid',
+            'languageField' => 'language_tag',
         ];
         $result = $this->subject->enrich([$this->defaultTable]);
         $this->expectException(SchemaException::class);

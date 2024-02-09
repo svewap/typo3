@@ -157,8 +157,8 @@ class TypoScriptFrontendController implements LoggerAwareInterface
     private int $cacheGenerated = 0;
 
     /**
-     * This hash is unique to the page id, involved TS templates, TS condition verdicts, and
-     * some other parameters that influence page render result. Used to get/set page cache.
+     * This hash is unique to the template, the $this->id and $this->type vars and
+     * the list of groups. Used to get and later store the cached data
      * @internal
      */
     public string $newHash = '';

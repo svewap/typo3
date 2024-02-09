@@ -91,9 +91,9 @@ class SiteInlineAjaxController extends AbstractFormEngineAjaxController
 
         if ($childTableName === 'site_language') {
             if ($childChildUid !== null) {
-                $language = $this->getLanguageById($childChildUid);
+                $language = $this->getLanguageByCode($childChildUid);
                 if ($language !== null) {
-                    $defaultDatabaseRow['languageId'] = $language->getLanguageId();
+                    $defaultDatabaseRow['languageCode'] = $language->getLanguageCode();
                     $defaultDatabaseRow['locale'] = $language->getLocale()->posixFormatted();
                     if ($language->getTitle() !== '') {
                         $defaultDatabaseRow['title'] = $language->getTitle();
@@ -383,11 +383,11 @@ class SiteInlineAjaxController extends AbstractFormEngineAjaxController
      * Find a site language by id. This will return the first occurrence of a
      * language, even if the same language is used in other site configurations.
      */
-    protected function getLanguageById(int $languageId): ?SiteLanguage
+    protected function getLanguageByCode(int $languageTag): ?SiteLanguage
     {
         foreach (GeneralUtility::makeInstance(SiteFinder::class)->getAllSites() as $site) {
             foreach ($site->getAllLanguages() as $language) {
-                if ($languageId === $language->getLanguageId()) {
+                if ($languageTag === $language->getLanguageCode()) {
                     return $language;
                 }
             }

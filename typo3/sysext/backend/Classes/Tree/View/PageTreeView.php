@@ -35,7 +35,7 @@ class PageTreeView extends AbstractTreeView
      */
     public function init($clause = '', $orderByFields = '')
     {
-        parent::init(' AND deleted=0 AND sys_language_uid=0 ' . $clause, $orderByFields ?: 'sorting');
+        parent::init(' AND deleted=0 AND language_tag=0 ' . $clause, $orderByFields ?: 'sorting');
     }
 
     /**

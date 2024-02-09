@@ -52,42 +52,42 @@ final class LocalizationRepositoryTest extends FunctionalTestCase
                 1,
                 1,
                 [
-                    'sys_language_uid' => 0,
+                    'language_tag' => 0,
                 ],
             ],
             'connected mode translated from non default language' => [
                 1,
                 2,
                 [
-                    'sys_language_uid' => 1,
+                    'language_tag' => 1,
                 ],
             ],
             'free mode translated from default language' => [
                 2,
                 1,
                 [
-                    'sys_language_uid' => 0,
+                    'language_tag' => 0,
                 ],
             ],
             'free mode translated from non default language' => [
                 2,
                 2,
                 [
-                    'sys_language_uid' => 1,
+                    'language_tag' => 1,
                 ],
             ],
             'free mode copied from another page translated from default language' => [
                 3,
                 1,
                 [
-                    'sys_language_uid' => 0,
+                    'language_tag' => 0,
                 ],
             ],
             'free mode copied from another page translated from non default language' => [
                 3,
                 2,
                 [
-                    'sys_language_uid' => 1,
+                    'language_tag' => 1,
                 ],
             ],
         ];

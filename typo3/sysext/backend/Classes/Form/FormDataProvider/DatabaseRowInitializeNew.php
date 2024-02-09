@@ -189,9 +189,9 @@ class DatabaseRowInitializeNew implements FormDataProviderInterface
 
     /**
      * If a new child is created in an inline relation via ajax, and if the parent is a localized record,
-     * the child should have the same sys_language_uid set in the field declared in ['ctrl']['languageField']
+     * the child should have the same language_tag set in the field declared in ['ctrl']['languageField']
      * if the child is localizable itself.
-     * A localized parent transfers its sys_language_uid via inlineParentConfig['inline']['parentSysLanguageUid'],
+     * A localized parent transfers its language_tag via inlineParentConfig['inline']['parentSysLanguageUid'],
      * use that value as default for the child record languageField.
      *
      * @param array $result Result array
@@ -209,7 +209,7 @@ class DatabaseRowInitializeNew implements FormDataProviderInterface
 
         if (!MathUtility::canBeInterpretedAsInteger($result['inlineParentConfig']['inline']['parentSysLanguageUid'])) {
             throw new \UnexpectedValueException(
-                'A sys_language_uid is set from inline parent config but the value is no integer',
+                'A language_tag is set from inline parent config but the value is no integer',
                 1490360772
             );
         }

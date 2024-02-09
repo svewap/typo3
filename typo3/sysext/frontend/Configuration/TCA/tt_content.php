@@ -17,11 +17,11 @@ return [
         'type' => 'CType',
         'hideAtCopy' => true,
         'prependAtCopy' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.prependAtCopy',
-        'copyAfterDuplFields' => 'colPos,sys_language_uid',
-        'useColumnsForDefaultValues' => 'colPos,sys_language_uid,CType',
+        'copyAfterDuplFields' => 'colPos,language_tag',
+        'useColumnsForDefaultValues' => 'colPos,language_tag,CType',
         'transOrigPointerField' => 'l18n_parent',
         'transOrigDiffSourceField' => 'l18n_diffsource',
-        'languageField' => 'sys_language_uid',
+        'languageField' => 'language_tag',
         'translationSource' => 'l10n_source',
         'previewRenderer' => \TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer::class,
         'enablecolumns' => [
@@ -316,7 +316,7 @@ return [
                 'foreign_table' => 'fe_groups',
             ],
         ],
-        'sys_language_uid' => [
+        'language_tag' => [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
@@ -329,7 +329,7 @@ return [
             ],
         ],
         'l18n_parent' => [
-            'displayCond' => 'FIELD:sys_language_uid:>:0',
+            'displayCond' => 'FIELD:language_tag:>:0',
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'select',
@@ -338,7 +338,7 @@ return [
                     ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => 'tt_content',
-                'foreign_table_where' => 'AND {#tt_content}.{#pid}=###CURRENT_PID### AND {#tt_content}.{#sys_language_uid} IN (-1,0)',
+                'foreign_table_where' => 'AND {#tt_content}.{#pid}=###CURRENT_PID### AND {#tt_content}.{#language_tag} IN (-1,0)',
                 'default' => 0,
             ],
         ],
@@ -1890,7 +1890,7 @@ return [
         ],
         'language' => [
             'showitem' => '
-                sys_language_uid,l18n_parent
+                language_tag,l18n_parent
             ',
         ],
         'access' => [

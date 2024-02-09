@@ -71,8 +71,8 @@ final class SiteLanguageTest extends UnitTestCase
             'locale' => 'fr',
         ];
         $site = $this->createSiteWithLanguage($configuration);
-        $subject = $site->getLanguageById(1);
-        self::assertSame($expected, $subject->getFallbackLanguageIds());
+        $subject = $site->getLanguageByCode(1);
+        self::assertSame($expected, $subject->getFallbackLanguageCodes());
     }
 
     /**
@@ -87,7 +87,7 @@ final class SiteLanguageTest extends UnitTestCase
             'locale' => 'de',
         ];
         $site = $this->createSiteWithLanguage($configuration);
-        $subject = $site->getLanguageById(1);
+        $subject = $site->getLanguageByCode(1);
         $expected = [
             'navigationTitle' => 'NavTitle',
             'customValue' => 'a custom value',

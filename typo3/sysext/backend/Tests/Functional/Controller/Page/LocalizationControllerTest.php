@@ -161,7 +161,7 @@ final class LocalizationControllerTest extends FunctionalTestCase
         $data = [
             'tt_content' => [
                 'NEW123456' => [
-                    'sys_language_uid' => 0,
+                    'language_tag' => 0,
                     'header' => 'Test content 2.5',
                     'pid' => -2,
                     'colPos' => 0,
@@ -197,7 +197,7 @@ final class LocalizationControllerTest extends FunctionalTestCase
         $data = [
             'tt_content' => [
                 'NEW123456' => [
-                    'sys_language_uid' => 0,
+                    'language_tag' => 0,
                     'header' => 'New content element',
                     'pid' => 1,
                     'colPos' => 0,

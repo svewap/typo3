@@ -68,12 +68,12 @@ final class DatabaseLanguageRowsTest extends UnitTestCase
             'databaseRow' => [
                 'uid' => 42,
                 'text' => 'localized text',
-                'sys_language_uid' => 2,
+                'language_tag' => 2,
                 'l10n_parent' => 23,
             ],
             'processedTca' => [
                 'ctrl' => [
-                    'languageField' => 'sys_language_uid',
+                    'languageField' => 'language_tag',
                     'transOrigPointerField' => 'l10n_parent',
                 ],
             ],
@@ -97,12 +97,12 @@ final class DatabaseLanguageRowsTest extends UnitTestCase
             'databaseRow' => [
                 'uid' => 42,
                 'text' => 'localized text',
-                'sys_language_uid' => 2,
+                'language_tag' => 2,
                 'l10n_parent' => 23,
             ],
             'processedTca' => [
                 'ctrl' => [
-                    'languageField' => 'sys_language_uid',
+                    'languageField' => 'language_tag',
                     'transOrigPointerField' => 'l10n_parent',
                 ],
             ],
@@ -112,7 +112,7 @@ final class DatabaseLanguageRowsTest extends UnitTestCase
             'uid' => 23,
             'pid' => 123,
             'text' => 'default language text',
-            'sys_language_uid' => 0,
+            'language_tag' => 0,
         ];
 
         $this->subject->expects(self::once())->method('getRecordWorkspaceOverlay')->willReturn($defaultLanguageRow);
@@ -138,13 +138,13 @@ final class DatabaseLanguageRowsTest extends UnitTestCase
             'databaseRow' => [
                 'uid' => 42,
                 'text' => 'localized text',
-                'sys_language_uid' => 2,
+                'language_tag' => 2,
                 'l10n_parent' => 23,
                 'l10n_diffsource' => json_encode($diffSource),
             ],
             'processedTca' => [
                 'ctrl' => [
-                    'languageField' => 'sys_language_uid',
+                    'languageField' => 'language_tag',
                     'transOrigPointerField' => 'l10n_parent',
                     'transOrigDiffSourceField' => 'l10n_diffsource',
                 ],
@@ -156,7 +156,7 @@ final class DatabaseLanguageRowsTest extends UnitTestCase
             'uid' => 23,
             'pid' => 123,
             'text' => 'default language text',
-            'sys_language_uid' => 0,
+            'language_tag' => 0,
         ];
 
         $this->subject->expects(self::once())->method('getRecordWorkspaceOverlay')->willReturn($defaultLanguageRow);
@@ -178,12 +178,12 @@ final class DatabaseLanguageRowsTest extends UnitTestCase
             'databaseRow' => [
                 'uid' => 42,
                 'text' => 'localized text',
-                'sys_language_uid' => 2,
+                'language_tag' => 2,
                 'l10n_parent' => 23,
             ],
             'processedTca' => [
                 'ctrl' => [
-                    'languageField' => 'sys_language_uid',
+                    'languageField' => 'language_tag',
                     'transOrigPointerField' => 'l10n_parent',
                 ],
             ],
@@ -228,7 +228,7 @@ final class DatabaseLanguageRowsTest extends UnitTestCase
             'uid' => 23,
             'pid' => 32,
             'text' => 'default language text',
-            'sys_language_uid' => 0,
+            'language_tag' => 0,
         ];
 
         $translationMock = $this->createMock(TranslationConfigurationProvider::class);
@@ -273,12 +273,12 @@ final class DatabaseLanguageRowsTest extends UnitTestCase
             'databaseRow' => [
                 'uid' => 42,
                 'text' => 'localized text',
-                'sys_language_uid' => 2,
+                'language_tag' => 2,
                 'l10n_parent' => 23,
             ],
             'processedTca' => [
                 'ctrl' => [
-                    'languageField' => 'sys_language_uid',
+                    'languageField' => 'language_tag',
                     'transOrigPointerField' => 'l10n_parent',
                 ],
             ],
@@ -327,7 +327,7 @@ final class DatabaseLanguageRowsTest extends UnitTestCase
             'uid' => 23,
             'pid' => 32,
             'text' => 'default language text',
-            'sys_language_uid' => 0,
+            'language_tag' => 0,
         ];
 
         $translationMock = $this->createMock(TranslationConfigurationProvider::class);
@@ -372,13 +372,13 @@ final class DatabaseLanguageRowsTest extends UnitTestCase
             'databaseRow' => [
                 'uid' => 42,
                 'text' => 'localized text',
-                'sys_language_uid' => 3,
+                'language_tag' => 3,
                 'l10n_parent' => 23,
                 'l10n_source' => 24,
             ],
             'processedTca' => [
                 'ctrl' => [
-                    'languageField' => 'sys_language_uid',
+                    'languageField' => 'language_tag',
                     'transOrigPointerField' => 'l10n_parent',
                     'translationSource' => 'l10n_source',
                 ],
@@ -411,13 +411,13 @@ final class DatabaseLanguageRowsTest extends UnitTestCase
             'uid' => 24,
             'pid' => 32,
             'text' => 'localized text in dank',
-            'sys_language_uid' => 2,
+            'language_tag' => 2,
         ];
         $defaultLanguageRow = [
             'uid' => 23,
             'pid' => 32,
             'text' => 'default language text',
-            'sys_language_uid' => 0,
+            'language_tag' => 0,
         ];
 
         $series = [

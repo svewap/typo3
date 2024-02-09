@@ -80,10 +80,10 @@ class InputSlugElement extends AbstractFormElement
         $parameterArray = $this->data['parameterArray'];
         $resultArray = $this->initializeResultArray();
 
-        $languageId = 0;
+        $languageTag = 0;
         if (isset($GLOBALS['TCA'][$table]['ctrl']['languageField']) && !empty($GLOBALS['TCA'][$table]['ctrl']['languageField'])) {
             $languageField = $GLOBALS['TCA'][$table]['ctrl']['languageField'];
-            $languageId = (int)((is_array($row[$languageField] ?? null) ? ($row[$languageField][0] ?? 0) : $row[$languageField]) ?? 0);
+            $languageTag = (string)((is_array($row[$languageField] ?? null) ? ($row[$languageField][0] ?? 0) : $row[$languageField]) ?? 0);
         }
 
         $itemValue = $parameterArray['itemFormElValue'];
@@ -236,7 +236,7 @@ class InputSlugElement extends AbstractFormElement
                     $table,
                     $this->data['effectivePid'],
                     $row['uid'],
-                    $languageId,
+                    $languageTag,
                     $this->data['fieldName'],
                     $this->data['command'],
                     $parentPageId,
@@ -251,7 +251,7 @@ class InputSlugElement extends AbstractFormElement
             'fieldName' => $this->data['fieldName'],
             'config' => $config,
             'listenerFieldNames' => $validInputNamesToListenTo,
-            'language' => $languageId,
+            'language' => $languageTag,
             'originalValue' => $itemValue,
             'signature' => $signature,
             'command' => $this->data['command'],

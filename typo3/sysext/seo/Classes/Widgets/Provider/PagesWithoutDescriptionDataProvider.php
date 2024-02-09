@@ -57,12 +57,12 @@ final class PagesWithoutDescriptionDataProvider
             try {
                 $site = $this->siteFinder->getSiteByPageId($pageId);
                 // make sure the language of the row actually exists in the site
-                $site->getLanguageById($row['sys_language_uid']);
+                $site->getLanguageByCode($row['language_tag']);
             } catch (SiteNotFoundException | \InvalidArgumentException) {
                 continue;
             }
             $router = $site->getRouter();
-            $row['frontendUrl'] = (string)$router->generateUri($pageId, ['_language' => $row['sys_language_uid']]);
+            $row['frontendUrl'] = (string)$router->generateUri($pageId, ['_language' => $row['language_tag']]);
             $items[] = $row;
             $rowCount++;
             if ($rowCount >= $this->limit) {
@@ -84,7 +84,7 @@ final class PagesWithoutDescriptionDataProvider
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable('pages');
         $queryBuilder->getRestrictions()->add(new WorkspaceRestriction($this->getBackendUser()->workspace));
         return $queryBuilder
-            ->select('uid', 'pid', 'title', 'slug', 'sys_language_uid', 'l10n_parent', 'perms_userid', 'perms_groupid', 'perms_user', 'perms_group', 'perms_everybody')
+            ->select('uid', 'pid', 'title', 'slug', 'language_tag', 'l10n_parent', 'perms_userid', 'perms_groupid', 'perms_user', 'perms_group', 'perms_everybody')
             ->from('pages')
             ->where(
                 $queryBuilder->expr()->notIn('doktype', $this->excludedDoktypes),

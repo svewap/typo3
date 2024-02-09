@@ -36,17 +36,17 @@ class ItemsProcessorFunctions
     public function populateAvailableLanguagesFromSites(array &$fieldDefinition): void
     {
         foreach (GeneralUtility::makeInstance(SiteFinder::class)->getAllSites() as $site) {
-            foreach ($site->getAllLanguages() as $languageId => $language) {
-                if (!isset($fieldDefinition['items'][$languageId])) {
-                    $fieldDefinition['items'][$languageId] = [
+            foreach ($site->getAllLanguages() as $languageTag => $language) {
+                if (!isset($fieldDefinition['items'][$languageTag])) {
+                    $fieldDefinition['items'][$languageTag] = [
                         'label' => $language->getTitle(),
-                        'value' => $languageId,
+                        'value' => $languageTag,
                         'icon' => $language->getFlagIdentifier(),
                         'tempTitles' => [],
                     ];
-                } elseif ($fieldDefinition['items'][$languageId]['label'] !== $language->getTitle()) {
+                } elseif ($fieldDefinition['items'][$languageTag]['label'] !== $language->getTitle()) {
                     // Temporarily store different titles
-                    $fieldDefinition['items'][$languageId]['tempTitles'][] = $language->getTitle();
+                    $fieldDefinition['items'][$languageTag]['tempTitles'][] = $language->getTitle();
                 }
             }
         }
@@ -76,7 +76,7 @@ class ItemsProcessorFunctions
         // with the "Create new" button, which is usually not possible in "selector" mode.
         // Note: The placeholder will never be displayed in the selector.
         $fieldDefinition['items'] = array_values(
-            array_merge($fieldDefinition['items'], [['label' => 'Placeholder', 'value' => PHP_INT_MAX]])
+            array_merge($fieldDefinition['items'], [['label' => 'Placeholder', 'value' => 'en-US']])
         );
     }
 
@@ -86,23 +86,23 @@ class ItemsProcessorFunctions
     public function populateFallbackLanguages(array &$fieldDefinition): void
     {
         foreach (GeneralUtility::makeInstance(SiteFinder::class)->getAllSites() as $site) {
-            foreach ($site->getAllLanguages() as $languageId => $language) {
-                if (isset($fieldDefinition['row']['languageId'][0])
-                    && (int)$fieldDefinition['row']['languageId'][0] === $languageId
+            foreach ($site->getAllLanguages() as $languageTag => $language) {
+                if (isset($fieldDefinition['row']['languageCode'][0])
+                    && (int)$fieldDefinition['row']['languageCode'][0] === $languageTag
                 ) {
                     // Skip current language id
                     continue;
                 }
-                if (!isset($fieldDefinition['items'][$languageId])) {
-                    $fieldDefinition['items'][$languageId] = [
+                if (!isset($fieldDefinition['items'][$languageTag])) {
+                    $fieldDefinition['items'][$languageTag] = [
                         'label' => $language->getTitle(),
-                        'value' => $languageId,
+                        'value' => $languageTag,
                         'icon' => $language->getFlagIdentifier(),
                         'tempTitles' => [],
                     ];
-                } elseif ($fieldDefinition['items'][$languageId]['label'] !== $language->getTitle()) {
+                } elseif ($fieldDefinition['items'][$languageTag]['label'] !== $language->getTitle()) {
                     // Temporarily store different titles
-                    $fieldDefinition['items'][$languageId]['tempTitles'][] = $language->getTitle();
+                    $fieldDefinition['items'][$languageTag]['tempTitles'][] = $language->getTitle();
                 }
             }
         }

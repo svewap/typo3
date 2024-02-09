@@ -51,7 +51,7 @@ final class IconFactoryTest extends FunctionalTestCase
         'CType' => 'text',
         't3ver_state' => '0',
         't3ver_wsid' => '0',
-        'sys_language_uid' => '0',
+        'language_tag' => '0',
         'l18n_parent' => '0',
         'subheader' => '',
         'bodytext' => '',

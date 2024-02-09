@@ -35,9 +35,9 @@ use TYPO3\CMS\Core\Localization\LanguageService;
 class DrawingConfiguration
 {
     /**
-     * @var int
+     * @var string
      */
-    protected $selectedLanguageId = 0;
+    protected $selectedLanguageTag = "0";
 
     /**
      * Corresponds to web.layout.allowInconsistentLanguageHandling TSconfig property
@@ -85,14 +85,14 @@ class DrawingConfiguration
      */
     protected $activeColumns = [1, 0, 2, 3];
 
-    public function getSelectedLanguageId(): int
+    public function getSelectedLanguageTag(): string
     {
-        return $this->selectedLanguageId;
+        return $this->selectedLanguageTag;
     }
 
-    public function setSelectedLanguageId(int $selectedLanguageId): void
+    public function setSelectedLanguageTag(string $selectedLanguageTag): void
     {
-        $this->selectedLanguageId = $selectedLanguageId;
+        $this->selectedLanguageTag = $selectedLanguageTag;
     }
 
     public function getAllowInconsistentLanguageHandling(): bool

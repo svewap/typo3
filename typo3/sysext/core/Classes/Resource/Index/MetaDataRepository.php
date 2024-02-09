@@ -111,7 +111,7 @@ class MetaDataRepository implements SingletonInterface
             ->from($this->tableName)
             ->where(
                 $queryBuilder->expr()->eq('file', $queryBuilder->createNamedParameter($uid, Connection::PARAM_INT)),
-                $queryBuilder->expr()->in('sys_language_uid', $queryBuilder->createNamedParameter([0, -1], Connection::PARAM_INT_ARRAY))
+                $queryBuilder->expr()->in('language_tag', $queryBuilder->createNamedParameter(['en-US', 'all'], Connection::PARAM_STR_ARRAY))
             )
             ->executeQuery()
             ->fetchAssociative();

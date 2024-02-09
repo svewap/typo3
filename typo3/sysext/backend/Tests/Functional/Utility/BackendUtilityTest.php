@@ -108,7 +108,7 @@ final class BackendUtilityTest extends FunctionalTestCase
             'Dansk',
             BackendUtility::getProcessedValue(
                 'pages',
-                'sys_language_uid',
+                'language_tag',
                 '1',
                 0,
                 false,
@@ -121,7 +121,7 @@ final class BackendUtilityTest extends FunctionalTestCase
             'German',
             BackendUtility::getProcessedValue(
                 'tt_content',
-                'sys_language_uid',
+                'language_tag',
                 '2',
                 0,
                 false,

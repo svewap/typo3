@@ -361,7 +361,7 @@ class BackendConfigurationManager implements SingletonInterface
             ->from('pages')
             ->where(
                 $queryBuilder->expr()->eq('is_siteroot', $queryBuilder->createNamedParameter(1, Connection::PARAM_INT)),
-                $queryBuilder->expr()->eq('sys_language_uid', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT)),
+                $queryBuilder->expr()->eq('language_tag', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT)),
                 // Only consider live root page IDs, never return a versioned root page ID
                 $queryBuilder->expr()->eq('t3ver_oid', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT)),
                 $queryBuilder->expr()->eq('t3ver_wsid', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT))
@@ -446,7 +446,7 @@ class BackendConfigurationManager implements SingletonInterface
                 ->from('pages')
                 ->where(
                     $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($pid, Connection::PARAM_INT)),
-                    $queryBuilder->expr()->eq('sys_language_uid', 0),
+                    $queryBuilder->expr()->eq('language_tag', 0),
                     $permsClause
                 )
                 ->orderBy('uid')

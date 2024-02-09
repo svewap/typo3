@@ -165,8 +165,8 @@ class SlugHelper
         $prefix = '';
         if ($this->tableName === 'pages' && ($this->configuration['generatorOptions']['prefixParentPageSlug'] ?? false)) {
             $languageFieldName = $GLOBALS['TCA'][$this->tableName]['ctrl']['languageField'] ?? null;
-            $languageId = (int)($recordData[$languageFieldName] ?? 0);
-            $parentPageRecord = $this->resolveParentPageRecord($pid, $languageId);
+            $languageCode = (int)($recordData[$languageFieldName] ?? 0);
+            $parentPageRecord = $this->resolveParentPageRecord($pid, $languageCode);
             if (is_array($parentPageRecord)) {
                 // If the parent page has a slug, use that instead of "re-generating" the slug from the parents' page title
                 if (!empty($parentPageRecord['slug'])) {
@@ -239,13 +239,13 @@ class SlugHelper
     {
         $pageId = (int)$state->resolveNodeIdentifier();
         $recordId = $state->getSubject()->getIdentifier();
-        $languageId = $state->getContext()->getLanguageId();
+        $languageCode = $state->getContext()->getLanguageCode();
 
         $queryBuilder = $this->createPreparedQueryBuilder();
         $this->applySlugConstraint($queryBuilder, $slug);
         $this->applyPageIdConstraint($queryBuilder, $pageId);
         $this->applyRecordConstraint($queryBuilder, $recordId);
-        $this->applyLanguageConstraint($queryBuilder, $languageId);
+        $this->applyLanguageConstraint($queryBuilder, $languageCode);
         $this->applyWorkspaceConstraint($queryBuilder, $state);
         $statement = $queryBuilder->executeQuery();
 
@@ -264,7 +264,7 @@ class SlugHelper
     {
         $pageId = $state->resolveNodeAggregateIdentifier();
         $recordId = $state->getSubject()->getIdentifier();
-        $languageId = $state->getContext()->getLanguageId();
+        $languageCode = $state->getContext()->getLanguageCode();
 
         if (!MathUtility::canBeInterpretedAsInteger($pageId)) {
             // If this is a new page, we use the parent page to resolve the site
@@ -275,7 +275,7 @@ class SlugHelper
         $queryBuilder = $this->createPreparedQueryBuilder();
         $this->applySlugConstraint($queryBuilder, $slug);
         $this->applyRecordConstraint($queryBuilder, $recordId);
-        $this->applyLanguageConstraint($queryBuilder, $languageId);
+        $this->applyLanguageConstraint($queryBuilder, $languageCode);
         $this->applyWorkspaceConstraint($queryBuilder, $state);
         $statement = $queryBuilder->executeQuery();
 
@@ -327,12 +327,12 @@ class SlugHelper
     public function isUniqueInTable(string $slug, RecordState $state): bool
     {
         $recordId = $state->getSubject()->getIdentifier();
-        $languageId = $state->getContext()->getLanguageId();
+        $languageCode = $state->getContext()->getLanguageCode();
 
         $queryBuilder = $this->createPreparedQueryBuilder();
         $this->applySlugConstraint($queryBuilder, $slug);
         $this->applyRecordConstraint($queryBuilder, $recordId);
-        $this->applyLanguageConstraint($queryBuilder, $languageId);
+        $this->applyLanguageConstraint($queryBuilder, $languageCode);
         $this->applyWorkspaceConstraint($queryBuilder, $state);
         $statement = $queryBuilder->executeQuery();
 
@@ -461,13 +461,13 @@ class SlugHelper
      * If language is -1 (all languages), there should not be any other records with the
      * same slug of any language (or -1).
      */
-    protected function applyLanguageConstraint(QueryBuilder $queryBuilder, int $languageId)
+    protected function applyLanguageConstraint(QueryBuilder $queryBuilder, int $languageCode)
     {
         $languageFieldName = $GLOBALS['TCA'][$this->tableName]['ctrl']['languageField'] ?? null;
         if (!is_string($languageFieldName)) {
             return;
         }
-        if ($languageId === -1) {
+        if ($languageCode === -1) {
             // if language is -1 "all languages" we need to check against all languages, thus not adding
             // any kind of language constraints.
             return;
@@ -478,7 +478,7 @@ class SlugHelper
             $queryBuilder->expr()->or(
                 $queryBuilder->expr()->eq(
                     $languageFieldName,
-                    $queryBuilder->createNamedParameter($languageId, Connection::PARAM_INT)
+                    $queryBuilder->createNamedParameter($languageCode, Connection::PARAM_INT)
                 ),
                 $queryBuilder->expr()->eq(
                     $languageFieldName,
@@ -568,7 +568,7 @@ class SlugHelper
     /**
      * Fetch a parent page, but exclude spacers and sys-folders
      */
-    protected function resolveParentPageRecord(int $pid, int $languageId): ?array
+    protected function resolveParentPageRecord(int $pid, int $languageCode): ?array
     {
         $rootLine = BackendUtility::BEgetRootLine($pid, '', true, ['nav_title']);
         $excludeDokTypes = [
@@ -579,20 +579,20 @@ class SlugHelper
             $parentPageRecord = array_shift($rootLine);
             // exclude spacers, recyclers and folders
         } while (!empty($rootLine) && in_array((int)$parentPageRecord['doktype'], $excludeDokTypes, true));
-        if ($languageId > 0) {
-            $languageIds = [$languageId];
+        if ($languageCode > 0) {
+            $languageCodes = [$languageCode];
             $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
 
             try {
                 $site = $siteFinder->getSiteByPageId($pid);
-                $siteLanguage = $site->getLanguageById($languageId);
-                $languageIds = array_merge($languageIds, $siteLanguage->getFallbackLanguageIds());
+                $siteLanguage = $site->getLanguageByCode($languageCode);
+                $languageCodes = array_merge($languageCodes, $siteLanguage->getFallbackLanguageCodes());
             } catch (SiteNotFoundException | \InvalidArgumentException $e) {
                 // no site or requested language available - move on
             }
 
-            foreach ($languageIds as $languageId) {
-                $localizedParentPageRecord = BackendUtility::getRecordLocalization('pages', $parentPageRecord['uid'], $languageId);
+            foreach ($languageCodes as $languageCode) {
+                $localizedParentPageRecord = BackendUtility::getRecordLocalization('pages', $parentPageRecord['uid'], $languageCode);
                 if (!empty($localizedParentPageRecord)) {
                     $parentPageRecord = reset($localizedParentPageRecord);
                     break;

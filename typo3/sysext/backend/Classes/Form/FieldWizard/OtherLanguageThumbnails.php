@@ -62,7 +62,7 @@ class OtherLanguageThumbnails extends AbstractNode
         }
 
         $html = [];
-        $languages = [$defaultLanguageRow['sys_language_uid'] => $defaultLanguageRow] + ($this->data['additionalLanguageRows'] ?? []);
+        $languages = [$defaultLanguageRow['language_tag'] => $defaultLanguageRow] + ($this->data['additionalLanguageRows'] ?? []);
 
         foreach ($languages as $sysLanguageUid => $languageRow) {
             $file = null;

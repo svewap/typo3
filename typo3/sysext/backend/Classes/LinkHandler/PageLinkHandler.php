@@ -162,8 +162,8 @@ class PageLinkHandler extends AbstractLinkHandler implements LinkHandlerInterfac
                             $queryBuilder->createNamedParameter($pageId, Connection::PARAM_INT)
                         ),
                         $queryBuilder->expr()->in(
-                            'sys_language_uid',
-                            $queryBuilder->createNamedParameter([$activePageRecord['sys_language_uid'], -1], Connection::PARAM_INT_ARRAY)
+                            'language_tag',
+                            $queryBuilder->createNamedParameter([$activePageRecord['language_tag'], 'all'], Connection::PARAM_STR_ARRAY)
                         )
                     )
                 )

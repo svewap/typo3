@@ -61,13 +61,13 @@ class PageSlugCandidateProvider
     {
         $slugCandidates = $this->getCandidateSlugsFromRoutePath($urlPath ?: '/');
         $pageCandidates = [];
-        $languages = [$language->getLanguageId()];
-        if (!empty($language->getFallbackLanguageIds())) {
-            $languages = array_merge($languages, $language->getFallbackLanguageIds());
+        $languages = [$language->getLanguageCode()];
+        if (!empty($language->getFallbackLanguageCodes())) {
+            $languages = array_merge($languages, $language->getFallbackLanguageCodes());
         }
         // Iterate all defined languages in their configured order to get matching page candidates somewhere in the language fallback chain
-        foreach ($languages as $languageId) {
-            $pageCandidatesFromSlugsAndLanguage = $this->getPagesFromDatabaseForCandidates($slugCandidates, $languageId);
+        foreach ($languages as $languageCode) {
+            $pageCandidatesFromSlugsAndLanguage = $this->getPagesFromDatabaseForCandidates($slugCandidates, $languageCode);
             // Determine whether fetched page candidates qualify for the request. The incoming URL is checked against all
             // pages found for the current URL and language.
             foreach ($pageCandidatesFromSlugsAndLanguage as $candidate) {
@@ -176,7 +176,7 @@ class PageSlugCandidateProvider
      * @return array[]|array
      * @throws SiteNotFoundException
      */
-    protected function getPagesFromDatabaseForCandidates(array $slugCandidates, int $languageId, array $excludeUids = []): array
+    protected function getPagesFromDatabaseForCandidates(array $slugCandidates, int $languageCode, array $excludeUids = []): array
     {
         $workspaceId = (int)$this->context->getPropertyFromAspect('workspace', 'id');
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
@@ -188,12 +188,12 @@ class PageSlugCandidateProvider
             ->add(GeneralUtility::makeInstance(WorkspaceRestriction::class, $workspaceId, true));
 
         $statement = $queryBuilder
-            ->select('uid', 'sys_language_uid', 'l10n_parent', 'l18n_cfg', 'pid', 'slug', 'mount_pid', 'mount_pid_ol', 't3ver_state', 'doktype', 't3ver_wsid', 't3ver_oid')
+            ->select('uid', 'language_tag', 'l10n_parent', 'l18n_cfg', 'pid', 'slug', 'mount_pid', 'mount_pid_ol', 't3ver_state', 'doktype', 't3ver_wsid', 't3ver_oid')
             ->from('pages')
             ->where(
                 $queryBuilder->expr()->eq(
-                    'sys_language_uid',
-                    $queryBuilder->createNamedParameter($languageId, Connection::PARAM_INT)
+                    'language_tag',
+                    $queryBuilder->createNamedParameter($languageCode)
                 ),
                 $queryBuilder->expr()->in(
                     'slug',
@@ -219,7 +219,7 @@ class PageSlugCandidateProvider
 
         while ($row = $statement->fetchAssociative()) {
             $mountPageInformation = null;
-            $pageIdInDefaultLanguage = (int)($languageId > 0 ? $row['l10n_parent'] : ($row['t3ver_oid'] ?: $row['uid']));
+            $pageIdInDefaultLanguage = (int)($languageCode > 0 ? $row['l10n_parent'] : ($row['t3ver_oid'] ?: $row['uid']));
             // When this page was added before via recursion, this page should be skipped
             if (in_array($pageIdInDefaultLanguage, $excludeUids, true)) {
                 continue;
@@ -252,7 +252,7 @@ class PageSlugCandidateProvider
                 $row['MPvar'] = $mountPageInformation['MPvar'];
                 $mountedPage = $pageRepository->getPage_noCheck((int)$mountPageInformation['mount_pid_rec']['uid']);
                 // Ensure to fetch the slug in the translated page
-                $mountedPage = $pageRepository->getLanguageOverlay('pages', $mountedPage, new LanguageAspect($languageId, $languageId));
+                $mountedPage = $pageRepository->getLanguageOverlay('pages', $mountedPage, new LanguageAspect($languageCode, $languageCode));
                 // Mount wasn't connected properly, so it is skipped
                 if (!$mountedPage) {
                     continue;
@@ -292,7 +292,7 @@ class PageSlugCandidateProvider
                     $row,
                     $mountedPage,
                     $siteOfMountedPage,
-                    $languageId,
+                    $languageCode,
                     $slugCandidates
                 );
                 foreach ($morePageCandidates as $candidate) {
@@ -329,7 +329,7 @@ class PageSlugCandidateProvider
         array $mountPointPage,
         array $mountedPage,
         Site $siteOfMountedPage,
-        int $languageId,
+        int $languageCode,
         array $slugCandidates
     ): array {
         $pages = [];
@@ -368,7 +368,7 @@ class PageSlugCandidateProvider
         $excludedPageIds = [(int)$mountPointPage['uid']];
         $pageCandidates = $slugProviderForMountPage->getPagesFromDatabaseForCandidates(
             $trimmedSlugPrefixes,
-            $languageId,
+            $languageCode,
             $excludedPageIds
         );
         // Depending on the "mount_pid_ol" parameter, the mountedPage or the mounted page is in the rootline

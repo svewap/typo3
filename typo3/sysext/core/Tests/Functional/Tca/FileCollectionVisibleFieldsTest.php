@@ -26,7 +26,7 @@ final class FileCollectionVisibleFieldsTest extends FunctionalTestCase
 {
     protected static $fileCollectionFields = [
         'title',
-        'sys_language_uid',
+        'language_tag',
         'type',
         'starttime',
         'endtime',

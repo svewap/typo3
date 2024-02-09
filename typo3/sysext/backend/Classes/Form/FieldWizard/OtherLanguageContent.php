@@ -89,7 +89,7 @@ class OtherLanguageContent extends AbstractNode
             ) ?? '';
             if ($defaultLanguageValue !== '') {
                 $html[] = '<div class="t3-form-original-language">';
-                $html[] =   $this->iconFactory->getIcon($this->data['systemLanguageRows'][$previewLanguage['sys_language_uid']]['flagIconIdentifier'], IconSize::SMALL)->render();
+                $html[] =   $this->iconFactory->getIcon($this->data['systemLanguageRows'][$previewLanguage['language_tag']]['flagIconIdentifier'], IconSize::SMALL)->render();
                 $html[] =   $this->previewFieldValue($defaultLanguageValue);
                 $html[] = '</div>';
             }

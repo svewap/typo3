@@ -31,19 +31,19 @@ final class DatabaseRowDefaultAsReadonlyTest extends UnitTestCase
             'databaseRow' => [
                 'uid' => 10,
                 'l10n_parent' => 5,
-                'sys_language_uid' => 2,
+                'language_tag' => 2,
                 'aField' => '',
             ],
             'defaultLanguageRow' => [
                 'uid' => 5,
                 'l10n_parent' => 0,
-                'sys_language_uid' => 0,
+                'language_tag' => 0,
                 'aField' => 'some-default-value',
             ],
             'processedTca' => [
                 'ctrl' => [
                     'transOrigPointerField' => 'l10n_parent',
-                    'languageField' => 'sys_language_uid',
+                    'languageField' => 'language_tag',
                 ],
                 'columns' => [
                     'aField' => [
@@ -79,13 +79,13 @@ final class DatabaseRowDefaultAsReadonlyTest extends UnitTestCase
                 'databaseRow' => [
                     'uid' => 10,
                     'l10n_parent' => 5,
-                    'sys_language_uid' => 2,
+                    'language_tag' => 2,
                     'aField' => 'wont-be-overridden',
                 ],
                 'processedTca' => [
                     'ctrl' => [
                         'transOrigPointerField' => 'l10n_parent',
-                        'languageField' => 'sys_language_uid',
+                        'languageField' => 'language_tag',
                     ],
                     'columns' => [
                         'aField' => [
@@ -101,19 +101,19 @@ final class DatabaseRowDefaultAsReadonlyTest extends UnitTestCase
                 'databaseRow' => [
                     'uid' => 10,
                     'l10n_parent' => 5,
-                    'sys_language_uid' => 2,
+                    'language_tag' => 2,
                     'aField' => 'wont-be-overridden',
                 ],
                 'defaultLanguageRow' => [
                     'uid' => 5,
                     'l10n_parent' => 0,
-                    'sys_language_uid' => 0,
+                    'language_tag' => 0,
                     'aField' => 'some-default-value',
                 ],
                 'processedTca' => [
                     'ctrl' => [
                         'transOrigPointerField' => 'l10n_parent',
-                        'languageField' => 'sys_language_uid',
+                        'languageField' => 'language_tag',
                     ],
                     'columns' => [
                         'aField' => [
@@ -128,7 +128,7 @@ final class DatabaseRowDefaultAsReadonlyTest extends UnitTestCase
                 'databaseRow' => [
                     'uid' => 10,
                     'l10n_parent' => 0,
-                    'sys_language_uid' => 2,
+                    'language_tag' => 2,
                     'aField' => 'wont-be-overridden',
                 ],
                 'defaultLanguageRow' => [
@@ -139,7 +139,7 @@ final class DatabaseRowDefaultAsReadonlyTest extends UnitTestCase
                 'processedTca' => [
                     'ctrl' => [
                         'transOrigPointerField' => 'l10n_parent',
-                        'languageField' => 'sys_language_uid',
+                        'languageField' => 'language_tag',
                     ],
                     'columns' => [
                         'aField' => [
@@ -155,19 +155,19 @@ final class DatabaseRowDefaultAsReadonlyTest extends UnitTestCase
                 'databaseRow' => [
                     'uid' => 10,
                     'l10n_parent' => 7,
-                    'sys_language_uid' => 2,
+                    'language_tag' => 2,
                     'aField' => 'wont-be-overridden',
                 ],
                 'defaultLanguageRow' => [
                     'uid' => 5,
                     'l10n_parent' => 0,
-                    'sys_language_uid' => 0,
+                    'language_tag' => 0,
                     'aField' => 'some-default-value',
                 ],
                 'processedTca' => [
                     'ctrl' => [
                         'transOrigPointerField' => 'l10n_parent',
-                        'languageField' => 'sys_language_uid',
+                        'languageField' => 'language_tag',
                     ],
                     'columns' => [
                         'aField' => [

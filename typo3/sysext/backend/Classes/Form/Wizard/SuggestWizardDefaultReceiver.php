@@ -122,7 +122,7 @@ class SuggestWizardDefaultReceiver
         if ($this->table === 'pages') {
             $this->queryBuilder->andWhere(
                 QueryHelper::stripLogicalOperatorPrefix($backendUser->getPagePermsClause(Permission::PAGE_SHOW)),
-                $this->queryBuilder->expr()->eq('sys_language_uid', 0)
+                $this->queryBuilder->expr()->eq('language_tag', 0)
             );
         }
         if (isset($config['addWhere'])) {

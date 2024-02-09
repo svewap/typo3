@@ -202,7 +202,7 @@ final class PagesAndTtContentWithImagesTest extends AbstractImportExportTestCase
                     'description',
                     'alternative',
                     'file',
-                    'sys_language_uid',
+                    'language_tag',
                     'l10n_parent',
                 ],
             ]

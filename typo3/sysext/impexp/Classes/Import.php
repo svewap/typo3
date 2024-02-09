@@ -989,7 +989,7 @@ class Import extends ImportExport
         ) {
             $ID = $uid;
         } elseif ($table === 'sys_file_metadata'
-            && $record['sys_language_uid'] === '0'
+            && $record['language_tag'] === '0'
             && isset($this->importMapId['sys_file'][$record['file']])
         ) {
             // On adding sys_file records the belonging sys_file_metadata record was also created:
@@ -1116,7 +1116,7 @@ class Import extends ImportExport
                     $queryBuilder->createNamedParameter($file, Connection::PARAM_INT)
                 ),
                 $queryBuilder->expr()->eq(
-                    'sys_language_uid',
+                    'language_tag',
                     $queryBuilder->createNamedParameter($sysLanguageUid, Connection::PARAM_INT)
                 )
             )

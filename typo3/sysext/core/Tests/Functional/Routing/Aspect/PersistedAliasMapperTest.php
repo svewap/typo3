@@ -136,7 +136,7 @@ final class PersistedAliasMapperTest extends FunctionalTestCase
         $this->writeSiteConfiguration($this->sites['acme']);
         $this->writeSiteConfiguration($this->sites['other']);
         $this->subject = new PersistedAliasMapper(self::ASPECT_CONFIGURATION);
-        $this->subject->setSiteLanguage($this->sites['acme']->getLanguageById(0));
+        $this->subject->setSiteLanguage($this->sites['acme']->getLanguageByCode(0));
         $this->subject->setSite($this->sites['acme']);
     }
 
@@ -201,7 +201,7 @@ final class PersistedAliasMapperTest extends FunctionalTestCase
     public function languageAwareRecordsAreResolved(string $identifier, string $requestValue, string $language, ?string $expectation): void
     {
         $this->subject->setSiteLanguage(
-            $this->sites[$identifier]->getLanguageById(self::LANGUAGE_MAP[$language])
+            $this->sites[$identifier]->getLanguageByCode(self::LANGUAGE_MAP[$language])
         );
         $this->subject->setSite(
             $this->sites[$identifier]

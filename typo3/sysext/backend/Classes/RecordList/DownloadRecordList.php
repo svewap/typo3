@@ -105,10 +105,10 @@ class DownloadRecordList
                 continue;
             }
             $translationsRaw = $this->translationConfigurationProvider->translationInfo($table, $row['uid'], 0, $row, $selectFields);
-            foreach ($translationsRaw['translations'] ?? [] as $languageId => $translationRow) {
+            foreach ($translationsRaw['translations'] ?? [] as $languageTag => $translationRow) {
                 // In offline workspace, look for alternative record
                 BackendUtility::workspaceOL($table, $translationRow, $backendUser->workspace, true);
-                if (is_array($translationRow) && $backendUser->checkLanguageAccess($languageId)) {
+                if (is_array($translationRow) && $backendUser->checkLanguageAccess($languageTag)) {
                     $result[] = $this->prepareRow($table, $translationRow, $columnsToRender, $this->recordList->id, $rawValues);
                 }
             }

@@ -32,7 +32,7 @@
                 <f:for each="{linkAnalyzerResult.brokenLinks}" as="link">
                     <tr>
                         <td><span title="{link.record_title}" aria-label="{link.record_title}">{link.record_uid}</span></td>
-                        <td>{link.language_code} [{link.language}]</td>
+                        <td>{link.language_tag} [{link.language}]</td>
                         <td><span title="{link.page_record.title}" aria-label="{link.page_record.title}">{link.real_pid}</span></td>
                         <td>{link.record_type}</td>
                         <td><span title="{link.target}" aria-label="{link.target}">{link.target -> f:format.crop(maxCharacters: 15)}</span></td>

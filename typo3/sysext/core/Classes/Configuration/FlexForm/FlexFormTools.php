@@ -631,7 +631,7 @@ class FlexFormTools
                 $fieldConfig['config']['size'] ??= 20;
                 // Force foreign_table_* fields for type category
                 $fieldConfig['config']['foreign_table'] = 'sys_category';
-                $fieldConfig['config']['foreign_table_where'] = ' AND {#sys_category}.{#sys_language_uid} IN (-1, 0)';
+                $fieldConfig['config']['foreign_table_where'] = ' AND {#sys_category}.{#language_tag} IN (-1, 0)';
                 if (empty($fieldConfig['config']['relationship'])) {
                     // Fall back to "oneToMany" when no relationship is given
                     $fieldConfig['config']['relationship'] = 'oneToMany';

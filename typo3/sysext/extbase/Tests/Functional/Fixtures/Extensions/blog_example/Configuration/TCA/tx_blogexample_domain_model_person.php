@@ -12,7 +12,7 @@ return [
         'crdate' => 'crdate',
         'versioningWS' => true,
         'origUid' => 't3_origuid',
-        'languageField' => 'sys_language_uid',
+        'languageField' => 'language_tag',
         'transOrigPointerField' => 'l10n_parent',
         'prependAtCopy' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.prependAtCopy',
         'delete' => 'deleted',
@@ -22,7 +22,7 @@ return [
         'iconfile' => 'EXT:blog_example/Resources/Public/Icons/icon_tx_blogexample_domain_model_person.gif',
     ],
     'columns' => [
-        'sys_language_uid' => [
+        'language_tag' => [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
@@ -31,7 +31,7 @@ return [
             ],
         ],
         'l10n_parent' => [
-            'displayCond' => 'FIELD:sys_language_uid:>:0',
+            'displayCond' => 'FIELD:language_tag:>:0',
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'select',
@@ -40,7 +40,7 @@ return [
                     ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => 'tx_blogexample_domain_model_person',
-                'foreign_table_where' => 'AND {#tx_blogexample_domain_model_person}.{#pid}=###CURRENT_PID### AND {#tx_blogexample_domain_model_person}.{#sys_language_uid} IN (-1,0)',
+                'foreign_table_where' => 'AND {#tx_blogexample_domain_model_person}.{#pid}=###CURRENT_PID### AND {#tx_blogexample_domain_model_person}.{#language_tag} IN (-1,0)',
             ],
         ],
         'hidden' => [
@@ -114,7 +114,7 @@ return [
         ],
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, firstname, lastname, email, salutation, avatar, tags, tags_special'],
+        '1' => ['showitem' => 'language_tag, firstname, lastname, email, salutation, avatar, tags, tags_special'],
     ],
     'palettes' => [
         '1' => ['showitem' => ''],

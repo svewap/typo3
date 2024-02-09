@@ -5187,14 +5187,14 @@ class ContentObjectRenderer implements LoggerAwareInterface
                     $languageQuery,
                     $expressionBuilder->and(
                         $expressionBuilder->eq($table . '.' . $localizationParentField, 0),
-                        $expressionBuilder->eq($languageField, $languageAspect->getContentId())
+                        $expressionBuilder->eq($languageField, $languageAspect->getContentLanguageCode())
                     )
                 );
             }
             return $languageQuery;
         }
         // No overlays = only fetch records given for the requested language and "all languages"
-        return $expressionBuilder->in($languageField, [$languageAspect->getContentId(), -1]);
+        return $expressionBuilder->in($languageField, [$languageAspect->getContentLanguageCode(), -1]);
     }
 
     /**

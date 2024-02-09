@@ -894,9 +894,9 @@ class DataMapProcessor
      * Fetches translation dependencies for a given parent/source record ids.
      *
      * Existing records in database:
-     * + [uid:5, l10n_parent=0, l10n_source=0, sys_language_uid=0]
-     * + [uid:6, l10n_parent=5, l10n_source=5, sys_language_uid=1]
-     * + [uid:7, l10n_parent=5, l10n_source=6, sys_language_uid=2]
+     * + [uid:5, l10n_parent=0, l10n_source=0, language_tag=0]
+     * + [uid:6, l10n_parent=5, l10n_source=5, language_tag=1]
+     * + [uid:7, l10n_parent=5, l10n_source=6, language_tag=2]
      *
      * Input $ids and their results:
      * + [5]   -> [DataMapItem(6), DataMapItem(7)] # since 5 is parent/source
@@ -968,9 +968,9 @@ class DataMapProcessor
      * This method expands the search criteria by expanding to ancestors.
      *
      * Existing records in database:
-     * + [uid:5, l10n_parent=0, l10n_source=0, sys_language_uid=0]
-     * + [uid:6, l10n_parent=5, l10n_source=5, sys_language_uid=1]
-     * + [uid:7, l10n_parent=5, l10n_source=6, sys_language_uid=2]
+     * + [uid:5, l10n_parent=0, l10n_source=0, language_tag=0]
+     * + [uid:6, l10n_parent=5, l10n_source=5, language_tag=1]
+     * + [uid:7, l10n_parent=5, l10n_source=6, language_tag=2]
      *
      * Input $ids and $desiredLanguage and their results:
      * + $ids=[5], $lang=1 -> [5 => 6] # since 5 is source of 6
@@ -1272,7 +1272,7 @@ class DataMapProcessor
             return $data;
         }
 
-        // apply `languageField`, e.g. `sys_language_uid`
+        // apply `languageField`, e.g. `language_tag`
         $data[$fieldNames['language']] = $language;
         // apply `transOrigPointerField`, e.g. `l10n_parent`
         if (empty($data[$fieldNames['parent']])) {
@@ -1326,7 +1326,7 @@ class DataMapProcessor
 
         try {
             $site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($pageId);
-            $siteLanguage = $site->getLanguageById($language);
+            $siteLanguage = $site->getLanguageByCode($language);
             $languageTitle = $siteLanguage->getTitle();
         } catch (SiteNotFoundException | \InvalidArgumentException $e) {
             $languageTitle = '';

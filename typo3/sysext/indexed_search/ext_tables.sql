@@ -20,7 +20,7 @@ CREATE TABLE index_phash (
   contentHash varchar(32) NOT NULL,
   crdate int(11) DEFAULT '0' NOT NULL,
   parsetime int(11) DEFAULT '0' NOT NULL,
-  sys_language_uid int(11) DEFAULT '0' NOT NULL,
+  language_tag int(11) DEFAULT '0' NOT NULL,
   item_crdate int(11) DEFAULT '0' NOT NULL,
   externalUrl tinyint(3) DEFAULT '0' NOT NULL,
   recordUid int(11) DEFAULT '0' NOT NULL,

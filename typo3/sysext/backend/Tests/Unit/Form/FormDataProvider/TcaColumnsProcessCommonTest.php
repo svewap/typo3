@@ -92,13 +92,13 @@ final class TcaColumnsProcessCommonTest extends UnitTestCase
             'columnsToProcess' => [],
             'processedTca' => [
                 'ctrl' => [
-                    'languageField' => 'sys_language_uid',
+                    'languageField' => 'language_tag',
                 ],
             ],
         ];
 
         $expected = $input;
-        $expected['columnsToProcess'] = ['sys_language_uid'];
+        $expected['columnsToProcess'] = ['language_tag'];
         self::assertSame($expected, (new TcaColumnsProcessCommon())->addData($input));
     }
 

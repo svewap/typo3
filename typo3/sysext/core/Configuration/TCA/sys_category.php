@@ -14,7 +14,7 @@ return [
         'rootLevel' => -1,
         'groupName' => 'content',
         'origUid' => 't3_origuid',
-        'languageField' => 'sys_language_uid',
+        'languageField' => 'language_tag',
         'transOrigPointerField' => 'l10n_parent',
         'transOrigDiffSourceField' => 'l10n_diffsource',
         'searchFields' => 'title,description',
@@ -49,10 +49,10 @@ return [
     ],
     'palettes' => [
         'timeRestriction' => ['showitem' => 'starttime, endtime'],
-        'language' => ['showitem' => 'sys_language_uid, l10n_parent'],
+        'language' => ['showitem' => 'language_tag, l10n_parent'],
     ],
     'columns' => [
-        'sys_language_uid' => [
+        'language_tag' => [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
@@ -60,7 +60,7 @@ return [
             ],
         ],
         'l10n_parent' => [
-            'displayCond' => 'FIELD:sys_language_uid:>:0',
+            'displayCond' => 'FIELD:language_tag:>:0',
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'select',
@@ -69,7 +69,7 @@ return [
                     ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => 'sys_category',
-                'foreign_table_where' => 'AND {#sys_category}.{#pid}=###CURRENT_PID### AND {#sys_category}.{#sys_language_uid} IN (-1,0)',
+                'foreign_table_where' => 'AND {#sys_category}.{#pid}=###CURRENT_PID### AND {#sys_category}.{#language_tag} IN (-1,0)',
                 'default' => 0,
             ],
         ],

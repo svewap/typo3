@@ -231,7 +231,7 @@ class TcaInputPlaceholders implements FormDataProviderInterface
     /**
      * E.g. sys_file is not translatable, thus the uid of the translation of it's metadata has to be retrieved here.
      *
-     * Get the uid of e.g. a file metadata entry for a given sys_language_uid and the possible translated data.
+     * Get the uid of e.g. a file metadata entry for a given language_tag and the possible translated data.
      * If there is no translation available, return the uid of default language.
      * If there is no value at all, return the "possible uids".
      *
@@ -253,7 +253,7 @@ class TcaInputPlaceholders implements FormDataProviderInterface
                 ),
                 $queryBuilder->expr()->in(
                     $languageField,
-                    $queryBuilder->createNamedParameter([$currentLanguage, 0], Connection::PARAM_INT_ARRAY)
+                    $queryBuilder->createNamedParameter([$currentLanguage, 0], Connection::PARAM_STR_ARRAY)
                 )
             )
             ->groupBy($languageField, 'uid')

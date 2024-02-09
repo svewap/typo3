@@ -48,18 +48,18 @@ class NullSite implements SiteInterface
         if (empty($languages)) {
             // Create the default language if no language configuration is given
             $this->languages[0] = new SiteLanguage(
-                0,
+                'en-US',
                 '',
                 new Uri('/'),
                 ['enabled' => true]
             );
         } else {
             foreach ($languages as $languageConfiguration) {
-                $languageUid = (int)$languageConfiguration['languageId'];
+                $languageCode = (string)$languageConfiguration['languageCode'];
                 // Language configuration does not have a base defined
                 // So the main site base is used (usually done for default languages)
-                $this->languages[$languageUid] = new SiteLanguage(
-                    $languageUid,
+                $this->languages[$languageCode] = new SiteLanguage(
+                    $languageCode,
                     $languageConfiguration['locale'] ?? '',
                     $baseEntryPoint ?: new Uri('/'),
                     $languageConfiguration
@@ -103,17 +103,17 @@ class NullSite implements SiteInterface
     }
 
     /**
-     * Returns a language of this site, given by the sys_language_uid
+     * Returns a language of this site, given by the language_tag
      *
      * @throws \InvalidArgumentException
      */
-    public function getLanguageById(int $languageId): SiteLanguage
+    public function getLanguageByCode(string $languageCode): SiteLanguage
     {
-        if (isset($this->languages[$languageId])) {
-            return $this->languages[$languageId];
+        if (isset($this->languages[$languageCode])) {
+            return $this->languages[$languageCode];
         }
         throw new \InvalidArgumentException(
-            'Language ' . $languageId . ' does not exist on site ' . $this->getIdentifier() . '.',
+            'Language ' . $languageCode . ' does not exist on site ' . $this->getIdentifier() . '.',
             1522965188
         );
     }
@@ -133,7 +133,7 @@ class NullSite implements SiteInterface
 
         // Check if we need to add language "-1"
         if ($includeAllLanguagesFlag && $user->checkLanguageAccess(-1)) {
-            $availableLanguages[-1] = new SiteLanguage(-1, '', $this->getBase(), [
+            $availableLanguages[-1] = new SiteLanguage('all', '', $this->getBase(), [
                 'title' => $this->getLanguageService()->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:multipleLanguages'),
                 'flag' => 'flags-multiple',
             ]);
@@ -144,8 +144,8 @@ class NullSite implements SiteInterface
         $disabledLanguages = GeneralUtility::intExplode(',', (string)($pageTs['disableLanguages'] ?? ''), true);
         // Do not add the ones that are not allowed by the user
         foreach ($this->languages as $language) {
-            if ($user->checkLanguageAccess($language->getLanguageId()) && !in_array($language->getLanguageId(), $disabledLanguages, true)) {
-                if ($language->getLanguageId() === 0) {
+            if ($user->checkLanguageAccess($language->getLanguageCode()) && !in_array($language->getLanguageCode(), $disabledLanguages, true)) {
+                if ($language->getLanguageCode() === 0) {
                     // 0: "Default" language
                     $defaultLanguageLabel = 'LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:defaultLanguage';
                     $defaultLanguageLabel = $this->getLanguageService()->sL($defaultLanguageLabel);
@@ -156,12 +156,12 @@ class NullSite implements SiteInterface
                     if (isset($pageTs['defaultLanguageFlag'])) {
                         $defaultLanguageFlag = 'flags-' . $pageTs['defaultLanguageFlag'];
                     }
-                    $language = new SiteLanguage(0, '', $language->getBase(), [
+                    $language = new SiteLanguage('en-US', '', $language->getBase(), [
                         'title' => $defaultLanguageLabel,
                         'flag' => $defaultLanguageFlag,
                     ]);
                 }
-                $availableLanguages[$language->getLanguageId()] = $language;
+                $availableLanguages[$language->getLanguageCode()] = $language;
             }
         }
 

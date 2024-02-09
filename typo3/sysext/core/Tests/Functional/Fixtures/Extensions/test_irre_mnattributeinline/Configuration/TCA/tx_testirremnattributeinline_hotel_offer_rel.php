@@ -8,7 +8,7 @@ return [
         'label' => 'uid',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'languageField' => 'sys_language_uid',
+        'languageField' => 'language_tag',
         'transOrigPointerField' => 'l18n_parent',
         'transOrigDiffSourceField' => 'l18n_diffsource',
         'translationSource' => 'l10n_source',
@@ -24,7 +24,7 @@ return [
         ],
     ],
     'columns' => [
-        'sys_language_uid' => [
+        'language_tag' => [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
@@ -32,7 +32,7 @@ return [
             ],
         ],
         'l18n_parent' => [
-            'displayCond' => 'FIELD:sys_language_uid:>:0',
+            'displayCond' => 'FIELD:language_tag:>:0',
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'select',
@@ -41,7 +41,7 @@ return [
                     ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => 'tx_testirremnattributeinline_hotel_offer_rel',
-                'foreign_table_where' => 'AND {#tx_testirremnattributeinline_hotel_offer_rel}.{#pid}=###CURRENT_PID### AND {#tx_testirremnattributeinline_hotel_offer_rel}.{#sys_language_uid} IN (-1,0)',
+                'foreign_table_where' => 'AND {#tx_testirremnattributeinline_hotel_offer_rel}.{#pid}=###CURRENT_PID### AND {#tx_testirremnattributeinline_hotel_offer_rel}.{#language_tag} IN (-1,0)',
                 'default' => 0,
             ],
         ],
@@ -65,7 +65,7 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'foreign_table' => 'tx_testirremnattributeinline_hotel',
-                'foreign_table_where' => 'AND {#tx_testirremnattributeinline_hotel}.{#pid}=###CURRENT_PID### AND {#tx_testirremnattributeinline_hotel}.{#sys_language_uid}="###REC_FIELD_sys_language_uid###"',
+                'foreign_table_where' => 'AND {#tx_testirremnattributeinline_hotel}.{#pid}=###CURRENT_PID### AND {#tx_testirremnattributeinline_hotel}.{#language_tag}="###REC_FIELD_language_tag###"',
                 'maxitems' => 1,
                 'default' => 0,
             ],
@@ -76,7 +76,7 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'foreign_table' => 'tx_testirremnattributeinline_offer',
-                'foreign_table_where' => 'AND {#tx_testirremnattributeinline_offer}.{#pid}=###CURRENT_PID### AND {#tx_testirremnattributeinline_offer}.{#sys_language_uid}="###REC_FIELD_sys_language_uid###"',
+                'foreign_table_where' => 'AND {#tx_testirremnattributeinline_offer}.{#pid}=###CURRENT_PID### AND {#tx_testirremnattributeinline_offer}.{#language_tag}="###REC_FIELD_language_tag###"',
                 'maxitems' => 1,
                 'default' => 0,
             ],
@@ -109,7 +109,7 @@ return [
     'types' => [
         '0' => ['showitem' =>
             '--div--;LLL:EXT:test_irre_mnattributeinline/Resources/Private/Language/locallang_db.xlf:tabs.general, title, hotelid, offerid, prices,' .
-            '--div--;LLL:EXT:test_irre_mnattributeinline/Resources/Private/Language/locallang_db.xlf:tabs.visibility, sys_language_uid, l18n_parent, l18n_diffsource, hidden, hotelsort, offersort',
+            '--div--;LLL:EXT:test_irre_mnattributeinline/Resources/Private/Language/locallang_db.xlf:tabs.visibility, language_tag, l18n_parent, l18n_diffsource, hidden, hotelsort, offersort',
         ],
     ],
     'palettes' => [

@@ -64,15 +64,15 @@ final class TcaSystemLanguageCollector
         $allLanguages = [];
         foreach ($this->getAllSites() as $site) {
             foreach ($site->getAllLanguages() as $language) {
-                $languageId = $language->getLanguageId();
-                if (isset($allLanguages[$languageId])) {
+                $languageCode = $language->getLanguageCode();
+                if (isset($allLanguages[$languageCode])) {
                     // Language already provided by another site, just add the label separately
-                    $allLanguages[$languageId]['label'] .= ', ' . $language->getTitle() . ' [Site: ' . $site->getIdentifier() . ']';
+                    $allLanguages[$languageCode]['label'] .= ', ' . $language->getTitle() . ' [Site: ' . $site->getIdentifier() . ']';
                     continue;
                 }
-                $allLanguages[$languageId] = [
+                $allLanguages[$languageCode] = [
                     'label' => $language->getTitle() . ' [Site: ' . $site->getIdentifier() . ']',
-                    'value' => $languageId,
+                    'value' => $languageCode,
                     'icon' => $language->getFlagIdentifier(),
                 ];
             }
@@ -90,10 +90,10 @@ final class TcaSystemLanguageCollector
         $recordPid = (int)($fieldInformation['row']['pid'] ?? 0);
         $languages = (new NullSite())->getAvailableLanguages($this->getBackendUser(), false, $recordPid);
 
-        foreach ($languages as $languageId => $language) {
+        foreach ($languages as $languageCode => $language) {
             $fieldInformation['items'][] = [
                 'label' => $language->getTitle(),
-                'value' => $languageId,
+                'value' => $languageCode,
                 'icon' => $language->getFlagIdentifier(),
             ];
         }

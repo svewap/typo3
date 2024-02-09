@@ -206,7 +206,7 @@ class Backend implements BackendInterface, SingletonInterface
         $languageAspect = $query->getQuerySettings()->getLanguageAspect();
         $languageAspect = new LanguageAspect(
             $languageAspect->getId(),
-            $languageAspect->getContentId(),
+            $languageAspect->getContentLanguageCode(),
             $languageAspect->getOverlayType() === LanguageAspect::OVERLAYS_OFF ? LanguageAspect::OVERLAYS_ON_WITH_FLOATING : $languageAspect->getOverlayType()
         );
         $query->getQuerySettings()->setLanguageAspect($languageAspect);

@@ -104,7 +104,7 @@ class HrefLangGenerator
 
     protected function getTranslatedPageRecord(int $pageId, int $languageId, Site $site): array
     {
-        $targetSiteLanguage = $site->getLanguageById($languageId);
+        $targetSiteLanguage = $site->getLanguageByCode($languageId);
         $languageAspect = LanguageAspectFactory::createFromSiteLanguage($targetSiteLanguage);
 
         $context = clone GeneralUtility::makeInstance(Context::class);

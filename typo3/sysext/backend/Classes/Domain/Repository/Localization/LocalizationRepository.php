@@ -51,7 +51,7 @@ class LocalizationRepository
     {
         $queryBuilder = $this->getQueryBuilderWithWorkspaceRestriction('tt_content');
 
-        $queryBuilder->select('tt_content_orig.sys_language_uid')
+        $queryBuilder->select('tt_content_orig.language_tag')
             ->from('tt_content')
             ->join(
                 'tt_content',
@@ -68,15 +68,15 @@ class LocalizationRepository
                     $queryBuilder->createNamedParameter($pageId, Connection::PARAM_INT)
                 ),
                 $queryBuilder->expr()->eq(
-                    'tt_content.sys_language_uid',
-                    $queryBuilder->createNamedParameter($localizedLanguage, Connection::PARAM_INT)
+                    'tt_content.language_tag',
+                    $queryBuilder->createNamedParameter($localizedLanguage)
                 ),
                 $queryBuilder->expr()->neq(
-                    'tt_content_orig.sys_language_uid',
-                    $queryBuilder->createNamedParameter(-1, Connection::PARAM_INT)
+                    'tt_content_orig.language_tag',
+                    $queryBuilder->createNamedParameter(-1)
                 )
             )
-            ->groupBy('tt_content_orig.sys_language_uid');
+            ->groupBy('tt_content_orig.language_tag');
         $this->getAllowedLanguageConstraintsForBackendUser($pageId, $queryBuilder, $this->getBackendUser(), 'tt_content_orig');
 
         return $queryBuilder->executeQuery()->fetchAssociative() ?: [];
@@ -86,7 +86,7 @@ class LocalizationRepository
      * Returns number of localized records in given page and language
      * Records which were added to the language directly (not through translation) are not counted.
      */
-    public function getLocalizedRecordCount(int $pageId, int $languageId): int
+    public function getLocalizedRecordCount(int $pageId, int $languageTag): int
     {
         $queryBuilder = $this->getQueryBuilderWithWorkspaceRestriction('tt_content');
 
@@ -94,8 +94,8 @@ class LocalizationRepository
             ->from('tt_content')
             ->where(
                 $queryBuilder->expr()->eq(
-                    'sys_language_uid',
-                    $queryBuilder->createNamedParameter($languageId, Connection::PARAM_INT)
+                    'language_tag',
+                    $queryBuilder->createNamedParameter($languageTag)
                 ),
                 $queryBuilder->expr()->eq(
                     'pid',
@@ -115,10 +115,10 @@ class LocalizationRepository
     /**
      * Fetch all available languages
      */
-    public function fetchAvailableLanguages(int $pageId, int $languageId): array
+    public function fetchAvailableLanguages(int $pageId, string $languageTag): array
     {
         $queryBuilder = $this->getQueryBuilderWithWorkspaceRestriction('tt_content');
-        $queryBuilder->select('sys_language_uid')
+        $queryBuilder->select('language_tag')
             ->from('tt_content')
             ->where(
                 $queryBuilder->expr()->eq(
@@ -126,11 +126,11 @@ class LocalizationRepository
                     $queryBuilder->createNamedParameter($pageId, Connection::PARAM_INT)
                 ),
                 $queryBuilder->expr()->neq(
-                    'sys_language_uid',
-                    $queryBuilder->createNamedParameter($languageId, Connection::PARAM_INT)
+                    'language_tag',
+                    $queryBuilder->createNamedParameter($languageTag, Connection::PARAM_INT)
                 )
             )
-            ->groupBy('sys_language_uid');
+            ->groupBy('language_tag');
 
         $this->getAllowedLanguageConstraintsForBackendUser($pageId, $queryBuilder, $this->getBackendUser());
         $languages = $queryBuilder->executeQuery()->fetchAllAssociative();
@@ -150,8 +150,8 @@ class LocalizationRepository
         $allowedLanguages = $this->translationConfigurationProvider->getSystemLanguages($pageId);
         $queryBuilder->andWhere(
             $queryBuilder->expr()->in(
-                ($alias === '' ? '' : ($alias . '.')) . 'sys_language_uid',
-                $queryBuilder->createNamedParameter(array_keys($allowedLanguages), Connection::PARAM_INT_ARRAY)
+                ($alias === '' ? '' : ($alias . '.')) . 'language_tag',
+                $queryBuilder->createNamedParameter(array_keys($allowedLanguages), Connection::PARAM_STR_ARRAY)
             )
         );
     }
@@ -161,7 +161,7 @@ class LocalizationRepository
      *
      * @return Result
      */
-    public function getRecordsToCopyDatabaseResult(int $pageId, int $destLanguageId, int $languageId, string $fields = '*')
+    public function getRecordsToCopyDatabaseResult(int $pageId, int $destLanguageId, int $languageTag, string $fields = '*')
     {
         $originalUids = [];
 
@@ -173,8 +173,8 @@ class LocalizationRepository
             ->from('tt_content')
             ->where(
                 $queryBuilder->expr()->eq(
-                    'sys_language_uid',
-                    $queryBuilder->createNamedParameter($destLanguageId, Connection::PARAM_INT)
+                    'language_tag',
+                    $queryBuilder->createNamedParameter($destLanguageId)
                 ),
                 $queryBuilder->expr()->eq(
                     'pid',
@@ -191,8 +191,8 @@ class LocalizationRepository
             ->from('tt_content')
             ->where(
                 $queryBuilder->expr()->eq(
-                    'sys_language_uid',
-                    $queryBuilder->createNamedParameter($languageId, Connection::PARAM_INT)
+                    'language_tag',
+                    $queryBuilder->createNamedParameter($languageTag)
                 ),
                 $queryBuilder->expr()->eq(
                     'pid',

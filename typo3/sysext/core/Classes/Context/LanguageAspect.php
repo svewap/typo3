@@ -25,7 +25,7 @@ use TYPO3\CMS\Core\Context\Exception\AspectPropertyNotFoundException;
  *
  *
  * "id" (languageId, int)
- * - formally known as $TSFE->sys_language_uid
+ * - formally known as $TSFE->language_tag
  * - the requested language of the current page (frontend)
  * - used in menus and links to generate "links in language with this ID"
  *
@@ -56,14 +56,14 @@ use TYPO3\CMS\Core\Context\Exception\AspectPropertyNotFoundException;
 class LanguageAspect implements AspectInterface
 {
     /**
-     * @var int
+     * @var string
      */
-    protected $id = 0;
+    protected $code = '';
 
     /**
-     * @var int
+     * @var string
      */
-    protected $contentId = 0;
+    protected $contentLanguageCode = '';
 
     /**
      * @var array
@@ -84,11 +84,11 @@ class LanguageAspect implements AspectInterface
      *
      * @param int|null $contentId
      */
-    public function __construct(int $id = 0, int $contentId = null, string $overlayType = self::OVERLAYS_ON_WITH_FLOATING, array $fallbackChain = [])
+    public function __construct(string $code = '', string $contentId = null, string $overlayType = self::OVERLAYS_ON_WITH_FLOATING, array $fallbackChain = [])
     {
         $this->overlayType = $overlayType;
-        $this->id = $id;
-        $this->contentId = $contentId ?? $this->id;
+        $this->code = $code;
+        $this->contentLanguageCode = $contentId ?? $this->code;
         $this->fallbackChain = $fallbackChain;
     }
 
@@ -104,9 +104,9 @@ class LanguageAspect implements AspectInterface
      * Returns the language ID the current page was requested,
      * this is relevant when building menus or links to other pages.
      */
-    public function getId(): int
+    public function getCode(): string
     {
-        return $this->id;
+        return $this->code;
     }
 
     /**
@@ -114,9 +114,9 @@ class LanguageAspect implements AspectInterface
      * This is especially useful when a page requested with language=4 should fall back to showing
      * content of language=2 (see fallbackChain)
      */
-    public function getContentId(): int
+    public function getContentLanguageCode(): string
     {
-        return $this->contentId;
+        return $this->contentLanguageCode;
     }
 
     public function getFallbackChain(): array
@@ -129,7 +129,7 @@ class LanguageAspect implements AspectInterface
      */
     public function doOverlays(): bool
     {
-        return $this->contentId > 0 && $this->overlayType !== self::OVERLAYS_OFF;
+        return $this->contentLanguageCode > 0 && $this->overlayType !== self::OVERLAYS_OFF;
     }
 
     /**
@@ -172,10 +172,10 @@ class LanguageAspect implements AspectInterface
     public function get(string $name)
     {
         switch ($name) {
-            case 'id':
-                return $this->id;
+            case 'code':
+                return $this->code;
             case 'contentId':
-                return $this->contentId;
+                return $this->contentLanguageCode;
             case 'fallbackChain':
                 return $this->fallbackChain;
             case 'overlayType':

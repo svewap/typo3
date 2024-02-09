@@ -84,7 +84,7 @@ class SiteMatcher implements SingletonInterface
         // Remove script file name (index.php) from request uri
         $uri = $this->canonicalizeUri($request->getUri(), $request);
         $pageId = $this->resolvePageIdQueryParam($request);
-        $languageId = $this->resolveLanguageIdQueryParam($request);
+        $languageCode = $this->resolveLanguageCodeQueryParam($request);
 
         $routeResult = $this->matchSiteByUri($uri, $request);
 
@@ -92,9 +92,9 @@ class SiteMatcher implements SingletonInterface
         // (pageId based site resolution without L parameter has always been prohibited, so we do not support that)
         if (
             $this->features->isFeatureEnabled('security.frontend.allowInsecureSiteResolutionByQueryParameters') &&
-            $pageId !== null && $languageId !== null
+            $pageId !== null && $languageCode !== null
         ) {
-            return $this->matchSiteByQueryParams($pageId, $languageId, $routeResult, $uri);
+            return $this->matchSiteByQueryParams($pageId, $languageCode, $routeResult, $uri);
         }
 
         // Allow the default language to be resolved in case all languages use a prefix
@@ -107,10 +107,10 @@ class SiteMatcher implements SingletonInterface
 
         // adjust the language aspect if it was given by query param `&L` (and ?id is given)
         // @todo remove, this is added for backwards (and functional tests) compatibility reasons
-        if ($languageId !== null && $pageId !== null) {
+        if ($languageCode !== null && $pageId !== null) {
             try {
                 // override/set language by `&L=` query param
-                $routeResult = $routeResult->withLanguage($routeResult->getSite()->getLanguageById($languageId));
+                $routeResult = $routeResult->withLanguage($routeResult->getSite()->getLanguageByCode($languageCode));
             } catch (\InvalidArgumentException) {
                 // ignore; language id not available
             }
@@ -169,7 +169,7 @@ class SiteMatcher implements SingletonInterface
                     (string)idn_to_ascii($uri->getHost()),
                     $uri->getScheme() === '' ? [] : [$uri->getScheme()]
                 );
-                $identifier = 'site_' . $site->getIdentifier() . '_' . $siteLanguage->getLanguageId();
+                $identifier = 'site_' . $site->getIdentifier() . '_' . $siteLanguage->getLanguageCode();
                 $collection->add($identifier, $route);
             }
         }
@@ -191,13 +191,13 @@ class SiteMatcher implements SingletonInterface
     /**
      * @return ?positive-int
      */
-    protected function resolveLanguageIdQueryParam(ServerRequestInterface $request): ?int
+    protected function resolveLanguageCodeQueryParam(ServerRequestInterface $request): ?int
     {
-        $languageId = $request->getQueryParams()['L'] ?? $request->getParsedBody()['L'] ?? null;
-        if ($languageId === null) {
+        $languageCode = $request->getQueryParams()['L'] ?? $request->getParsedBody()['L'] ?? null;
+        if ($languageCode === null) {
             return null;
         }
-        return (int)$languageId < 0 ? null : (int)$languageId;
+        return (int)$languageCode < 0 ? null : (int)$languageCode;
     }
 
     /**
@@ -246,7 +246,7 @@ class SiteMatcher implements SingletonInterface
 
     protected function matchSiteByQueryParams(
         int $pageId,
-        int $languageId,
+        int $languageCode,
         SiteRouteResult $fallback,
         UriInterface $uri,
     ): SiteRouteResult {
@@ -258,7 +258,7 @@ class SiteMatcher implements SingletonInterface
 
         try {
             // override/set language by `&L=` query param
-            $language = $site->getLanguageById($languageId);
+            $language = $site->getLanguageByCode($languageCode);
         } catch (\InvalidArgumentException) {
             return $fallback;
         }

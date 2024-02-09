@@ -90,13 +90,13 @@ class TranslationConfigurationProvider
     protected function addSiteLanguagesToConsolidatedList(array $allSystemLanguages, array $languagesOfSpecificSite, SiteInterface $site, bool $includeSiteSuffix): array
     {
         foreach ($languagesOfSpecificSite as $language) {
-            $languageId = $language->getLanguageId();
-            if (isset($allSystemLanguages[$languageId])) {
+            $languageTag = $language->getLanguageCode();
+            if (isset($allSystemLanguages[$languageTag])) {
                 // Language already provided by another site, just add the label separately
-                $allSystemLanguages[$languageId]['title'] .= ', ' . $language->getTitle() . ' [Site: ' . $site->getIdentifier() . ']';
+                $allSystemLanguages[$languageTag]['title'] .= ', ' . $language->getTitle() . ' [Site: ' . $site->getIdentifier() . ']';
             } else {
-                $allSystemLanguages[$languageId] = [
-                    'uid' => $languageId,
+                $allSystemLanguages[$languageTag] = [
+                    'uid' => $languageTag,
                     'title' => $language->getTitle() . ($includeSiteSuffix ? ' [Site: ' . $site->getIdentifier() . ']' : ''),
                     'flagIcon' => $language->getFlagIdentifier(),
                 ];
@@ -200,7 +200,7 @@ class TranslationConfigurationProvider
             'table' => $table,
             'uid' => $uid,
             'CType' => $row['CType'] ?? '',
-            'sys_language_uid' => $row[$GLOBALS['TCA'][$table]['ctrl']['languageField'] ?? null] ?? null,
+            'language_tag' => $row[$GLOBALS['TCA'][$table]['ctrl']['languageField'] ?? null] ?? null,
             'translations' => $translations,
             'excessive_translations' => $translationsErrors,
         ];

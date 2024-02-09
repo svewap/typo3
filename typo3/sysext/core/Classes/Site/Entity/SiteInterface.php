@@ -47,11 +47,11 @@ interface SiteInterface
     public function getLanguages(): array;
 
     /**
-     * Returns a language of this site, given by the sys_language_uid
+     * Returns a language of this site, given by the language_tag
      *
      * @throws \InvalidArgumentException
      */
-    public function getLanguageById(int $languageId): SiteLanguage;
+    public function getLanguageByCode(string $languageCode): SiteLanguage;
 
     /**
      * Returns the first language that was configured. This is usually language=0

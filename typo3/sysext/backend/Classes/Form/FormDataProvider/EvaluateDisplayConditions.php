@@ -768,7 +768,7 @@ class EvaluateDisplayConditions implements FormDataProviderInterface
      * Evaluates conditions concerning a field of the current record.
      *
      * Example:
-     * "FIELD:sys_language_uid:>:0" => TRUE, if the field 'sys_language_uid' is greater than 0
+     * "FIELD:language_tag:>:0" => TRUE, if the field 'language_tag' is greater than 0
      *
      * @param array $condition Condition array
      */

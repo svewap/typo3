@@ -2,7 +2,7 @@
 
 return [
     'ctrl' => [
-        'label' => 'languageId',
+        'label' => 'languageCode',
         'label_userFunc' => \TYPO3\CMS\Backend\Configuration\TCA\UserFunctions::class . '->getSiteLanguageTitle',
         'title' => 'LLL:EXT:backend/Resources/Private/Language/locallang_siteconfiguration_tca.xlf:site_language.ctrl.title',
         'typeicon_classes' => [
@@ -10,8 +10,8 @@ return [
         ],
     ],
     'columns' => [
-        'languageId' => [
-            'label' => 'LLL:EXT:backend/Resources/Private/Language/locallang_siteconfiguration_tca.xlf:site_language.languageId',
+        'languageCode' => [
+            'label' => 'LLL:EXT:backend/Resources/Private/Language/locallang_siteconfiguration_tca.xlf:site_language.languageCode',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
@@ -381,7 +381,7 @@ return [
         ],
         'fallbackType' => [
             'label' => 'LLL:EXT:backend/Resources/Private/Language/locallang_siteconfiguration_tca.xlf:site_language.fallbackType',
-            'displayCond' => 'FIELD:languageId:>:0',
+            'displayCond' => 'FIELD:languageCode:>:0',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
@@ -394,7 +394,7 @@ return [
         ],
         'fallbacks' => [
             'label' => 'LLL:EXT:backend/Resources/Private/Language/locallang_siteconfiguration_tca.xlf:site_language.fallbacks',
-            'displayCond' => 'FIELD:languageId:>:0',
+            'displayCond' => 'FIELD:languageCode:>:0',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
@@ -406,16 +406,15 @@ return [
     ],
     'types' => [
         '1' => [
-            'showitem' => '--palette--;;default, --palette--;;rendering-related, flag, --palette--;;languageIdPalette',
+            'showitem' => '--palette--;;languageCodePalette,--palette--;;default, --palette--;;rendering-related, flag',
         ],
     ],
     'palettes' => [
         'default' => [
             'showitem' => 'title, enabled, --linebreak--, locale, hreflang, --linebreak--, base',
         ],
-        'languageIdPalette' => [
-            'showitem' => 'languageId',
-            'isHiddenPalette' => true,
+        'languageCodePalette' => [
+            'showitem' => 'languageCode',
         ],
         'rendering-related' => [
             'label' => 'LLL:EXT:backend/Resources/Private/Language/locallang_siteconfiguration_tca.xlf:site_language.palette.frontend',

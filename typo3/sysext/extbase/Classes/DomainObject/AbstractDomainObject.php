@@ -32,7 +32,7 @@ abstract class AbstractDomainObject implements DomainObjectInterface
     public const PROPERTY_UID = 'uid';
     public const PROPERTY_PID = 'pid';
     public const PROPERTY_LOCALIZED_UID = '_localizedUid';
-    public const PROPERTY_LANGUAGE_UID = '_languageUid';
+    public const PROPERTY_LANGUAGE_TAG = '_languageTag';
     public const PROPERTY_VERSIONED_UID = '_versionedUid';
 
     /**
@@ -55,7 +55,7 @@ abstract class AbstractDomainObject implements DomainObjectInterface
      * @internal
      * @todo make private in 13.0 and expose value via getter
      */
-    protected ?int $_languageUid = null;
+    protected ?string $_languageTag = null;
 
     /**
      * The uid of the versioned record.

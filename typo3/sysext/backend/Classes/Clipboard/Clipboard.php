@@ -405,7 +405,7 @@ class Clipboard
                 ),
                 $queryBuilder->expr()->neq(
                     $tcaCtrl['languageField'],
-                    $queryBuilder->createNamedParameter(0, Connection::PARAM_INT)
+                    $queryBuilder->createNamedParameter('0', Connection::PARAM_STR)
                 ),
                 $queryBuilder->expr()->gt(
                     'pid',

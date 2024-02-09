@@ -54,12 +54,12 @@ class TcaLanguage extends AbstractItemProvider implements FormDataProviderInterf
                 $sites = $this->getAllSites();
                 foreach ($sites as $site) {
                     // Add ALL languages from ALL sites
-                    foreach ($site->getAllLanguages() as $languageId => $language) {
-                        if (isset($siteLanguages[$languageId])) {
+                    foreach ($site->getAllLanguages() as $languageTag => $language) {
+                        if (isset($siteLanguages[$languageTag])) {
                             // Language already provided by another site, just add the label separately
-                            $siteLanguages[$languageId]['title'] .= ', ' . $language->getTitle() . ' [Site: ' . $site->getIdentifier() . ']';
+                            $siteLanguages[$languageTag]['title'] .= ', ' . $language->getTitle() . ' [Site: ' . $site->getIdentifier() . ']';
                         } else {
-                            $siteLanguages[$languageId] = [
+                            $siteLanguages[$languageTag] = [
                                 'title' => $language->getTitle() . ' [Site: ' . $site->getIdentifier() . ']',
                                 'flagIconIdentifier' => $language->getFlagIdentifier(),
                             ];
@@ -69,9 +69,9 @@ class TcaLanguage extends AbstractItemProvider implements FormDataProviderInterf
                 ksort($siteLanguages);
             } elseif (($result['systemLanguageRows'] ?? []) !== []) {
                 // Add system languages available for the current site
-                foreach ($result['systemLanguageRows'] as $languageId => $language) {
-                    if ($languageId !== -1) {
-                        $siteLanguages[$languageId] = [
+                foreach ($result['systemLanguageRows'] as $languageTag => $language) {
+                    if ($languageTag !== -1) {
+                        $siteLanguages[$languageTag] = [
                             'title' => $language['title'],
                             'flagIconIdentifier' => $language['flagIconIdentifier'],
                         ];
@@ -88,10 +88,10 @@ class TcaLanguage extends AbstractItemProvider implements FormDataProviderInterf
                     ],
                 ];
                 // Add the fetched site languages to the field config items array
-                foreach ($siteLanguages as $languageId => $language) {
+                foreach ($siteLanguages as $languageTag => $language) {
                     $fieldConfig['config']['items'][] = [
                         'label' => $language['title'],
-                        'value' => $languageId,
+                        'value' => $languageTag,
                         'icon' => $language['flagIconIdentifier'],
                     ];
                 }

@@ -33,7 +33,7 @@ class EntityContext
     /**
      * @var int
      */
-    protected $languageId = 0;
+    protected $languageCode = 0;
 
     public function getWorkspaceId(): int
     {
@@ -53,21 +53,21 @@ class EntityContext
         return $target;
     }
 
-    public function getLanguageId(): int
+    public function getLanguageCode(): int
     {
-        return $this->languageId;
+        return $this->languageCode;
     }
 
     /**
      * @return static
      */
-    public function withLanguageId(int $languageId): self
+    public function withLanguageCode(int $languageCode): self
     {
-        if ($this->languageId === $languageId) {
+        if ($this->languageCode === $languageCode) {
             return $this;
         }
         $target = clone $this;
-        $target->languageId = $languageId;
+        $target->languageCode = $languageCode;
         return $target;
     }
 }

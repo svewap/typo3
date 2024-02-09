@@ -26,7 +26,7 @@ final class CategoryVisibleFieldsTest extends FunctionalTestCase
 {
     protected static $categoryFields = [
         'title',
-        'sys_language_uid',
+        'language_tag',
         'hidden',
         'parent',
         'description',

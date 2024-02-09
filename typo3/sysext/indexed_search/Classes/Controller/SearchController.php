@@ -956,8 +956,8 @@ class SearchController extends ActionController
         if (!empty($row['data_page_mp'] ?? false)) {
             $urlParameters['MP'] = $row['data_page_mp'];
         }
-        if (($pageLanguage === 0 && $row['sys_language_uid'] > 0) || $pageLanguage > 0) {
-            $linkConfiguration['_language'] = (int)$row['sys_language_uid'];
+        if (($pageLanguage === 0 && $row['language_tag'] > 0) || $pageLanguage > 0) {
+            $linkConfiguration['_language'] = (string)$row['language_tag'];
         }
 
         if ($urlParameters !== []) {

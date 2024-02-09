@@ -103,7 +103,7 @@ final class AddTest extends FunctionalTestCase
             )
             ->executeQuery()
             ->fetchAssociative();
-        self::assertEquals(0, $newBlogRecord['sys_language_uid']);
+        self::assertEquals(0, $newBlogRecord['language_tag']);
     }
 
     /**
@@ -132,7 +132,7 @@ final class AddTest extends FunctionalTestCase
             )
             ->executeQuery()
             ->fetchAssociative();
-        self::assertEquals(-1, $newBlogRecord['sys_language_uid']);
+        self::assertEquals(-1, $newBlogRecord['language_tag']);
     }
 
     /**

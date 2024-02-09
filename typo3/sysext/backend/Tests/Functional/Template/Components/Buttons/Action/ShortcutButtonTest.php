@@ -135,7 +135,7 @@ final class ShortcutButtonTest extends FunctionalTestCase
                         ],
                         'overrideVals' => [
                             'pages' => [
-                                'sys_language_uid' => 1,
+                                'language_tag' => 1,
                             ],
                         ],
                     ],
@@ -155,7 +155,7 @@ final class ShortcutButtonTest extends FunctionalTestCase
                         ],
                         'overrideVals' => [
                             'pages' => [
-                                'sys_language_uid' => 1,
+                                'language_tag' => 1,
                             ],
                         ],
                     ],

@@ -1244,8 +1244,8 @@ class EditDocumentController
                 && isset($TCActrl['languageField'], $record[$TCActrl['languageField']])
             ) {
                 $sysLanguageUid = (int)$record[$TCActrl['languageField']];
-            } elseif (isset($this->defVals['sys_language_uid'])) {
-                $sysLanguageUid = (int)$this->defVals['sys_language_uid'];
+            } elseif (isset($this->defVals['language_tag'])) {
+                $sysLanguageUid = $this->defVals['language_tag'];
             }
 
             $l18nParent = isset($TCActrl['transOrigPointerField'], $record[$TCActrl['transOrigPointerField']])
@@ -1829,8 +1829,8 @@ class EditDocumentController
     {
         $disableDelete = false;
         if ($this->firstEl['table'] === 'sys_file_metadata') {
-            $row = BackendUtility::getRecord('sys_file_metadata', $this->firstEl['uid'], 'sys_language_uid');
-            $languageUid = $row['sys_language_uid'];
+            $row = BackendUtility::getRecord('sys_file_metadata', $this->firstEl['uid'], 'language_tag');
+            $languageUid = $row['language_tag'];
             if ($languageUid === 0) {
                 $disableDelete = true;
             }
@@ -1895,7 +1895,7 @@ class EditDocumentController
             }
             // Remove default language, if user does not have access. This is necessary, since
             // the default language is always added when fetching the system languages (#88504).
-            if (isset($availableLanguages[0]) && !$this->getBackendUser()->checkLanguageAccess(0)) {
+            if (isset($availableLanguages[0]) && !$this->getBackendUser()->checkLanguageAccess('0')) {
                 unset($availableLanguages[0]);
             }
             // Page available in other languages than default language?
@@ -1973,12 +1973,12 @@ class EditDocumentController
                     }
                     $languageMenu = $view->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
                     $languageMenu->setIdentifier('_langSelector');
-                    foreach ($availableLanguages as $languageId => $language) {
+                    foreach ($availableLanguages as $languageTag => $language) {
                         $selectorOptionLabel = $language['title'];
                         // Create url for creating a localized record
                         $addOption = true;
                         $href = '';
-                        if (!isset($rowsByLang[$languageId])) {
+                        if (!isset($rowsByLang[$languageTag])) {
                             // Translation in this language does not exist
                             if (!isset($rowsByLang[0]['uid'])) {
                                 // Don't add option since no default row to localize from exists
@@ -1994,14 +1994,14 @@ class EditDocumentController
                                         'cmd' => [
                                             $table => [
                                                 $rowsByLang[0]['uid'] => [
-                                                    'localize' => $languageId,
+                                                    'localize' => $languageTag,
                                                 ],
                                             ],
                                         ],
                                         'redirect' => (string)$this->uriBuilder->buildUriFromRoute(
                                             'record_edit',
                                             [
-                                                'justLocalized' => $table . ':' . $rowsByLang[0]['uid'] . ':' . $languageId,
+                                                'justLocalized' => $table . ':' . $rowsByLang[0]['uid'] . ':' . $languageTag,
                                                 'returnUrl' => $this->retUrl,
                                             ]
                                         ),
@@ -2010,24 +2010,24 @@ class EditDocumentController
                             }
                         } else {
                             $params = [
-                                'edit[' . $table . '][' . $rowsByLang[$languageId]['uid'] . ']' => 'edit',
+                                'edit[' . $table . '][' . $rowsByLang[$languageTag]['uid'] . ']' => 'edit',
                                 'returnUrl' => $this->retUrl,
                             ];
                             if ($table === 'pages') {
                                 // Disallow manual adjustment of the language field for pages
                                 $params['overrideVals'] = [
                                     'pages' => [
-                                        'sys_language_uid' => $languageId,
+                                        'language_tag' => $languageTag,
                                     ],
                                 ];
                             }
                             $href = (string)$this->uriBuilder->buildUriFromRoute('record_edit', $params);
                         }
-                        if ($addOption && !in_array($languageId, $noAddOption, true)) {
+                        if ($addOption && !in_array($languageTag, $noAddOption, true)) {
                             $menuItem = $languageMenu->makeMenuItem()
                                 ->setTitle($selectorOptionLabel)
                                 ->setHref($href);
-                            if ($languageId === $currentLanguage) {
+                            if ($languageTag === $currentLanguage) {
                                 $menuItem->setActive(true);
                             }
                             $languageMenu->addMenuItem($menuItem);
@@ -2146,9 +2146,9 @@ class EditDocumentController
                 ];
             }
             while ($row = $statement->fetchAssociative()) {
-                $languageId = (int)$row[$GLOBALS['TCA']['pages']['ctrl']['languageField']];
-                if (isset($allLanguages[$languageId])) {
-                    $availableLanguages[$languageId] = $allLanguages[$languageId];
+                $languageTag = (int)$row[$GLOBALS['TCA']['pages']['ctrl']['languageField']];
+                if (isset($allLanguages[$languageTag])) {
+                    $availableLanguages[$languageTag] = $allLanguages[$languageTag];
                 }
             }
             return $availableLanguages;

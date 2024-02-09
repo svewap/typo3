@@ -237,8 +237,8 @@ class PersistedPatternMapper implements PersistedMappableAspectInterface, Static
             return $results[0] ?? null;
         }
         // post-process language fallbacks
-        $languageIds = $this->resolveAllRelevantLanguageIds();
-        return $this->resolveLanguageFallback($results, $this->languageFieldName, $languageIds);
+        $languageCodes = $this->resolveAllRelevantLanguageCodes();
+        return $this->resolveLanguageFallback($results, $this->languageFieldName, $languageCodes);
     }
 
     protected function createQueryBuilder(): QueryBuilder
@@ -284,10 +284,10 @@ class PersistedPatternMapper implements PersistedMappableAspectInterface, Static
             );
             // otherwise - basically uid is not in pattern - restrict to languages and apply fallbacks
         } elseif ($languageAware) {
-            $languageIds = $this->resolveAllRelevantLanguageIds();
+            $languageCodes = $this->resolveAllRelevantLanguageCodes();
             $constraints[] = $queryBuilder->expr()->in(
                 $this->languageFieldName,
-                $queryBuilder->createNamedParameter($languageIds, Connection::PARAM_INT_ARRAY)
+                $queryBuilder->createNamedParameter($languageCodes, Connection::PARAM_INT_ARRAY)
             );
         }
 
@@ -296,8 +296,8 @@ class PersistedPatternMapper implements PersistedMappableAspectInterface, Static
 
     protected function resolveOverlay(?array $record): ?array
     {
-        $languageId = $this->siteLanguage->getLanguageId();
-        if ($record === null || $languageId === 0) {
+        $languageCode = $this->siteLanguage->getLanguageCode();
+        if ($record === null || $languageCode === 0) {
             return $record;
         }
 

@@ -427,7 +427,7 @@ class TranslationStatusController extends InfoModuleController
             )
             ->andWhere(
                 $queryBuilder->expr()->eq(
-                    'sys_language_uid',
+                    'language_tag',
                     $queryBuilder->createNamedParameter($sysLang, Connection::PARAM_INT)
                 )
             )

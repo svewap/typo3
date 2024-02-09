@@ -58,7 +58,7 @@ class Typo3QuerySettings implements QuerySettingsInterface
     protected bool $includeDeleted = false;
 
     /**
-     * Flag if the sys_language_uid should be respected (default is TRUE).
+     * Flag if the language_tag should be respected (default is TRUE).
      */
     protected bool $respectSysLanguage = true;
 

@@ -185,7 +185,7 @@ class SortSubPagesController
         return $queryBuilder->select('*')
             ->from('pages')
             ->where(
-                $queryBuilder->expr()->eq('sys_language_uid', 0),
+                $queryBuilder->expr()->eq('language_tag', 0),
                 $queryBuilder->expr()->eq(
                     'pid',
                     $queryBuilder->createNamedParameter($parentPageUid, Connection::PARAM_INT)

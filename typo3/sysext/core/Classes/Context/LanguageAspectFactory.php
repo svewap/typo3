@@ -30,9 +30,9 @@ class LanguageAspectFactory
      */
     public static function createFromSiteLanguage(SiteLanguage $language): LanguageAspect
     {
-        $languageId = $language->getLanguageId();
+        $languageCode = $language->getLanguageCode();
         $fallbackType = $language->getFallbackType();
-        $fallbackOrder = $language->getFallbackLanguageIds();
+        $fallbackOrder = $language->getFallbackLanguageCodes();
         $fallbackOrder[] = 'pageNotFound';
         switch ($fallbackType) {
             // Fall back to other language, if the page does not exist in the requested language
@@ -58,6 +58,6 @@ class LanguageAspectFactory
                 $overlayType = LanguageAspect::OVERLAYS_OFF;
         }
 
-        return GeneralUtility::makeInstance(LanguageAspect::class, $languageId, $languageId, $overlayType, $fallbackOrder);
+        return GeneralUtility::makeInstance(LanguageAspect::class, $languageCode, $languageCode, $overlayType, $fallbackOrder);
     }
 }

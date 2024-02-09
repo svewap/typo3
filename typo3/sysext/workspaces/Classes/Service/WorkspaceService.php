@@ -733,7 +733,7 @@ class WorkspaceService implements SingletonInterface
                 ->from('pages')
                 ->where(
                     $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($pid, Connection::PARAM_INT)),
-                    $queryBuilder->expr()->eq('sys_language_uid', 0),
+                    $queryBuilder->expr()->eq('language_tag', 0),
                     $permsClause
                 )
                 ->executeQuery();

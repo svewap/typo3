@@ -68,8 +68,8 @@
 			<trans-unit id="site_language.language" resname="site_language.language">
 				<source>Language</source>
 			</trans-unit>
-			<trans-unit id="site_language.languageId" resname="site_language.languageId">
-				<source>Language ID</source>
+			<trans-unit id="site_language.languageCode" resname="site_language.languageCode">
+				<source>Language Code</source>
 			</trans-unit>
 			<trans-unit id="site_language.title" resname="site_language.title">
 				<source>Title</source>

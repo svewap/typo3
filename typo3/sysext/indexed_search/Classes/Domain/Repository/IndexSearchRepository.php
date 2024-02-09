@@ -534,7 +534,7 @@ class IndexSearchRepository
             'IP.contentHash',
             'IP.crdate',
             'IP.parsetime',
-            'IP.sys_language_uid',
+            'IP.language_tag',
             'IP.item_crdate',
             'IP.externalUrl',
             'IP.recordUid',
@@ -805,7 +805,7 @@ class IndexSearchRepository
             ->getQueryBuilderForTable('index_phash')
             ->expr();
 
-        return ' AND ' . $expressionBuilder->eq('IP.sys_language_uid', $this->languageUid);
+        return ' AND ' . $expressionBuilder->eq('IP.language_tag', $this->languageUid);
     }
 
     /**
@@ -934,7 +934,7 @@ class IndexSearchRepository
                 'IP.contentHash',
                 'IP.crdate',
                 'IP.parsetime',
-                'IP.sys_language_uid',
+                'IP.language_tag',
                 'IP.item_crdate',
                 'IP.externalUrl',
                 'IP.recordUid',

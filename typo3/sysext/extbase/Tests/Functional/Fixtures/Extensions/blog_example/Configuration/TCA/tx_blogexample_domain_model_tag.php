@@ -9,7 +9,7 @@ return [
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'versioningWS' => true,
-        'languageField' => 'sys_language_uid',
+        'languageField' => 'language_tag',
         'transOrigPointerField' => 'l18n_parent',
         'transOrigDiffSourceField' => 'l18n_diffsource',
         'delete' => 'deleted',
@@ -19,7 +19,7 @@ return [
         'iconfile' => 'EXT:blog_example/Resources/Public/Icons/icon_tx_blogexample_domain_model_tag.gif',
     ],
     'columns' => [
-        'sys_language_uid' => [
+        'language_tag' => [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
@@ -28,7 +28,7 @@ return [
             ],
         ],
         'l18n_parent' => [
-            'displayCond' => 'FIELD:sys_language_uid:>:0',
+            'displayCond' => 'FIELD:language_tag:>:0',
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'select',
@@ -37,7 +37,7 @@ return [
                     ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => 'tx_blogexample_domain_model_tag',
-                'foreign_table_where' => 'AND {#tx_blogexample_domain_model_tag}.{#uid}=###REC_FIELD_l18n_parent### AND {#tx_blogexample_domain_model_tag}.{#sys_language_uid} IN (-1,0)',
+                'foreign_table_where' => 'AND {#tx_blogexample_domain_model_tag}.{#uid}=###REC_FIELD_l18n_parent### AND {#tx_blogexample_domain_model_tag}.{#language_tag} IN (-1,0)',
             ],
         ],
         'l18n_diffsource' => [
@@ -84,7 +84,7 @@ return [
         ],
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, hidden, name, items'],
+        '1' => ['showitem' => 'language_tag, hidden, name, items'],
     ],
     'palettes' => [
         '1' => ['showitem' => ''],

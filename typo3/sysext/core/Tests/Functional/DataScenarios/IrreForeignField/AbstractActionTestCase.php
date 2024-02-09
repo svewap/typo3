@@ -503,7 +503,7 @@ abstract class AbstractActionTestCase extends AbstractDataHandlerActionTestCase
             $this->recordIds['localizedPageId'],
             [
                 self::TABLE_Page => ['uid' => $this->recordIds['localizedPageId'], self::FIELD_PageHotel => '6,__nextUid', 'l10n_state' => [self::FIELD_PageHotel => 'custom']],
-                self::TABLE_Hotel => ['uid' => '__NEW', 'sys_language_uid' => self::VALUE_LanguageId, 'title' => 'Hotel in dansk page only'],
+                self::TABLE_Hotel => ['uid' => '__NEW', 'language_tag' => self::VALUE_LanguageId, 'title' => 'Hotel in dansk page only'],
             ]
         );
     }

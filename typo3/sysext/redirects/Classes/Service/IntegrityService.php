@@ -144,7 +144,7 @@ class IntegrityService
             //       for ex. if PageTypeSuffix routeEnhancer are used and redirects are created based on that.
             $slug = ltrim(($row['slug'] ?? ''), '/');
             $lang = (int)($row[$this->getPagesLanguageFieldName()] ?? 0);
-            $siteLanguage = $site->getLanguageById($lang);
+            $siteLanguage = $site->getLanguageByCode($lang);
 
             // empty slug root pages has been already handled with language bases above, thus skip them here.
             if (empty($slug)) {
@@ -182,7 +182,7 @@ class IntegrityService
             //       for ex. if PageTypeSuffix routeEnhancer are used and redirects are created based on that.
             $slug = ltrim($row['slug'] ?? '', '/');
             $lang = (int)($row[$this->getPagesLanguageFieldName()] ?? 0);
-            $siteLanguage = $site->getLanguageById($lang);
+            $siteLanguage = $site->getLanguageByCode($lang);
 
             // empty slugs should to occur here, but to be sure we skip them here, as they were already handled.
             if (empty($slug)) {
@@ -201,7 +201,7 @@ class IntegrityService
 
     private function getPagesLanguageFieldName(): string
     {
-        return $GLOBALS['TCA']['pages']['ctrl']['languageField'] ?? 'sys_language_uid';
+        return $GLOBALS['TCA']['pages']['ctrl']['languageField'] ?? 'language_tag';
     }
 
     private function getPagesLanguageParentFieldName(): string

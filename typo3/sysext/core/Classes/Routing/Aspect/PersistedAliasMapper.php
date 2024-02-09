@@ -220,12 +220,12 @@ class PersistedAliasMapper implements PersistedMappableAspectInterface, StaticMa
             ),
         ];
 
-        $languageIds = null;
+        $languageCodes = null;
         if ($languageAware) {
-            $languageIds = $this->resolveAllRelevantLanguageIds();
+            $languageCodes = $this->resolveAllRelevantLanguageCodes();
             $constraints[] = $queryBuilder->expr()->in(
                 $this->languageFieldName,
-                $queryBuilder->createNamedParameter($languageIds, Connection::PARAM_INT_ARRAY)
+                $queryBuilder->createNamedParameter($languageCodes, Connection::PARAM_INT_ARRAY)
             );
         }
 
@@ -244,7 +244,7 @@ class PersistedAliasMapper implements PersistedMappableAspectInterface, StaticMa
             return $results[0] ?? null;
         }
         // post-process language fallbacks
-        return $this->resolveLanguageFallback($results, $this->languageFieldName, $languageIds);
+        return $this->resolveLanguageFallback($results, $this->languageFieldName, $languageCodes);
     }
 
     protected function createQueryBuilder(): QueryBuilder
@@ -263,8 +263,8 @@ class PersistedAliasMapper implements PersistedMappableAspectInterface, StaticMa
 
     protected function resolveOverlay(?array $record): ?array
     {
-        $languageId = $this->siteLanguage->getLanguageId();
-        if ($record === null || $languageId === 0) {
+        $languageCode = $this->siteLanguage->getLanguageCode();
+        if ($record === null || $languageCode === 0) {
             return $record;
         }
 

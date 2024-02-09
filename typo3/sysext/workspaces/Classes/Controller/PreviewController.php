@@ -120,7 +120,7 @@ class PreviewController
             // Remove GET parameters related to the workspaces module
             unset($queryParameters['route'], $queryParameters['token'], $queryParameters['previewWS']);
             if (isset($queryParameters['L'])) {
-                $queryParameters['_language'] = $site->getLanguageById((int)$queryParameters['L']);
+                $queryParameters['_language'] = $site->getLanguageByCode((int)$queryParameters['L']);
                 unset($queryParameters['L']);
             }
             $parameters = $queryParameters;

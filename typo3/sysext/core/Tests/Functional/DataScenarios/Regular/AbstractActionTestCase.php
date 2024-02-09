@@ -91,7 +91,7 @@ abstract class AbstractActionTestCase extends AbstractDataHandlerActionTestCase
      */
     public function createContentForLanguageAll(): void
     {
-        $newTableIds = $this->actionService->createNewRecord(self::TABLE_Content, self::VALUE_PageId, ['header' => 'Language set to all', 'sys_language_uid' => -1]);
+        $newTableIds = $this->actionService->createNewRecord(self::TABLE_Content, self::VALUE_PageId, ['header' => 'Language set to all', 'language_tag' => -1]);
         $this->recordIds['newContentLanguageAll'] = $newTableIds[self::TABLE_Content][0];
     }
 
@@ -338,7 +338,7 @@ abstract class AbstractActionTestCase extends AbstractDataHandlerActionTestCase
         $dataMap = [
             self::TABLE_Content => [
                 $newContentIdDefault => ['pid' => self::VALUE_PageId, 'header' => 'Testing'],
-                $newContentIdLocalized => ['pid' => self::VALUE_PageId, 'header' => 'Localized Testing', 'sys_language_uid' => self::VALUE_LanguageId, 'l18n_parent' => $newContentIdDefault, 'l10n_source' => $newContentIdDefault],
+                $newContentIdLocalized => ['pid' => self::VALUE_PageId, 'header' => 'Localized Testing', 'language_tag' => self::VALUE_LanguageId, 'l18n_parent' => $newContentIdDefault, 'l10n_source' => $newContentIdDefault],
             ],
         ];
         $this->actionService->invoke($dataMap, []);
@@ -354,7 +354,7 @@ abstract class AbstractActionTestCase extends AbstractDataHandlerActionTestCase
         $dataMap = [
             self::TABLE_Content => [
                 $newContentIdDefault => ['pid' => self::VALUE_PageId, 'header' => 'Testing'],
-                $newContentIdLocalized => ['pid' => self::VALUE_PageId, 'header' => 'Localized Testing', 'sys_language_uid' => self::VALUE_LanguageId, 'l18n_parent' => $newContentIdDefault, 'l10n_source' => $newContentIdDefault],
+                $newContentIdLocalized => ['pid' => self::VALUE_PageId, 'header' => 'Localized Testing', 'language_tag' => self::VALUE_LanguageId, 'l18n_parent' => $newContentIdDefault, 'l10n_source' => $newContentIdDefault],
             ],
         ];
         $this->actionService->invoke($dataMap, []);
@@ -370,7 +370,7 @@ abstract class AbstractActionTestCase extends AbstractDataHandlerActionTestCase
         $dataMap = [
             self::TABLE_Content => [
                 $newContentIdDefault => ['pid' => self::VALUE_PageId, 'header' => 'Testing'],
-                $newContentIdLocalized => ['pid' => self::VALUE_PageId, 'header' => 'Localized Testing', 'sys_language_uid' => self::VALUE_LanguageId, 'l18n_parent' => $newContentIdDefault, 'l10n_source' => $newContentIdDefault],
+                $newContentIdLocalized => ['pid' => self::VALUE_PageId, 'header' => 'Localized Testing', 'language_tag' => self::VALUE_LanguageId, 'l18n_parent' => $newContentIdDefault, 'l10n_source' => $newContentIdDefault],
             ],
         ];
         $this->actionService->invoke($dataMap, []);

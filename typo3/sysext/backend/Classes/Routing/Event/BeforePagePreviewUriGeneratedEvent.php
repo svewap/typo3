@@ -31,7 +31,7 @@ final class BeforePagePreviewUriGeneratedEvent implements StoppableEventInterfac
 
     public function __construct(
         private int $pageId,
-        private int $languageId,
+        private string $languageTag,
         private array $rootline,
         private string $section,
         private array $additionalQueryParameters,
@@ -64,14 +64,14 @@ final class BeforePagePreviewUriGeneratedEvent implements StoppableEventInterfac
         $this->pageId = $pageId;
     }
 
-    public function getLanguageId(): int
+    public function getLanguageTag(): string
     {
-        return $this->languageId;
+        return $this->languageTag;
     }
 
-    public function setLanguageId(int $languageId): void
+    public function setLanguageTag(string $languageTag): void
     {
-        $this->languageId = $languageId;
+        $this->languageTag = $languageTag;
     }
 
     public function getRootline(): array

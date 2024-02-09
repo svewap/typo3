@@ -76,9 +76,9 @@ class ContentFetcher
      *
      * @return array Associative array for each column (colPos) or for all columns if $columnNumber is null
      */
-    public function getContentRecordsPerColumn(?int $columnNumber = null, ?int $languageId = null): array
+    public function getContentRecordsPerColumn(?int $columnNumber = null, ?string $languageTag = null): array
     {
-        $languageId = $languageId ?? $this->context->getSiteLanguage()->getLanguageId();
+        $languageTag = $languageTag ?? $this->context->getSiteLanguage()->getLanguageCode();
 
         if (empty($this->fetchedContentRecords)) {
             $isLanguageMode = $this->context->getDrawingConfiguration()->getLanguageMode();
@@ -86,7 +86,7 @@ class ContentFetcher
             $result = $queryBuilder->executeQuery();
             $records = $this->getResult($result);
             foreach ($records as $record) {
-                $recordLanguage = (int)$record['sys_language_uid'];
+                $recordLanguage = $record['language_tag'];
                 $recordColumnNumber = (int)$record['colPos'];
                 if ($recordLanguage === -1) {
                     // Record is set to "all languages", place it according to view mode.
@@ -95,7 +95,7 @@ class ContentFetcher
                         $recordLanguage = 0;
                     } else {
                         // Force the record to be shown in the currently active language in "Columns" view mode.
-                        $recordLanguage = $languageId;
+                        $recordLanguage = $languageTag;
                     }
                 }
                 $this->fetchedContentRecords[$recordLanguage][$recordColumnNumber][] = $record;
@@ -103,7 +103,7 @@ class ContentFetcher
             $this->getRuntimeCache()->set('ContentFetcher_fetchedContentRecords', $this->fetchedContentRecords);
         }
 
-        $contentByLanguage = &$this->fetchedContentRecords[$languageId];
+        $contentByLanguage = &$this->fetchedContentRecords[$languageTag];
 
         if ($columnNumber === null) {
             return $contentByLanguage ?? [];
@@ -112,9 +112,9 @@ class ContentFetcher
         return $contentByLanguage[$columnNumber] ?? [];
     }
 
-    public function getFlatContentRecords(int $languageId): iterable
+    public function getFlatContentRecords(int $languageTag): iterable
     {
-        $contentRecords = $this->getContentRecordsPerColumn(null, $languageId);
+        $contentRecords = $this->getContentRecordsPerColumn(null, $languageTag);
         return empty($contentRecords) ? [] : array_merge(...$contentRecords);
     }
 
@@ -125,8 +125,8 @@ class ContentFetcher
     {
         $unrendered = [];
         $rememberer = GeneralUtility::makeInstance(RecordRememberer::class);
-        $languageId = $this->context->getDrawingConfiguration()->getSelectedLanguageId();
-        foreach ($this->getContentRecordsPerColumn(null, $languageId) as $contentRecordsInColumn) {
+        $languageTag = $this->context->getDrawingConfiguration()->getSelectedLanguageTag();
+        foreach ($this->getContentRecordsPerColumn(null, $languageTag) as $contentRecordsInColumn) {
             foreach ($contentRecordsInColumn as $contentRecord) {
                 $used = $rememberer->isRemembered((int)$contentRecord['uid']);
                 // A hook mentioned that this record is used somewhere, so this is in fact "rendered" already
@@ -140,30 +140,30 @@ class ContentFetcher
         return $unrendered;
     }
 
-    public function getTranslationData(iterable $contentElements, int $language): array
+    public function getTranslationData(iterable $contentElements, string $languageTag): array
     {
-        if ($language === 0) {
+        if ($languageTag === '0') {
             return [];
         }
 
-        $languageTranslationInfo = $this->getRuntimeCache()->get('ContentFetcher_TranslationInfo_' . $language) ?: [];
+        $languageTranslationInfo = $this->getRuntimeCache()->get('ContentFetcher_TranslationInfo_' . $languageTag) ?: [];
         if (empty($languageTranslationInfo)) {
-            $contentRecordsInDefaultLanguage = $this->getContentRecordsPerColumn(null, 0);
+            $contentRecordsInDefaultLanguage = $this->getContentRecordsPerColumn(null, '0');
             if (!empty($contentRecordsInDefaultLanguage)) {
                 $contentRecordsInDefaultLanguage = array_merge(...$contentRecordsInDefaultLanguage);
             }
             $untranslatedRecordUids = array_flip(
                 array_column(
-                    // Eliminate records with "-1" as sys_language_uid since they can not be translated
+                    // Eliminate records with "-1" as language_tag since they can not be translated
                     array_filter($contentRecordsInDefaultLanguage, static function (array $record): bool {
-                        return (int)($record['sys_language_uid'] ?? 0) !== -1;
+                        return ($record['language_tag'] ?? 0) !== -1;
                     }),
                     'uid'
                 )
             );
 
             foreach ($contentElements as $contentElement) {
-                if ((int)$contentElement['sys_language_uid'] === -1) {
+                if ($contentElement['language_tag'] === -1) {
                     continue;
                 }
                 if ((int)$contentElement['l18n_parent'] === 0) {
@@ -192,7 +192,7 @@ class ContentFetcher
                 // We do not want to show the staleTranslationWarning if allowInconsistentLanguageHandling is enabled
                 $allowInconsistentLanguageHandling = (bool)(BackendUtility::getPagesTSconfig($this->context->getPageId())['mod.']['web_layout.']['allowInconsistentLanguageHandling'] ?? false);
                 if (!$this->context->getDrawingConfiguration()->getAllowInconsistentLanguageHandling()) {
-                    $siteLanguage = $this->context->getSiteLanguage($language);
+                    $siteLanguage = $this->context->getSiteLanguage($languageTag);
                     $message = GeneralUtility::makeInstance(
                         FlashMessage::class,
                         $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:staleTranslationWarning'),
@@ -205,7 +205,7 @@ class ContentFetcher
                 }
             }
 
-            $this->getRuntimeCache()->set('ContentFetcher_TranslationInfo_' . $language, $languageTranslationInfo);
+            $this->getRuntimeCache()->set('ContentFetcher_TranslationInfo_' . $languageTag, $languageTranslationInfo);
         }
         return $languageTranslationInfo;
     }

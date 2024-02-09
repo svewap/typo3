@@ -117,8 +117,8 @@ final class PageTsConfigRecordsOverviewController
                     $queryBuilder->createNamedParameter('')
                 ),
                 $queryBuilder->expr()->eq(
-                    'sys_language_uid',
-                    $queryBuilder->createNamedParameter(0, Connection::PARAM_INT)
+                    'language_tag',
+                    $queryBuilder->createNamedParameter(0)
                 )
             )
             ->executeQuery();

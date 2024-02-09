@@ -8,7 +8,7 @@ return [
         'label' => 'uid',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'languageField' => 'sys_language_uid',
+        'languageField' => 'language_tag',
         'transOrigPointerField' => 'l18n_parent',
         'transOrigDiffSourceField' => 'l18n_diffsource',
         'translationSource' => 'l10n_source',
@@ -24,7 +24,7 @@ return [
         ],
     ],
     'columns' => [
-        'sys_language_uid' => [
+        'language_tag' => [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
@@ -32,7 +32,7 @@ return [
             ],
         ],
         'l18n_parent' => [
-            'displayCond' => 'FIELD:sys_language_uid:>:0',
+            'displayCond' => 'FIELD:language_tag:>:0',
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'select',
@@ -41,7 +41,7 @@ return [
                     ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => 'tx_testirremnattributesimple_hotel_offer_rel',
-                'foreign_table_where' => 'AND {#tx_testirremnattributesimple_hotel_offer_rel}.{#pid}=###CURRENT_PID### AND {#tx_testirremnattributesimple_hotel_offer_rel}.{#sys_language_uid} IN (-1,0)',
+                'foreign_table_where' => 'AND {#tx_testirremnattributesimple_hotel_offer_rel}.{#pid}=###CURRENT_PID### AND {#tx_testirremnattributesimple_hotel_offer_rel}.{#language_tag} IN (-1,0)',
                 'default' => 0,
             ],
         ],
@@ -115,7 +115,7 @@ return [
     'types' => [
         '0' => ['showitem' =>
             '--div--;LLL:EXT:test_irre_mnattributesimple/Resources/Private/Language/locallang_db.xlf:tabs.general, title, hotelid, offerid, hotelsort, offersort, quality, allincl,' .
-            '--div--;LLL:EXT:test_irre_mnattributesimple/Resources/Private/Language/locallang_db.xlf:tabs.visibility, sys_language_uid, l18n_parent, l18n_diffsource, hidden',
+            '--div--;LLL:EXT:test_irre_mnattributesimple/Resources/Private/Language/locallang_db.xlf:tabs.visibility, language_tag, l18n_parent, l18n_diffsource, hidden',
         ],
     ],
     'palettes' => [

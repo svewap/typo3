@@ -26,11 +26,11 @@ use TYPO3\CMS\Core\Localization\Locale;
 class SiteLanguage
 {
     /**
-     * The language id.
+     * The language code.
      *
-     * @var int
+     * @var string
      */
-    protected $languageId;
+    protected $languageCode = '';
 
     /**
      * Locale, like 'de-CH' or 'en-GB'
@@ -91,7 +91,7 @@ class SiteLanguage
     /**
      * @var array
      */
-    protected $fallbackLanguageIds = [];
+    protected $fallbackLanguageCodes = [];
 
     /**
      * @var bool
@@ -107,9 +107,9 @@ class SiteLanguage
     /**
      * SiteLanguage constructor.
      */
-    public function __construct(int $languageId, string $locale, UriInterface $base, array $configuration)
+    public function __construct(string $languageCode, string $locale, UriInterface $base, array $configuration)
     {
-        $this->languageId = $languageId;
+        $this->languageCode = $languageCode;
         $this->locale = new Locale($locale);
         $this->base = $base;
         $this->configuration = $configuration;
@@ -136,19 +136,19 @@ class SiteLanguage
             $this->fallbackType = $configuration['fallbackType'];
         }
         if (isset($configuration['fallbacks'])) {
-            $fallbackLanguageIds = $configuration['fallbacks'];
+            $fallbackLanguageCodes = $configuration['fallbacks'];
 
             // It is important to distinct between "0" and "" so, empty() should not be used here
-            if (is_string($fallbackLanguageIds)) {
-                if ($fallbackLanguageIds !== '') {
-                    $fallbackLanguageIds = explode(',', $fallbackLanguageIds);
+            if (is_string($fallbackLanguageCodes)) {
+                if ($fallbackLanguageCodes !== '') {
+                    $fallbackLanguageCodes = explode(',', $fallbackLanguageCodes);
                 } else {
-                    $fallbackLanguageIds = [];
+                    $fallbackLanguageCodes = [];
                 }
-            } elseif (is_scalar($fallbackLanguageIds)) {
-                $fallbackLanguageIds = [$fallbackLanguageIds];
+            } elseif (is_scalar($fallbackLanguageCodes)) {
+                $fallbackLanguageCodes = [$fallbackLanguageCodes];
             }
-            $this->fallbackLanguageIds = array_map(intval(...), $fallbackLanguageIds);
+            $this->fallbackLanguageCodes = array_map(intval(...), $fallbackLanguageCodes);
         }
         if (isset($configuration['enabled'])) {
             $this->enabled = (bool)$configuration['enabled'];
@@ -162,7 +162,7 @@ class SiteLanguage
     public function toArray(): array
     {
         return array_merge($this->configuration, [
-            'languageId' => $this->getLanguageId(),
+            'languageCode' => $this->getLanguageCode(),
             // kept for backwards-compat for the time being, might change to BGP-47 format
             'locale' => $this->getLocale()->posixFormatted(),
             'base' => (string)$this->getBase(),
@@ -174,13 +174,13 @@ class SiteLanguage
             'flagIdentifier' => $this->getFlagIdentifier(),
             'fallbackType' => $this->getFallbackType(),
             'enabled' => $this->enabled(),
-            'fallbackLanguageIds' => $this->getFallbackLanguageIds(),
+            'fallbackLanguageCodes' => $this->getFallbackLanguageCodes(),
         ]);
     }
 
-    public function getLanguageId(): int
+    public function getLanguageCode(): string
     {
-        return $this->languageId;
+        return $this->languageCode;
     }
 
     public function getLocale(): Locale
@@ -276,8 +276,8 @@ class SiteLanguage
         return $this->fallbackType;
     }
 
-    public function getFallbackLanguageIds(): array
+    public function getFallbackLanguageCodes(): array
     {
-        return $this->fallbackLanguageIds;
+        return $this->fallbackLanguageCodes;
     }
 }

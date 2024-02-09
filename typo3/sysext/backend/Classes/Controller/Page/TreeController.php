@@ -37,6 +37,7 @@ use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Schema\Struct\SelectItem;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Type\Bitmask\Permission;
+use TYPO3\CMS\Core\Utility\DebugUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
 
@@ -168,7 +169,7 @@ class TreeController
             $stateHash = $backendUserPageTreeState['stateHash'] ?? [];
             $this->expandedState = is_array($stateHash) ? $stateHash : [];
         }
-        $this->userHasAccessToModifyPagesAndToDefaultLanguage = $this->getBackendUser()->check('tables_modify', 'pages') && $this->getBackendUser()->checkLanguageAccess(0);
+        $this->userHasAccessToModifyPagesAndToDefaultLanguage = $this->getBackendUser()->check('tables_modify', 'pages') && $this->getBackendUser()->checkLanguageAccess('0');
     }
 
     /**
@@ -176,6 +177,11 @@ class TreeController
      */
     public function fetchConfigurationAction(): ResponseInterface
     {
+        $lang = $this->getBackendUser()->user['lang'] ?? 'en';
+        if ($lang === 'default') {
+            $lang = 'en';
+        }
+
         $configuration = [
             'allowDragMove' => $this->isDragMoveAllowed(),
             'doktypes' => $this->getDokTypes(),
@@ -185,6 +191,7 @@ class TreeController
             'dataUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_page_tree_data'),
             'filterUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_page_tree_filter'),
             'setTemporaryMountPointUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_page_tree_set_temporary_mount_point'),
+            'lang' => $lang,
         ];
 
         return new JsonResponse($configuration);
@@ -258,10 +265,19 @@ class TreeController
     {
         $this->initializeConfiguration($request);
 
+        $currentLanguage = $request->getQueryParams()['currentLanguage'];
+        $sourceLanguage = $request->getQueryParams()['sourceLanguage'] ?? '';
+        $languageTags = [$currentLanguage];
+        if ($sourceLanguage !== '') {
+            $languageTags[] = $sourceLanguage;
+        }
+
+
         $items = [];
         if (!empty($request->getQueryParams()['pid'])) {
             // Fetching a part of a page tree
             $entryPoints = $this->getAllEntryPointPageTrees((int)$request->getQueryParams()['pid']);
+
             $mountPid = (int)($request->getQueryParams()['mount'] ?? 0);
             $parentDepth = (int)($request->getQueryParams()['pidDepth'] ?? 0);
             $this->levelsToFetch = $parentDepth + $this->levelsToFetch;
@@ -269,7 +285,10 @@ class TreeController
                 $items[] = $this->pagesToFlatArray($page, $mountPid, $parentDepth);
             }
         } else {
-            $entryPoints = $this->getAllEntryPointPageTrees();
+            $entryPoints = $this->getAllEntryPointPageTrees(0);
+
+            $this->enrichEntryPointsWithLabels($entryPoints,$languageTags);
+
             foreach ($entryPoints as $page) {
                 $items[] = $this->pagesToFlatArray($page, (int)$page['uid']);
             }
@@ -357,8 +376,8 @@ class TreeController
 
         $suffix = '';
         $prefix = '';
-        $nameSourceField = 'title';
-        $visibleText = $page['title'];
+
+
         $tooltip = BackendUtility::titleAttribForPages($page, '', false);
         if ($pageId !== 0) {
             $icon = $this->iconFactory->getIconForRecord('pages', $page, IconSize::SMALL);
@@ -366,12 +385,23 @@ class TreeController
             $icon = $this->iconFactory->getIcon('apps-pagetree-root', IconSize::SMALL);
         }
 
-        if ($this->useNavTitle && trim($page['nav_title'] ?? '') !== '') {
-            $nameSourceField = 'nav_title';
-            $visibleText = $page['nav_title'];
-        }
-        if (trim($visibleText) === '') {
-            $visibleText = htmlspecialchars('[' . $this->getLanguageService()->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.no_title') . ']');
+
+        $translations = [];
+        foreach ($page['_translations'] ?? [] as $languageTag => $translation) {
+            $translations[$languageTag] = [];
+            $translations[$languageTag]['uid'] = $translation['uid'];
+            $visibleText = $translation['title'];
+            $nameSourceField = 'title';
+
+            if ($this->useNavTitle && trim($translation['nav_title'] ?? '') !== '') {
+                $nameSourceField = 'nav_title';
+                $visibleText = $translation['nav_title'];
+            }
+            if (trim($visibleText) === '') {
+                $visibleText = htmlspecialchars('[' . $this->getLanguageService()->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.no_title') . ']');
+            }
+            $translations[$languageTag]['nameSourceField'] = $nameSourceField;
+            $translations[$languageTag]['name'] = $visibleText;
         }
 
         if ($this->addDomainName && ($page['is_siteroot'] ?? false)) {
@@ -400,15 +430,15 @@ class TreeController
             // fine in JSON - if used in HTML directly, e.g. quotes can be used for XSS
             'tip' => strip_tags(htmlspecialchars_decode($tooltip)),
             'icon' => $icon->getIdentifier(),
-            'name' => $visibleText,
+            'name' => 'dede',
             'type' => (int)($page['doktype'] ?? 0),
-            'nameSourceField' => $nameSourceField,
             'mountPoint' => $entryPoint,
             'workspaceId' => !empty($page['t3ver_oid']) ? $page['t3ver_oid'] : $pageId,
             'siblingsCount' => $page['siblingsCount'] ?? 1,
             'siblingsPosition' => $page['siblingsPosition'] ?? 1,
             'allowDelete' => $backendUser->doesUserHaveAccess($page, Permission::PAGE_DELETE),
             'allowEdit' => $this->userHasAccessToModifyPagesAndToDefaultLanguage && $backendUser->doesUserHaveAccess($page, Permission::PAGE_EDIT),
+            '_translations' => $translations,
         ];
 
         if (!empty($page['_children']) || $this->pageTreeRepository->hasChildren($pageId)) {
@@ -486,7 +516,7 @@ class TreeController
      *
      * @param string $query The search query can either be a string to be found in the title or the nav_title of a page or the uid of a page.
      */
-    protected function getAllEntryPointPageTrees(int $startPid = 0, string $query = ''): array
+    protected function getAllEntryPointPageTrees(int $startPid, string $query = ''): array
     {
         $this->pageTreeRepository ??= $this->initializePageTreeRepository();
         $backendUser = $this->getBackendUser();
@@ -575,6 +605,28 @@ class TreeController
         }
 
         return $entryPointRecords;
+    }
+
+    protected function enrichEntryPointsWithLabels(array &$entryPoints, array $languageTags): void
+    {
+
+        foreach ($entryPoints as &$entryPoint) {
+
+            $translationRecords = $this->pageTreeRepository->getPageTranslations($entryPoint['uid'], $languageTags);
+
+            $entryPoint['_translations'] = [];
+            foreach ($translationRecords as $translationRecord) {
+                $entryPoint['_translations'][$translationRecord['language_tag']] = [
+                    'title' => $translationRecord['title'],
+                    'nav_title' => $translationRecord['nav_title'],
+                    'uid' => $translationRecord['uid'],
+                ];
+            }
+
+            if (isset($entryPoint['_children'])) {
+                $this->enrichEntryPointsWithLabels($entryPoint['_children'], $languageTags);
+            }
+        }
     }
 
     protected function calculateBackgroundColors(array $pageIds)

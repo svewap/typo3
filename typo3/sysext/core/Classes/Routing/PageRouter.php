@@ -235,7 +235,7 @@ class PageRouter implements RouterInterface
         if ($languageOption instanceof SiteLanguage) {
             $language = $languageOption;
         } elseif ($languageOption !== null) {
-            $language = $this->site->getLanguageById((int)$languageOption);
+            $language = $this->site->getLanguageByCode((int)$languageOption);
         }
         if ($language === null) {
             $language = $this->site->getDefaultLanguage();
@@ -258,8 +258,8 @@ class PageRouter implements RouterInterface
             $page = $route->toArray();
         } elseif (is_array($route)
             // Check 3rd party input $route for basic requirements
-            && isset($route['uid'], $route['sys_language_uid'], $route['l10n_parent'], $route['slug'])
-            && (int)$route['sys_language_uid'] === $language->getLanguageId()
+            && isset($route['uid'], $route['language_tag'], $route['l10n_parent'], $route['slug'])
+            && (string)$route['language_tag'] === $language->getLanguageCode()
             && ((int)$route['l10n_parent'] === 0 || isset($route['_LOCALIZED_UID']))
         ) {
             $page = $route;
@@ -283,7 +283,7 @@ class PageRouter implements RouterInterface
                 [, $mountPointPage] = explode('-', (string)reset($mountPointPairs));
                 $site = GeneralUtility::makeInstance(SiteMatcher::class)
                     ->matchByPageId((int)$mountPointPage);
-                $language = $site->getLanguageById($language->getLanguageId());
+                $language = $site->getLanguageByCode($language->getLanguageCode());
             } catch (SiteNotFoundException $e) {
                 // No alternative site found, use the existing one
             }
@@ -620,19 +620,19 @@ class PageRouter implements RouterInterface
     protected function isRouteReallyValidForLanguage(Route $route, SiteLanguage $siteLanguage): bool
     {
         $page = $route->getOption('_page');
-        $languageIdField = $GLOBALS['TCA']['pages']['ctrl']['languageField'] ?? '';
-        if ($languageIdField === '') {
+        $languageCodeField = $GLOBALS['TCA']['pages']['ctrl']['languageField'] ?? '';
+        if ($languageCodeField === '') {
             return true;
         }
-        $languageId = (int)($page[$languageIdField] ?? 0);
-        if ($siteLanguage->getLanguageId() === 0 || $siteLanguage->getLanguageId() === $languageId) {
+        $languageCode = (string)($page[$languageCodeField] ?? 0);
+        if ($siteLanguage->getLanguageCode() === 0 || $siteLanguage->getLanguageCode() === $languageCode) {
             // default language site request or if page record is same language then siteLanguage, page record
             // is valid to use as page resolving candidate and need no further overlay checks.
             return true;
         }
-        $pageIdInDefaultLanguage = (int)($languageId > 0 ? $page['l10n_parent'] : $page['uid']);
+        $pageIdInDefaultLanguage = (int)($languageCode > 0 ? $page['l10n_parent'] : $page['uid']);
         $pageRepository = GeneralUtility::makeInstance(PageRepository::class, $this->context);
-        $localizedPage = $pageRepository->getPageOverlay($pageIdInDefaultLanguage, $siteLanguage->getLanguageId());
+        $localizedPage = $pageRepository->getPageOverlay($pageIdInDefaultLanguage, $siteLanguage->getLanguageCode());
         if (!$localizedPage) {
             // no page language overlay found, which means that either language page is not published and no logged
             // in backend user OR there is no language overlay for that page at all. Thus using page record to build

@@ -474,10 +474,10 @@ class RecordListController
         }
         $availableTranslations = [];
         foreach ($siteLanguages as $siteLanguage) {
-            if ($siteLanguage->getLanguageId() === 0) {
+            if ($siteLanguage->getLanguageCode() === 0) {
                 continue;
             }
-            $availableTranslations[$siteLanguage->getLanguageId()] = $siteLanguage->getTitle();
+            $availableTranslations[$siteLanguage->getLanguageCode()] = $siteLanguage->getTitle();
         }
         // Then, subtract the languages which are already on the page:
         $localizationParentField = $GLOBALS['TCA']['pages']['ctrl']['transOrigPointerField'];

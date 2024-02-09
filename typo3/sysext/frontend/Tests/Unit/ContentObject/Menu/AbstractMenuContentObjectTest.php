@@ -263,7 +263,7 @@ final class AbstractMenuContentObjectTest extends UnitTestCase
         $queryConfiguration = [
             'pidInList' => 12,
             'orderBy' => 'field',
-            'languageField' => 'sys_language_uid',
+            'languageField' => 'language_tag',
             'where' => $whereClausePrefix,
         ];
 

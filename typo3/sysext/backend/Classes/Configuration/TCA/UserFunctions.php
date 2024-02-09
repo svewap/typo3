@@ -34,9 +34,9 @@ class UserFunctions
     public function getSiteLanguageTitle(array &$parameters): void
     {
         $record = $parameters['row'];
-        $languageId = (int)($record['languageId'][0] ?? 0);
+        $languageTag = ($record['languageCode'][0] ?? 0);
 
-        if ($languageId === PHP_INT_MAX && str_starts_with((string)($record['uid'] ?? ''), 'NEW')) {
+        if ($languageTag === PHP_INT_MAX && str_starts_with((string)($record['uid'] ?? ''), 'NEW')) {
             // If we deal with a new record, created via "Create new" (indicated by the PHP_INT_MAX placeholder),
             // we use a label as record title, until the real values, especially the language ID, are calculated.
             $parameters['title'] = '[' . $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_siteconfiguration_tca.xlf:site.languages.new') . ']';
@@ -44,10 +44,10 @@ class UserFunctions
         }
 
         $parameters['title'] = sprintf(
-            '%s %s [%d] (%s) Base: %s',
+            '%s %s [%s] (%s) Base: %s',
             $record['enabled'] ? '' : '[' . $this->getLanguageService()->sL('LLL:EXT:core/Resources/Private/Language/locallang_common.xlf:disabled') . ']',
             $record['title'],
-            $languageId,
+            $languageTag,
             $record['locale'],
             $record['base']
         );

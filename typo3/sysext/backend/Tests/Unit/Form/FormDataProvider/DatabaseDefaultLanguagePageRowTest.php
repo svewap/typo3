@@ -48,7 +48,7 @@ final class DatabaseDefaultLanguagePageRowTest extends UnitTestCase
             'databaseRow' => [
                 'uid' => 23,
                 'l10n_parent' => 13,
-                'sys_language_uid' => 23,
+                'language_tag' => 23,
             ],
         ];
         $result = $this->subject->addData($input);
@@ -66,7 +66,7 @@ final class DatabaseDefaultLanguagePageRowTest extends UnitTestCase
             'databaseRow' => [
                 'uid' => 23,
                 'l10n_parent' => 0,
-                'sys_language_uid' => 0,
+                'language_tag' => 0,
             ],
         ];
         $result = $this->subject->addData($input);
@@ -91,14 +91,14 @@ final class DatabaseDefaultLanguagePageRowTest extends UnitTestCase
                 'uid' => 23,
                 'pid' => 1,
                 'l10n_parent' => 13,
-                'sys_language_uid' => 8,
+                'language_tag' => 8,
             ],
         ];
 
         $defaultLanguagePageRow = [
             'uid' => 13,
             'pid' => 1,
-            'sys_language_uid' => 0,
+            'language_tag' => 0,
             'l10n_parent' => 0,
         ];
 

@@ -120,7 +120,7 @@ final class RequestHandlerTest extends UnitTestCase
             'content' => '10',
         ];
 
-        $siteLanguage = $this->createSiteWithLanguage()->getLanguageById(3);
+        $siteLanguage = $this->createSiteWithLanguage()->getLanguageByCode(3);
         $contentObjectRendererMock = $this->getMockBuilder(ContentObjectRenderer::class)->disableOriginalConstructor()->getMock();
         $contentObjectRendererMock->expects(self::atLeastOnce())->method('cObjGet')->with(self::anything())->willReturn('');
         $contentObjectRendererMock->expects(self::once())->method('stdWrap')->with(self::anything())->willReturn($stdWrapResult);
@@ -282,7 +282,7 @@ final class RequestHandlerTest extends UnitTestCase
      */
     public function generateMetaTagHtmlGeneratesCorrectTags(array $typoScript, string $stdWrapResult, array $expectedTags): void
     {
-        $siteLanguage = $this->createSiteWithLanguage()->getLanguageById(3);
+        $siteLanguage = $this->createSiteWithLanguage()->getLanguageByCode(3);
         $contentObjectRendererMock = $this->getMockBuilder(ContentObjectRenderer::class)->disableOriginalConstructor()->getMock();
         $contentObjectRendererMock->expects(self::atLeastOnce())->method('cObjGet')->with(self::anything())->willReturn('');
         $contentObjectRendererMock->method('stdWrap')->with(self::anything())->willReturn($stdWrapResult);
@@ -331,7 +331,7 @@ final class RequestHandlerTest extends UnitTestCase
     {
         $stdWrapResult = '';
 
-        $siteLanguage = $this->createSiteWithLanguage()->getLanguageById(3);
+        $siteLanguage = $this->createSiteWithLanguage()->getLanguageByCode(3);
         $contentObjectRendererMock = $this->getMockBuilder(ContentObjectRenderer::class)->disableOriginalConstructor()->getMock();
         $contentObjectRendererMock->expects(self::atLeastOnce())->method('cObjGet')->with(self::anything())->willReturn('');
         $contentObjectRendererMock->method('stdWrap')->with(self::anything())->willReturn($stdWrapResult);
@@ -436,7 +436,7 @@ final class RequestHandlerTest extends UnitTestCase
      */
     public function generateMultipleMetaTags(array $typoScript, string $stdWrapResult, array $expectedTags): void
     {
-        $siteLanguage = $this->createSiteWithLanguage()->getLanguageById(3);
+        $siteLanguage = $this->createSiteWithLanguage()->getLanguageByCode(3);
         $contentObjectRendererMock = $this->getMockBuilder(ContentObjectRenderer::class)->disableOriginalConstructor()->getMock();
         $contentObjectRendererMock->expects(self::atLeastOnce())->method('cObjGet')->with(self::anything())->wilLReturn('');
         $contentObjectRendererMock->method('stdWrap')->with(self::anything())->willReturn($stdWrapResult);

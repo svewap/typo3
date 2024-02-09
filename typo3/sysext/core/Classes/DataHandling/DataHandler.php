@@ -4828,7 +4828,7 @@ class DataHandler implements LoggerAwareInterface
         // Try to fetch the site language from the pages' associated site
         $siteLanguage = $this->getSiteLanguageForPage((int)$pageId, (int)$language);
         if ($siteLanguage === null) {
-            $this->log($table, $uid, SystemLogDatabaseAction::LOCALIZE, 0, SystemLogErrorClassification::USER_ERROR, 'Language ID "{languageId}" not found for page {pageId}', -1, ['languageId' => (int)$language, 'pageId' => (int)$pageId]);
+            $this->log($table, $uid, SystemLogDatabaseAction::LOCALIZE, 0, SystemLogErrorClassification::USER_ERROR, 'Language ID "{languageCode}" not found for page {pageId}', -1, ['languageCode' => (int)$language, 'pageId' => (int)$pageId]);
             return false;
         }
 
@@ -4923,7 +4923,7 @@ class DataHandler implements LoggerAwareInterface
                         // @todo Deprecate passing an array and pass the full SiteLanguage object instead
                         $hookObj->processTranslateTo_copyAction(
                             $row[$fN],
-                            ['uid' => $siteLanguage->getLanguageId(), 'title' => $siteLanguage->getTitle()],
+                            ['uid' => $siteLanguage->getLanguageCode(), 'title' => $siteLanguage->getTitle()],
                             $this,
                             $fN
                         );
@@ -5201,7 +5201,7 @@ class DataHandler implements LoggerAwareInterface
     }
 
     /**
-     * When deleting a live element with sys_language_uid = 0, there may be translated records that
+     * When deleting a live element with language_tag = 0, there may be translated records that
      * have been created in workspaces only (t3ver_state=1). Those have to be discarded explicitly
      * since the other 'delete' related code does not consider this case, otherwise the 'new' workspace
      * translation would be dangling when the live record is gone.
@@ -5217,7 +5217,7 @@ class DataHandler implements LoggerAwareInterface
         $languageField = $GLOBALS['TCA'][$table]['ctrl']['languageField'];
         $localizationParentFieldName = $GLOBALS['TCA'][$table]['ctrl']['transOrigPointerField'];
         $liveRecord = BackendUtility::getRecord($table, $uid);
-        if ((int)($liveRecord[$languageField] ?? 0) !== 0 || (int)($liveRecord['t3ver_wsid'] ?? 0) !== 0) {
+        if (($liveRecord['language_tag'] ?? 0) !== 0 || (int)($liveRecord['t3ver_wsid'] ?? 0) !== 0) {
             // Don't do anything if we're not deleting a live record in default language
             return;
         }
@@ -5227,7 +5227,7 @@ class DataHandler implements LoggerAwareInterface
             ->where(
                 // workspace elements
                 $queryBuilder->expr()->gt('t3ver_wsid', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT)),
-                // with sys_language_uid > 0
+                // with language_tag > 0
                 $queryBuilder->expr()->gt($languageField, $queryBuilder->createNamedParameter(0, Connection::PARAM_INT)),
                 // in state 'new'
                 $queryBuilder->expr()->eq('t3ver_state', $queryBuilder->createNamedParameter(VersionState::NEW_PLACEHOLDER->value, Connection::PARAM_INT)),
@@ -5467,7 +5467,7 @@ class DataHandler implements LoggerAwareInterface
         // Delete either a default language page or a translated page
         $pageIdInDefaultLanguage = $this->getDefaultLanguagePageId($uid);
         $isPageTranslation = false;
-        $pageLanguageId = 0;
+        $pageLanguageCode = 0;
         if ($pageIdInDefaultLanguage !== $uid) {
             // For translated pages, translated records in other tables (eg. tt_content) for the
             // to-delete translated page have their pid field set to the uid of the default language record,
@@ -5477,7 +5477,7 @@ class DataHandler implements LoggerAwareInterface
             // adapts the query for other tables to use the uid of the default language page as pid together
             // with the language id of the translated page.
             $isPageTranslation = true;
-            $pageLanguageId = $this->pageInfo($uid, $GLOBALS['TCA']['pages']['ctrl']['languageField']);
+            $pageLanguageCode = $this->pageInfo($uid, $GLOBALS['TCA']['pages']['ctrl']['languageField']);
         }
 
         if ($deleteRecordsOnPage) {
@@ -5508,7 +5508,7 @@ class DataHandler implements LoggerAwareInterface
                         ),
                         $queryBuilder->expr()->eq(
                             $GLOBALS['TCA'][$table]['ctrl']['languageField'],
-                            $queryBuilder->createNamedParameter($pageLanguageId, Connection::PARAM_INT)
+                            $queryBuilder->createNamedParameter($pageLanguageCode, Connection::PARAM_INT)
                         )
                     );
                 } else {
@@ -6009,9 +6009,9 @@ class DataHandler implements LoggerAwareInterface
     protected function discardSubPagesAndRecordsOnPage(array $page): void
     {
         $isLocalizedPage = false;
-        $sysLanguageId = (int)$page[$GLOBALS['TCA']['pages']['ctrl']['languageField']];
+        $sysLanguageCode = (int)$page[$GLOBALS['TCA']['pages']['ctrl']['languageField']];
         $versionState = VersionState::tryFrom($page['t3ver_state'] ?? 0);
-        if ($sysLanguageId > 0) {
+        if ($sysLanguageCode > 0) {
             // New or moved localized page.
             // Discard records on this page localization, but no sub pages.
             // Records of a translated page have the pid set to the default language page uid. Found in l10n_parent.
@@ -6052,11 +6052,11 @@ class DataHandler implements LoggerAwareInterface
                     )
                 );
             if ($isLocalizedPage) {
-                // Add sys_language_uid = x restriction if discarding a localized page
+                // Add language_tag = x restriction if discarding a localized page
                 $queryBuilder->andWhere(
                     $queryBuilder->expr()->eq(
                         $GLOBALS['TCA'][$table]['ctrl']['languageField'],
-                        $queryBuilder->createNamedParameter($sysLanguageId, Connection::PARAM_INT)
+                        $queryBuilder->createNamedParameter($sysLanguageCode, Connection::PARAM_INT)
                     )
                 );
             }
@@ -8155,7 +8155,7 @@ class DataHandler implements LoggerAwareInterface
 
         // Typically l10n_parent
         $transOrigPointerField = $GLOBALS['TCA'][$table]['ctrl']['transOrigPointerField'];
-        // Typically sys_language_uid
+        // Typically language_tag
         $languageField = $GLOBALS['TCA'][$table]['ctrl']['languageField'];
 
         $select = [$sortColumn, $languageField, $transOrigPointerField, 'pid', 'uid'];
@@ -8251,8 +8251,8 @@ class DataHandler implements LoggerAwareInterface
         }
         try {
             $site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($pageId);
-            foreach ($site->getAvailableLanguages($this->BE_USER, false, $pageId) as $languageId => $language) {
-                $incomingFieldArray[$languageFieldName] = $languageId;
+            foreach ($site->getAvailableLanguages($this->BE_USER, false, $pageId) as $languageCode => $language) {
+                $incomingFieldArray[$languageFieldName] = $languageCode;
                 break;
             }
         } catch (SiteNotFoundException) {
@@ -8271,12 +8271,12 @@ class DataHandler implements LoggerAwareInterface
      * @param int $pageId
      * @param int $languageId
      */
-    protected function getSiteLanguageForPage(int $pageId, int $languageId): ?SiteLanguage
+    protected function getSiteLanguageForPage(int $pageId, int $languageCode): ?SiteLanguage
     {
         try {
             // Try to fetch the site language from the pages' associated site
             $site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($pageId);
-            return $site->getLanguageById($languageId);
+            return $site->getLanguageByCode($languageCode);
         } catch (SiteNotFoundException | \InvalidArgumentException $e) {
             // In case no site language could be found, we might deal with the root node,
             // we therefore try to fetch the site language from all available sites.
@@ -8284,7 +8284,7 @@ class DataHandler implements LoggerAwareInterface
             $sites = GeneralUtility::makeInstance(SiteFinder::class)->getAllSites();
             foreach ($sites as $site) {
                 try {
-                    return $site->getLanguageById($languageId);
+                    return $site->getLanguageByCode($languageCode);
                 } catch (\InvalidArgumentException $e) {
                     // language not found in site, continue
                     continue;

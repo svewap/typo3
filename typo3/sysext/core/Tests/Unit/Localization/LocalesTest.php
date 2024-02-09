@@ -139,7 +139,7 @@ final class LocalesTest extends UnitTestCase
     public function setSystemLocaleFromSiteLanguageWithoutLocaleDoesNotSetLocale(): void
     {
         $site = $this->createSiteWithDefaultLanguage('');
-        $result = Locales::setSystemLocaleFromSiteLanguage($site->getLanguageById(0));
+        $result = Locales::setSystemLocaleFromSiteLanguage($site->getLanguageByCode(0));
         self::assertFalse($result);
         $currentLocale = setlocale(LC_COLLATE, 0);
         // Check that the locale was not overridden
@@ -153,7 +153,7 @@ final class LocalesTest extends UnitTestCase
     {
         $locale = 'en_US';
         $site = $this->createSiteWithDefaultLanguage($locale);
-        $result = Locales::setSystemLocaleFromSiteLanguage($site->getLanguageById(0));
+        $result = Locales::setSystemLocaleFromSiteLanguage($site->getLanguageByCode(0));
         self::assertTrue($result);
         $currentLocale = setlocale(LC_COLLATE, 0);
         // Check that the locale was overridden

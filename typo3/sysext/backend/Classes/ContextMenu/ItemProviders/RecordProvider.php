@@ -279,7 +279,7 @@ class RecordProvider extends AbstractProvider
         if ($itemName === 'newWizard' && $this->table === 'tt_content') {
             $urlParameters = [
                 'id' => $this->record['pid'],
-                'sys_language_uid' => $this->record[$this->getLanguageField()] ?? null,
+                'language_tag' => $this->record[$this->getLanguageField()] ?? null,
                 'colPos' => $this->record['colPos'],
                 'uid_pid' => -$this->record['uid'],
             ];

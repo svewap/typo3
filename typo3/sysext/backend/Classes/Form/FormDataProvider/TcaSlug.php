@@ -37,11 +37,11 @@ class TcaSlug implements FormDataProviderInterface
         $table = $result['tableName'];
         $site = $result['site'];
         $row = $result['databaseRow'];
-        $languageId = 0;
+        $languageTag = '0';
 
         if (($result['processedTca']['ctrl']['languageField'] ?? '') !== '') {
             $languageField = $result['processedTca']['ctrl']['languageField'];
-            $languageId = (int)((is_array($row[$languageField] ?? null) ? ($row[$languageField][0] ?? 0) : $row[$languageField]) ?? 0);
+            $languageTag = (string)((is_array($row[$languageField] ?? null) ? ($row[$languageField][0] ?? 0) : $row[$languageField]) ?? 0);
         }
 
         foreach ($result['processedTca']['columns'] as $fieldName => $fieldConfig) {
@@ -52,11 +52,11 @@ class TcaSlug implements FormDataProviderInterface
             $prefix = $fieldConfig['config']['appearance']['prefix'] ?? '';
 
             if ($prefix !== '') {
-                $parameters = ['site' => $site, 'languageId' => $languageId, 'table' => $table, 'row' => $row];
+                $parameters = ['site' => $site, 'languageCode' => $languageTag, 'table' => $table, 'row' => $row];
                 $prefix = GeneralUtility::callUserFunction($prefix, $parameters, $this);
             } elseif ($site instanceof SiteInterface) {
                 // default behaviour used for pages
-                $prefix = $this->getPrefixForSite($site, $languageId);
+                $prefix = $this->getPrefixForSite($site, $languageTag);
             }
 
             $result['customData'][$fieldName]['slugPrefix'] = $prefix;
@@ -69,10 +69,10 @@ class TcaSlug implements FormDataProviderInterface
     /**
      * Render the prefix for the input field.
      */
-    protected function getPrefixForSite(SiteInterface $site, int $languageId): string
+    protected function getPrefixForSite(SiteInterface $site, string $languageTag): string
     {
         try {
-            $language = ($languageId < 0) ? $site->getDefaultLanguage() : $site->getLanguageById($languageId);
+            $language = ($languageTag < 0) ? $site->getDefaultLanguage() : $site->getLanguageByCode($languageTag);
             $base = $language->getBase();
             $prefix = rtrim((string)$base, '/');
             if ($prefix !== '' && empty($base->getScheme()) && $base->getHost() !== '') {

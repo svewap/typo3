@@ -174,7 +174,7 @@ class RichTextElement extends AbstractFormElement
      */
     protected function getLanguageIsoCodeOfContent(): string
     {
-        $currentLanguageUid = ($this->data['databaseRow']['sys_language_uid'] ?? 0);
+        $currentLanguageUid = ($this->data['databaseRow']['language_tag'] ?? 0);
         if (is_array($currentLanguageUid)) {
             $currentLanguageUid = $currentLanguageUid[0];
         }

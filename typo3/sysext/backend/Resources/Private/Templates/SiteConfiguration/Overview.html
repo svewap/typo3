@@ -113,7 +113,7 @@
                                             <div class="{f:if(condition: '{siteLanguageIterator.isLast}', then: '', else: 'mb-2')}">
                                                 <f:if condition="{siteLanguage.enabled}">
                                                     <f:then>
-                                                        <core:icon identifier="{siteLanguage.flagIdentifier}" /> {siteLanguage.title} <code class="m-0">[{siteLanguage.languageId}]</code>
+                                                        <core:icon identifier="{siteLanguage.flagIdentifier}" /> {siteLanguage.title} <code class="m-0">[{siteLanguage.languageCode}]</code>
                                                     </f:then>
                                                     <f:else>
                                                         <core:icon identifier="{siteLanguage.flagIdentifier}" overlay="overlay-hidden" />

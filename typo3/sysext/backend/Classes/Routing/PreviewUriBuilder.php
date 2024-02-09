@@ -51,7 +51,7 @@ class PreviewUriBuilder
     public const OPTION_WINDOW_SCOPE_GLOBAL = 'global';
 
     protected int $pageId;
-    protected int $languageId = 0;
+    protected string $languageTag = "0";
     protected array $rootLine = [];
     protected string $section = '';
     protected array $additionalQueryParameters = [];
@@ -112,13 +112,13 @@ class PreviewUriBuilder
      * @param int $language particular language
      * @return static
      */
-    public function withLanguage(int $language): self
+    public function withLanguage(string $language): self
     {
-        if ($this->languageId === $language) {
+        if ($this->languageTag === $language) {
             return $this;
         }
         $target = clone $this;
-        $target->languageId = $language;
+        $target->languageTag = $language;
         return $target;
     }
 
@@ -148,19 +148,19 @@ class PreviewUriBuilder
             $additionalQueryParams = [];
             parse_str($additionalQueryParameters, $additionalQueryParams);
         }
-        $languageId = $this->languageId;
+        $languageTag = $this->languageTag;
         if (isset($additionalQueryParams['_language'])) {
-            $languageId = (int)$additionalQueryParams['_language'];
+            $languageTag = (int)$additionalQueryParams['_language'];
             unset($additionalQueryParams['_language']);
         }
         // No change
-        if ($this->languageId === $languageId && $additionalQueryParams === $this->additionalQueryParameters) {
+        if ($this->languageTag === $languageTag && $additionalQueryParams === $this->additionalQueryParameters) {
             return $this;
         }
 
         $target = clone $this;
         $target->additionalQueryParameters = $additionalQueryParams;
-        $target->languageId = $languageId;
+        $target->languageTag = $languageTag;
         return $target;
     }
 
@@ -173,7 +173,7 @@ class PreviewUriBuilder
         try {
             $event = new BeforePagePreviewUriGeneratedEvent(
                 $this->pageId,
-                $this->languageId,
+                $this->languageTag,
                 $this->rootLine,
                 $this->section,
                 $this->additionalQueryParameters,
@@ -209,8 +209,8 @@ class PreviewUriBuilder
                     $previewRouteParameters = $event->getAdditionalQueryParameters();
                     // Reassemble encapsulated language id into route parameters to get proper localized page preview
                     // uri for non-default languages.
-                    if ($event->getLanguageId() > 0) {
-                        $previewRouteParameters['_language'] = $site->getLanguageById($event->getLanguageId());
+                    if ($event->getLanguageTag() > 0) {
+                        $previewRouteParameters['_language'] = $site->getLanguageByCode($event->getLanguageTag());
                     }
                     $event->setPreviewUri(
                         $site->getRouter($event->getContext())->generateUri(
@@ -228,7 +228,7 @@ class PreviewUriBuilder
             $event = new AfterPagePreviewUriGeneratedEvent(
                 $event->getPreviewUri(),
                 $event->getPageId(),
-                $event->getLanguageId(),
+                $event->getLanguageTag(),
                 $event->getRootline(),
                 $event->getSection(),
                 $event->getAdditionalQueryParameters(),

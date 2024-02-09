@@ -31,7 +31,7 @@ return [
         'tx_testirrecsv_hotels',
     ],
     'tx_testirrecsv_hotel' => [
-        'sys_language_uid',
+        'language_tag',
         'l18n_parent',
         'sorting',
         'deleted',
@@ -40,7 +40,7 @@ return [
         'offers',
     ],
     'tx_testirrecsv_offer' => [
-        'sys_language_uid',
+        'language_tag',
         'l18n_parent',
         'sorting',
         'deleted',
@@ -49,7 +49,7 @@ return [
         'prices',
     ],
     'tx_testirrecsv_price' => [
-        'sys_language_uid',
+        'language_tag',
         'l18n_parent',
         'sorting',
         'deleted',
@@ -58,7 +58,7 @@ return [
         'price',
     ],
     'tx_testirreforeignfield_hotel' => [
-        'sys_language_uid',
+        'language_tag',
         'l18n_parent',
         'sorting',
         'deleted',
@@ -70,7 +70,7 @@ return [
         'offers',
     ],
     'tx_testirreforeignfield_offer' => [
-        'sys_language_uid',
+        'language_tag',
         'l18n_parent',
         'sorting',
         'deleted',
@@ -82,7 +82,7 @@ return [
         'prices',
     ],
     'tx_testirreforeignfield_price' => [
-        'sys_language_uid',
+        'language_tag',
         'l18n_parent',
         'sorting',
         'deleted',
@@ -94,7 +94,7 @@ return [
         'price',
     ],
     'tx_testirremnattributeinline_hotel' => [
-        'sys_language_uid',
+        'language_tag',
         'l18n_parent',
         'sorting',
         'deleted',
@@ -103,7 +103,7 @@ return [
         'offers',
     ],
     'tx_testirremnattributeinline_hotel_offer_rel' => [
-        'sys_language_uid',
+        'language_tag',
         'l18n_parent',
         'deleted',
         'hidden',
@@ -114,7 +114,7 @@ return [
         'prices',
     ],
     'tx_testirremnattributeinline_offer' => [
-        'sys_language_uid',
+        'language_tag',
         'l18n_parent',
         'sorting',
         'deleted',
@@ -123,7 +123,7 @@ return [
         'hotels',
     ],
     'tx_testirremnattributeinline_price' => [
-        'sys_language_uid',
+        'language_tag',
         'l18n_parent',
         'sorting',
         'deleted',
@@ -133,7 +133,7 @@ return [
         'price',
     ],
     'tx_testirremnattributesimple_hotel' => [
-        'sys_language_uid',
+        'language_tag',
         'l18n_parent',
         'sorting',
         'deleted',
@@ -142,7 +142,7 @@ return [
         'offers',
     ],
     'tx_testirremnattributesimple_hotel_offer_rel' => [
-        'sys_language_uid',
+        'language_tag',
         'l18n_parent',
         'deleted',
         'hidden',
@@ -154,7 +154,7 @@ return [
         'allincl',
     ],
     'tx_testirremnattributesimple_offer' => [
-        'sys_language_uid',
+        'language_tag',
         'l18n_parent',
         'sorting',
         'deleted',
@@ -163,7 +163,7 @@ return [
         'hotels',
     ],
     'tx_testirremm_hotel' => [
-        'sys_language_uid',
+        'language_tag',
         'l18n_parent',
         'sorting',
         'deleted',
@@ -172,7 +172,7 @@ return [
         'offers',
     ],
     'tx_testirremm_offer' => [
-        'sys_language_uid',
+        'language_tag',
         'l18n_parent',
         'sorting',
         'deleted',
@@ -182,7 +182,7 @@ return [
         'prices',
     ],
     'tx_testirremm_price' => [
-        'sys_language_uid',
+        'language_tag',
         'l18n_parent',
         'sorting',
         'deleted',
@@ -192,7 +192,7 @@ return [
         'offers',
     ],
     'tx_testirremnsymmetric_hotel' => [
-        'sys_language_uid',
+        'language_tag',
         'l18n_parent',
         'sorting',
         'deleted',
@@ -201,7 +201,7 @@ return [
         'branches',
     ],
     'tx_testirremnsymmetric_hotel_rel' => [
-        'sys_language_uid',
+        'language_tag',
         'l18n_parent',
         'deleted',
         'hidden',

@@ -93,7 +93,7 @@ class Site implements SiteInterface
         $this->configuration = $configuration;
         $configuration['languages'] = !empty($configuration['languages']) ? $configuration['languages'] : [
             0 => [
-                'languageId' => 0,
+                'languageCode' => 'en-US',
                 'title' => 'Default',
                 'navigationTitle' => '',
                 'flag' => 'us',
@@ -107,7 +107,7 @@ class Site implements SiteInterface
         $this->base = new Uri($this->sanitizeBaseUrl($baseUrl));
 
         foreach ($configuration['languages'] as $languageConfiguration) {
-            $languageUid = (int)$languageConfiguration['languageId'];
+            $languageCode = $languageConfiguration['languageCode'];
             // site language has defined its own base, this is the case most of the time.
             if (!empty($languageConfiguration['base'])) {
                 $base = $this->resolveBaseWithVariants(
@@ -132,8 +132,8 @@ class Site implements SiteInterface
                     $languageConfiguration['flag'] = 'flags-' . $languageConfiguration['flag'];
                 }
             }
-            $this->languages[$languageUid] = new SiteLanguage(
-                $languageUid,
+            $this->languages[$languageCode] = new SiteLanguage(
+                $languageCode,
                 $languageConfiguration['locale'],
                 $base,
                 $languageConfiguration
@@ -205,9 +205,9 @@ class Site implements SiteInterface
     public function getLanguages(): array
     {
         $languages = [];
-        foreach ($this->languages as $languageId => $language) {
+        foreach ($this->languages as $languageCode => $language) {
             if ($language->enabled()) {
-                $languages[$languageId] = $language;
+                $languages[$languageCode] = $language;
             }
         }
         return $languages;
@@ -224,17 +224,17 @@ class Site implements SiteInterface
     }
 
     /**
-     * Returns a language of this site, given by the sys_language_uid
+     * Returns a language of this site, given by the language_tag
      *
      * @throws \InvalidArgumentException
      */
-    public function getLanguageById(int $languageId): SiteLanguage
+    public function getLanguageByCode(string $languageCode): SiteLanguage
     {
-        if (isset($this->languages[$languageId])) {
-            return $this->languages[$languageId];
+        if (isset($this->languages[$languageCode])) {
+            return $this->languages[$languageCode];
         }
         throw new \InvalidArgumentException(
-            'Language ' . $languageId . ' does not exist on site ' . $this->identifier . '.',
+            'Language ' . $languageCode . ' does not exist on site ' . $this->identifier . '.',
             1522960188
         );
     }
@@ -252,8 +252,8 @@ class Site implements SiteInterface
         $availableLanguages = [];
 
         // Check if we need to add language "-1"
-        if ($includeAllLanguagesFlag && $user->checkLanguageAccess(-1)) {
-            $availableLanguages[-1] = new SiteLanguage(-1, '', $this->getBase(), [
+        if ($includeAllLanguagesFlag && $user->checkLanguageAccess('-1')) {
+            $availableLanguages['all'] = new SiteLanguage('0', '', $this->getBase(), [
                 'title' => $this->getLanguageService()->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:multipleLanguages'),
                 'flag' => 'flags-multiple',
             ]);
@@ -261,8 +261,8 @@ class Site implements SiteInterface
 
         // Do not add the ones that are not allowed by the user
         foreach ($this->languages as $language) {
-            if ($user->checkLanguageAccess($language->getLanguageId())) {
-                $availableLanguages[$language->getLanguageId()] = $language;
+            if ($user->checkLanguageAccess($language->getLanguageCode())) {
+                $availableLanguages[$language->getLanguageCode()] = $language;
             }
         }
 

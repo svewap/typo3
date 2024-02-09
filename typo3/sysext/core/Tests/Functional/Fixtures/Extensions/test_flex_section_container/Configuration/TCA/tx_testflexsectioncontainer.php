@@ -11,7 +11,7 @@ return [
         'iconfile' => 'EXT:test_flex_section_container/Resources/Public/Icons/Extension.svg',
         'versioningWS' => true,
         'origUid' => 't3_origuid',
-        'languageField' => 'sys_language_uid',
+        'languageField' => 'language_tag',
         'transOrigPointerField' => 'l10n_parent',
         'translationSource' => 'l10n_source',
         'security' => [
@@ -20,7 +20,7 @@ return [
     ],
 
     'columns' => [
-        'sys_language_uid' => [
+        'language_tag' => [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
@@ -28,7 +28,7 @@ return [
             ],
         ],
         'l10n_parent' => [
-            'displayCond' => 'FIELD:sys_language_uid:>:0',
+            'displayCond' => 'FIELD:language_tag:>:0',
             'label' => 'Translation parent',
             'config' => [
                 'type' => 'select',
@@ -40,13 +40,13 @@ return [
                     ],
                 ],
                 'foreign_table' => 'tx_testflexsectioncontainer',
-                'foreign_table_where' => 'AND {#tx_testflexsectioncontainer}.{#pid}=###CURRENT_PID### AND {#tx_testflexsectioncontainer}.{#sys_language_uid} IN (-1,0)',
+                'foreign_table_where' => 'AND {#tx_testflexsectioncontainer}.{#pid}=###CURRENT_PID### AND {#tx_testflexsectioncontainer}.{#language_tag} IN (-1,0)',
                 'default' => 0,
             ],
         ],
         'l10n_source' => [
             'exclude' => true,
-            'displayCond' => 'FIELD:sys_language_uid:>:0',
+            'displayCond' => 'FIELD:language_tag:>:0',
             'label' => 'Translation source',
             'config' => [
                 'type' => 'select',
@@ -114,7 +114,7 @@ return [
                 --div--;flex,
                     flex_1,
                 --div--;meta,
-                    sys_language_uid, l10n_parent, l10n_source,
+                    language_tag, l10n_parent, l10n_source,
             ',
         ],
     ],

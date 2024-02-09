@@ -12,6 +12,6 @@
 <f:translate key="tasks.email.listing.explanation" extensionName="linkvalidator"/>
 <f:translate key="tasks.email.listing.notes" extensionName="linkvalidator"/>
 <f:for each="{linkAnalyzerResult.brokenLinks}" as="link">
-{f:if(condition: link.record_title, then: '{link.record_title} [{link.record_uid}]', else: link.record_uid)} | {link.language_code} [{link.language}] | {f:if(condition: link.page_record.title, then: '{link.page_record.title} [{link.real_pid}]', else: link.real_pid)} | {link.record_type} | {link.target} | <f:translate key="task.email.brokenLinks.type.{link.link_type}" extensionName="linkvalidator"/>
+{f:if(condition: link.record_title, then: '{link.record_title} [{link.record_uid}]', else: link.record_uid)} | {link.language_tag} [{link.language}] | {f:if(condition: link.page_record.title, then: '{link.page_record.title} [{link.real_pid}]', else: link.real_pid)} | {link.record_type} | {link.target} | <f:translate key="task.email.brokenLinks.type.{link.link_type}" extensionName="linkvalidator"/>
 </f:for>
 </f:if></f:section>

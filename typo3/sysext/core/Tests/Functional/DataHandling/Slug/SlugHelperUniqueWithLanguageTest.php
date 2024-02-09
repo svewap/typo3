@@ -57,7 +57,7 @@ final class SlugHelperUniqueWithLanguageTest extends FunctionalTestCase
                 'recordData' => [
                     'uid' => 2,
                     'pid' => 1,
-                    'sys_language_uid' => 0,
+                    'language_tag' => 0,
                     'title' => 'Some title',
                     'slug' => 'unique-slug',
                 ],
@@ -67,7 +67,7 @@ final class SlugHelperUniqueWithLanguageTest extends FunctionalTestCase
                 'recordData' => [
                     'uid' => 2,
                     'pid' => 1,
-                    'sys_language_uid' => 0,
+                    'language_tag' => 0,
                     'title' => 'Some title',
                     'slug' => 'other-slug',
                 ],
@@ -77,7 +77,7 @@ final class SlugHelperUniqueWithLanguageTest extends FunctionalTestCase
                 'recordData' => [
                     'uid' => 2,
                     'pid' => 1,
-                    'sys_language_uid' => 1,
+                    'language_tag' => 1,
                     'title' => 'Some title',
                     'slug' => 'unique-slug',
                 ],
@@ -87,7 +87,7 @@ final class SlugHelperUniqueWithLanguageTest extends FunctionalTestCase
                 'recordData' => [
                     'uid' => 2,
                     'pid' => 1,
-                    'sys_language_uid' => -1,
+                    'language_tag' => -1,
                     'title' => 'Some title',
                     'slug' => 'unique-slug',
                 ],

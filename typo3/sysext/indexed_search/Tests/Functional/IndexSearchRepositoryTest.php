@@ -45,7 +45,7 @@ final class IndexSearchRepositoryTest extends FunctionalTestCase
             'type' => 0,
             'MP' => '',
             'staticPageArguments' => null,
-            'sys_language_uid' => 0,
+            'language_tag' => 0,
             'gr_list' => '0,-1',
             'recordUid' => null,
             'freeIndexUid' => null,

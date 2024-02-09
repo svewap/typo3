@@ -49,14 +49,14 @@ class DatabaseSystemLanguageRows implements FormDataProviderInterface
 
         $languageRows = [];
         foreach ($languages as $language) {
-            $languageId = $language->getLanguageId();
-            if ($languageId > 0) {
+            $languageTag = $language->getLanguageCode();
+            if ($languageTag > 0) {
                 $iso = $language->getLocale()->getLanguageCode();
             } else {
                 $iso = 'DEF';
             }
-            $languageRows[$languageId] = [
-                'uid' => $languageId,
+            $languageRows[$languageTag] = [
+                'uid' => $languageTag,
                 'title' => $language->getTitle(),
                 'iso' => $iso,
                 'flagIconIdentifier' => $language->getFlagIdentifier(),
@@ -74,7 +74,7 @@ class DatabaseSystemLanguageRows implements FormDataProviderInterface
                 $message = sprintf(
                     $this->getLanguageService()->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:error.missingLanguageIsocode'),
                     $language->getLocale()->getLanguageCode(),
-                    $languageId
+                    $languageTag
                 );
                 $flashMessage = GeneralUtility::makeInstance(
                     FlashMessage::class,

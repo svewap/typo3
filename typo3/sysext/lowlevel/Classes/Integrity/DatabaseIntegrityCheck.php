@@ -119,7 +119,7 @@ class DatabaseIntegrityCheck
         if (!$this->genTreeIncludeDeleted) {
             $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
         }
-        $queryBuilder->select('uid', 'title', 'doktype', 'deleted', 'hidden', 'sys_language_uid')
+        $queryBuilder->select('uid', 'title', 'doktype', 'deleted', 'hidden', 'language_tag')
             ->from('pages')
             ->orderBy('sorting');
         if ($versions) {
@@ -137,7 +137,7 @@ class DatabaseIntegrityCheck
         while ($row = $result->fetchAssociative()) {
             $newID = $row['uid'];
             // Register various data for this item:
-            if ($row['sys_language_uid'] === 0) {
+            if ($row['language_tag'] === 0) {
                 $this->pageIdArray[$newID] = $row;
             } else {
                 $this->pageTranslatedPageIDArray[$newID] = $row;

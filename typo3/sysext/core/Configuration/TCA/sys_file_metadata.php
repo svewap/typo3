@@ -9,7 +9,7 @@ return [
         'type' => 'file:type',
         'hideTable' => true,
         'rootLevel' => 1,
-        'languageField' => 'sys_language_uid',
+        'languageField' => 'language_tag',
         'transOrigPointerField' => 'l10n_parent',
         'transOrigDiffSourceField' => 'l10n_diffsource',
         'versioningWS' => true,
@@ -30,7 +30,7 @@ return [
                 'type' => 'passthrough',
             ],
         ],
-        'sys_language_uid' => [
+        'language_tag' => [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
                 'type' => 'language',
@@ -42,7 +42,7 @@ return [
             ],
         ],
         'l10n_parent' => [
-            'displayCond' => 'FIELD:sys_language_uid:>:0',
+            'displayCond' => 'FIELD:language_tag:>:0',
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'group',
@@ -65,7 +65,7 @@ return [
             ],
         ],
         'file' => [
-            'displayCond' => 'FIELD:sys_language_uid:=:0',
+            'displayCond' => 'FIELD:language_tag:=:0',
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_file',
             'config' => [
                 'readOnly' => true,
@@ -140,7 +140,7 @@ return [
     ],
     'palettes' => [
         'language' => [
-            'showitem' => 'sys_language_uid, l10n_parent',
+            'showitem' => 'language_tag, l10n_parent',
             'isHiddenPalette' => true,
         ],
     ],

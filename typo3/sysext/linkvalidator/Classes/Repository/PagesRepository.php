@@ -169,7 +169,7 @@ class PagesRepository
         ];
         if (!empty($limitToLanguageIds)) {
             $constraints[] = $queryBuilder->expr()->in(
-                'sys_language_uid',
+                'language_tag',
                 $queryBuilder->createNamedParameter($limitToLanguageIds, Connection::PARAM_INT_ARRAY)
             );
         }

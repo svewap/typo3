@@ -49,7 +49,7 @@ class RecordStateFactory
 
         $context = GeneralUtility::makeInstance(EntityContext::class)
             ->withWorkspaceId($aspectFieldValues['workspace'])
-            ->withLanguageId($aspectFieldValues['language']);
+            ->withLanguageCode($aspectFieldValues['language']);
         $node = $this->createEntityPointer($pageId, 'pages');
         $subject = $this->createEntityPointer($recordId);
 

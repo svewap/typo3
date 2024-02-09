@@ -162,7 +162,7 @@ class FormDataCompiler
             // Array keys still contain the concatenation dots.
             'pageTsConfig' => [],
             // List of available system languages. Array key is the system language uid, value array
-            // contains details of the record, with iso code resolved. Key is the sys_language_uid uid.
+            // contains details of the record, with iso code resolved. Key is the language_tag uid.
             'systemLanguageRows' => [],
             // If the page that is handled has "page_language_overlay" records (page has localizations in
             // different languages), then this array holds those rows.
@@ -179,7 +179,7 @@ class FormDataCompiler
             // the default language record changed meanwhile.
             'defaultLanguageDiffRow' => null,
             // With userTS options.additionalPreviewLanguages set, field values of additional languages
-            // can be shown. This array holds those additional language records, Array key is sys_language_uid.
+            // can be shown. This array holds those additional language records, Array key is language_tag.
             'additionalLanguageRows' => [],
             // The tca record type value of the record. Forced to string, there can be "named" type values.
             'recordTypeValue' => '',

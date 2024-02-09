@@ -105,7 +105,7 @@ class PageTreeRepository
             'shortcut_mode',
             'mount_pid_ol',
             'url',
-            'sys_language_uid',
+            'language_tag',
             'l10n_parent',
         ], $additionalFieldsToQuery);
         $this->additionalQueryRestrictions = $additionalQueryRestrictions;
@@ -243,7 +243,7 @@ class PageTreeRepository
         $queryBuilder
             ->from('pages')
             ->where(
-                $queryBuilder->expr()->eq('sys_language_uid', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT))
+                $queryBuilder->expr()->eq('language_tag', $queryBuilder->createNamedParameter(0))
             )
             // ensure deterministic sorting
             ->orderBy('sorting', 'ASC')
@@ -335,6 +335,52 @@ class PageTreeRepository
         return $pageRecords;
     }
 
+
+    public function getPageTranslations(int $pageId, array $languageTags): array
+    {
+
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getQueryBuilderForTable('pages');
+        $queryBuilder->getRestrictions()
+            ->removeAll()
+            ->add(GeneralUtility::makeInstance(DeletedRestriction::class))
+            ->add(GeneralUtility::makeInstance(WorkspaceRestriction::class, $this->currentWorkspace));
+
+        if (!empty($this->additionalQueryRestrictions)) {
+            foreach ($this->additionalQueryRestrictions as $additionalQueryRestriction) {
+                $queryBuilder->getRestrictions()->add($additionalQueryRestriction);
+            }
+        }
+
+        $queryBuilder
+            ->add('select', $this->quotedFields)
+            ->from('pages')
+            ->where(
+                $queryBuilder->expr()->and(
+                    $queryBuilder->expr()->in('language_tag', $queryBuilder->createNamedParameter($languageTags, Connection::PARAM_STR_ARRAY)),
+                    $queryBuilder->expr()->eq('l10n_parent', $queryBuilder->createNamedParameter($pageId, Connection::PARAM_INT))
+                )
+
+            );
+
+        if (!empty($this->additionalWhereClause)) {
+            $queryBuilder->andWhere(
+                QueryHelper::stripLogicalOperatorPrefix($this->additionalWhereClause)
+            );
+        }
+
+        $pageRecords = $queryBuilder
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        foreach ($pageRecords as &$pageRecord) {
+            $pageRecord['uid'] = (int)$pageRecord['uid'];
+        }
+
+        return $pageRecords;
+
+    }
+
     public function hasChildren(int $pid): bool
     {
         $pageRecords = $this->getChildPageRecords([$pid]);
@@ -370,7 +416,7 @@ class PageTreeRepository
             ->from('pages')
             ->where(
                 // Only show records in default language
-                $queryBuilder->expr()->eq('sys_language_uid', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT))
+                $queryBuilder->expr()->eq('language_tag', $queryBuilder->createNamedParameter('0'))
             );
 
         if (!empty($this->additionalWhereClause)) {
@@ -538,7 +584,7 @@ class PageTreeRepository
             ->from('pages')
             ->where(
                 // Only show records in default language
-                $expressionBuilder->eq('sys_language_uid', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT)),
+                $expressionBuilder->eq('language_tag', $queryBuilder->createNamedParameter(0)),
                 $workspaceIdExpression,
                 QueryHelper::stripLogicalOperatorPrefix($additionalWhereClause)
             );

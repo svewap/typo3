@@ -59,7 +59,7 @@ final class GetUniqueTranslationTest extends FunctionalTestCase
         // Mis-using the "keywords" field in the scenario data-set to check for uniqueness
         $GLOBALS['TCA']['pages']['columns']['keywords']['l10n_mode'] = 'exclude';
         $GLOBALS['TCA']['pages']['columns']['keywords']['transOrigPointerField'] = 'l10n_parent';
-        $GLOBALS['TCA']['pages']['columns']['keywords']['languageField'] = 'sys_language_uid';
+        $GLOBALS['TCA']['pages']['columns']['keywords']['languageField'] = 'language_tag';
         $GLOBALS['TCA']['pages']['columns']['keywords']['config']['eval'] = 'unique';
         $actionService = new ActionService();
         $map = $actionService->localizeRecord('pages', self::PAGE_DATAHANDLER, 1);
@@ -78,7 +78,7 @@ final class GetUniqueTranslationTest extends FunctionalTestCase
         // Mis-using the "nav_title" field in the scenario data-set to check for uniqueness
         $GLOBALS['TCA']['pages']['columns']['nav_title']['l10n_mode'] = 'exclude';
         $GLOBALS['TCA']['pages']['columns']['nav_title']['transOrigPointerField'] = 'l10n_parent';
-        $GLOBALS['TCA']['pages']['columns']['nav_title']['languageField'] = 'sys_language_uid';
+        $GLOBALS['TCA']['pages']['columns']['nav_title']['languageField'] = 'language_tag';
         $GLOBALS['TCA']['pages']['columns']['nav_title']['config']['eval'] = 'unique';
         $actionService = new ActionService();
         $map = $actionService->localizeRecord('pages', self::PAGE_DATAHANDLER, 1);
@@ -102,7 +102,7 @@ final class GetUniqueTranslationTest extends FunctionalTestCase
         // Mis-using the "nav_title" field in the scenario data-set to check for uniqueness
         $GLOBALS['TCA']['pages']['columns']['nav_title']['l10n_mode'] = 'exclude';
         $GLOBALS['TCA']['pages']['columns']['nav_title']['transOrigPointerField'] = 'l10n_parent';
-        $GLOBALS['TCA']['pages']['columns']['nav_title']['languageField'] = 'sys_language_uid';
+        $GLOBALS['TCA']['pages']['columns']['nav_title']['languageField'] = 'language_tag';
         $GLOBALS['TCA']['pages']['columns']['nav_title']['config']['eval'] = 'unique';
         $actionService = new ActionService();
         $map = $actionService->createNewRecord('pages', -self::PAGE_DATAHANDLER, [
@@ -127,14 +127,14 @@ final class GetUniqueTranslationTest extends FunctionalTestCase
         // Mis-using the "nav_title" field in the scenario data-set to check for uniqueness
         $GLOBALS['TCA']['pages']['columns']['nav_title']['l10n_mode'] = 'exclude';
         $GLOBALS['TCA']['pages']['columns']['nav_title']['transOrigPointerField'] = 'l10n_parent';
-        $GLOBALS['TCA']['pages']['columns']['nav_title']['languageField'] = 'sys_language_uid';
+        $GLOBALS['TCA']['pages']['columns']['nav_title']['languageField'] = 'language_tag';
         $GLOBALS['TCA']['pages']['columns']['nav_title']['config']['eval'] = 'unique';
         $actionService = new ActionService();
         $map = $actionService->createNewRecord('pages', -self::PAGE_DATAHANDLER, [
             'title' => 'New Page',
             'doktype' => 1,
             'nav_title' => 'datahandler',
-            'sys_language_uid' => 1,
+            'language_tag' => 1,
         ]);
         $newPageId = $map['pages'][0];
         $defaultLanguageRecord = BackendUtility::getRecord('pages', self::PAGE_DATAHANDLER);

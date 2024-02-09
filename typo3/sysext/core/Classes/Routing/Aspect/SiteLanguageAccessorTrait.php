@@ -34,22 +34,22 @@ trait SiteLanguageAccessorTrait
     /**
      * Resolves one record out of given language fallbacks.
      */
-    protected function resolveLanguageFallback(array $results, ?string $languageFieldName, ?array $languageIds): ?array
+    protected function resolveLanguageFallback(array $results, ?string $languageFieldName, ?array $languageCodes): ?array
     {
         if ($results === []) {
             return null;
         }
-        if ($languageFieldName === null || $languageIds === null) {
+        if ($languageFieldName === null || $languageCodes === null) {
             return $results[0];
         }
         usort(
             $results,
             // orders records by there occurrence in $languageFallbackIds
-            static function (array $a, array $b) use ($languageFieldName, $languageIds): int {
+            static function (array $a, array $b) use ($languageFieldName, $languageCodes): int {
                 $languageA = (int)$a[$languageFieldName];
                 $languageB = (int)$b[$languageFieldName];
-                return array_search($languageA, $languageIds, true)
-                    - array_search($languageB, $languageIds, true);
+                return array_search($languageA, $languageCodes, true)
+                    - array_search($languageB, $languageCodes, true);
             }
         );
         return $results[0];
@@ -66,16 +66,16 @@ trait SiteLanguageAccessorTrait
      *
      * @return int[]
      */
-    protected function resolveAllRelevantLanguageIds()
+    protected function resolveAllRelevantLanguageCodes()
     {
-        $languageIds = [-1, $this->siteLanguage->getLanguageId()];
+        $languageCodes = [-1, $this->siteLanguage->getLanguageCode()];
         foreach ($this->getLanguageAspect()->getFallbackChain() as $item) {
-            if (in_array($item, $languageIds, true) || !MathUtility::canBeInterpretedAsInteger($item)) {
+            if (in_array($item, $languageCodes, true) || !MathUtility::canBeInterpretedAsInteger($item)) {
                 continue;
             }
-            $languageIds[] = (int)$item;
+            $languageCodes[] = (int)$item;
         }
-        return $languageIds;
+        return $languageCodes;
     }
 
     /**

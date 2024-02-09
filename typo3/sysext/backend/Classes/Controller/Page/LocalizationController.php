@@ -82,12 +82,12 @@ class LocalizationController
     public function getUsedLanguagesInPage(ServerRequestInterface $request): ResponseInterface
     {
         $params = $request->getQueryParams();
-        if (!isset($params['pageId'], $params['languageId'])) {
+        if (!isset($params['pageId'], $params['languageCode'])) {
             return new JsonResponse(null, 400);
         }
 
         $pageId = (int)$params['pageId'];
-        $languageId = (int)$params['languageId'];
+        $languageTag = $params['languageCode'];
 
         $translationProvider = GeneralUtility::makeInstance(TranslationConfigurationProvider::class);
         $systemLanguages = $translationProvider->getSystemLanguages($pageId);
@@ -95,20 +95,20 @@ class LocalizationController
         $availableLanguages = [];
 
         // First check whether column has localized records
-        $elementsInColumnCount = $this->localizationRepository->getLocalizedRecordCount($pageId, $languageId);
+        $elementsInColumnCount = $this->localizationRepository->getLocalizedRecordCount($pageId, $languageTag);
         $result = [];
         if ($elementsInColumnCount !== 0) {
             // check elements in column - empty if source records do not exist anymore
-            $result = $this->localizationRepository->fetchOriginLanguage($pageId, $languageId);
+            $result = $this->localizationRepository->fetchOriginLanguage($pageId, $languageTag);
             if ($result !== []) {
-                $availableLanguages[] = $systemLanguages[$result['sys_language_uid']];
+                $availableLanguages[] = $systemLanguages[$result['language_tag']];
             }
         }
         if ($elementsInColumnCount === 0 || $result === []) {
-            $fetchedAvailableLanguages = $this->localizationRepository->fetchAvailableLanguages($pageId, $languageId);
+            $fetchedAvailableLanguages = $this->localizationRepository->fetchAvailableLanguages($pageId, $languageTag);
             foreach ($fetchedAvailableLanguages as $language) {
-                if (isset($systemLanguages[$language['sys_language_uid']])) {
-                    $availableLanguages[] = $systemLanguages[$language['sys_language_uid']];
+                if (isset($systemLanguages[$language['language_tag']])) {
+                    $availableLanguages[] = $systemLanguages[$language['language_tag']];
                 }
             }
         }
@@ -137,19 +137,19 @@ class LocalizationController
     public function getRecordLocalizeSummary(ServerRequestInterface $request): ResponseInterface
     {
         $params = $request->getQueryParams();
-        if (!isset($params['pageId'], $params['destLanguageId'], $params['languageId'])) {
+        if (!isset($params['pageId'], $params['destLanguageCode'], $params['languageCode'])) {
             return new JsonResponse(null, 400);
         }
 
         $pageId = (int)$params['pageId'];
-        $destLanguageId = (int)$params['destLanguageId'];
-        $languageId = (int)$params['languageId'];
+        $destLanguageCode = (int)$params['destLanguageCode'];
+        $languageTag = (int)$params['languageCode'];
 
         $records = [];
         $result = $this->localizationRepository->getRecordsToCopyDatabaseResult(
             $pageId,
-            $destLanguageId,
-            $languageId,
+            $destLanguageCode,
+            $languageTag,
             '*'
         );
 
@@ -184,7 +184,7 @@ class LocalizationController
     public function localizeRecords(ServerRequestInterface $request): ResponseInterface
     {
         $params = $request->getQueryParams();
-        if (!isset($params['pageId'], $params['srcLanguageId'], $params['destLanguageId'], $params['action'], $params['uidList'])) {
+        if (!isset($params['pageId'], $params['srcLanguageCode'], $params['destLanguageCode'], $params['action'], $params['uidList'])) {
             return new JsonResponse(null, 400);
         }
 
@@ -197,8 +197,8 @@ class LocalizationController
         // Filter transmitted but invalid uids
         $params['uidList'] = $this->filterInvalidUids(
             (int)$params['pageId'],
-            (int)$params['destLanguageId'],
-            (int)$params['srcLanguageId'],
+            (int)$params['destLanguageCode'],
+            (int)$params['srcLanguageCode'],
             $params['uidList']
         );
 
@@ -213,15 +213,15 @@ class LocalizationController
      */
     protected function filterInvalidUids(
         int $pageId,
-        int $destLanguageId,
-        int $srcLanguageId,
+        int $destLanguageCode,
+        int $srcLanguageCode,
         array $transmittedUidList
     ): array {
         // Get all valid uids that can be processed
         $validUidList = $this->localizationRepository->getRecordsToCopyDatabaseResult(
             $pageId,
-            $destLanguageId,
-            $srcLanguageId,
+            $destLanguageCode,
+            $srcLanguageCode,
             'uid'
         );
 
@@ -235,7 +235,7 @@ class LocalizationController
      */
     protected function process($params): void
     {
-        $destLanguageId = (int)$params['destLanguageId'];
+        $destLanguageCode = (int)$params['destLanguageCode'];
 
         // Build command map
         $cmd = [
@@ -246,11 +246,11 @@ class LocalizationController
             foreach ($params['uidList'] as $currentUid) {
                 if ($params['action'] === static::ACTION_LOCALIZE) {
                     $cmd['tt_content'][$currentUid] = [
-                        'localize' => $destLanguageId,
+                        'localize' => $destLanguageCode,
                     ];
                 } else {
                     $cmd['tt_content'][$currentUid] = [
-                        'copyToLanguage' => $destLanguageId,
+                        'copyToLanguage' => $destLanguageCode,
                     ];
                 }
             }

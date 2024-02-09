@@ -181,7 +181,7 @@ final class FileCollectionRegistryTest extends UnitTestCase
         ];
 
         // check type
-        self::assertEquals('sys_language_uid, l10n_parent, l10n_diffsource, title, --palette--;;1, type, something', $GLOBALS['TCA']['sys_file_collection']['types']['my_type']['showitem']);
+        self::assertEquals('language_tag, l10n_parent, l10n_diffsource, title, --palette--;;1, type, something', $GLOBALS['TCA']['sys_file_collection']['types']['my_type']['showitem']);
 
         // check if columns.type.item exist
         self::assertEquals($type, $GLOBALS['TCA']['sys_file_collection']['columns']['type']['config']['items'][1]['value']);

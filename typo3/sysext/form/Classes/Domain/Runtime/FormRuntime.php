@@ -1039,7 +1039,7 @@ class FormRuntime implements RootRenderableInterface, \ArrayAccess
                 ],
             ];
             $this->currentSiteLanguage = GeneralUtility::makeInstance(Site::class, 'form-dummy', $pageId, $fakeSiteConfiguration)
-                ->getLanguageById($languageId);
+                ->getLanguageByCode($languageId);
         }
     }
 

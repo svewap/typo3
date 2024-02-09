@@ -138,7 +138,7 @@ final class SiteTest extends UnitTestCase
                 ],
             ],
         ]);
-        self::assertEquals(new Uri($expected), $subject->getLanguageById(0)->getBase());
+        self::assertEquals(new Uri($expected), $subject->getLanguageByCode(0)->getBase());
     }
 
     /**

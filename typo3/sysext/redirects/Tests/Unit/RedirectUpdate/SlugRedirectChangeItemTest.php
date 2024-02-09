@@ -31,7 +31,7 @@ final class SlugRedirectChangeItemTest extends UnitTestCase
     public function withChangedReturnsNewInstanceWithChangedSet(): void
     {
         $changeItem = $this->createInitialChangeItem();
-        $extendedChangeItem = $changeItem->withChanged(['uid' => 1, 'sys_language_uid' => 0, 'slug' => '/changed']);
+        $extendedChangeItem = $changeItem->withChanged(['uid' => 1, 'language_tag' => 0, 'slug' => '/changed']);
 
         self::assertSame('/changed', $extendedChangeItem->getChanged()['slug'] ?? null);
     }
@@ -54,7 +54,7 @@ final class SlugRedirectChangeItemTest extends UnitTestCase
             pageId: 1,
             site: $this->createMock(Site::class),
             siteLanguage: $this->createMock(SiteLanguage::class),
-            original: ['uid' => 1, 'sys_language_uid' => 0, 'slug' => '/initial'],
+            original: ['uid' => 1, 'language_tag' => 0, 'slug' => '/initial'],
             sourcesCollection: new RedirectSourceCollection(),
             changed: null
         );

@@ -139,9 +139,9 @@ class TcaInlineConfiguration implements FormDataProviderInterface
     }
 
     /**
-     * Set default value for child records 'sys_language_uid' field. This is relevant if a localized
+     * Set default value for child records 'language_tag' field. This is relevant if a localized
      * parent is edited and a child is added via the ajax call. The child should then have the same
-     * sys_language_uid as the parent.
+     * language_tag as the parent.
      * The method verifies if the parent is a localized parent, and writes the current languageField
      * value into TCA ['config']['inline']['parentSysLanguageUid'] of the parent inline TCA field. The whole
      * ['config'] section is transferred to the 'create new child' ajax controller, the value is then used within

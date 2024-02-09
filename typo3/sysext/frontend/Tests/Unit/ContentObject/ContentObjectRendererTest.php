@@ -1748,7 +1748,7 @@ final class ContentObjectRendererTest extends UnitTestCase
             'title' => 'languageTitle',
             'navigationTitle' => 'German',
         ]);
-        $language = $site->getLanguageById(1);
+        $language = $site->getLanguageByCode('en');
         $request = $request->withAttribute('language', $language);
         $this->subject->setRequest($request);
         self::assertEquals('German', $this->subject->getData('siteLanguage:navigationTitle'));
@@ -3958,7 +3958,7 @@ final class ContentObjectRendererTest extends UnitTestCase
         $subject = new ContentObjectRenderer();
         $site = $this->createSiteWithLanguage([
             'base' => '/',
-            'languageId' => 2,
+            'languageCode' => 'en',
             'locale' => 'en_UK',
         ]);
         $request = (new ServerRequest())->withAttribute('language', $site->getLanguageById(2));
@@ -5519,7 +5519,7 @@ final class ContentObjectRendererTest extends UnitTestCase
             'locale' => $language,
         ]);
         $request = new ServerRequest();
-        $request = $request->withAttribute('language', $site->getLanguageById(2));
+        $request = $request->withAttribute('language', $site->getLanguageByCode('en'));
         $this->subject->setRequest($request);
         self::assertSame(
             $expected,

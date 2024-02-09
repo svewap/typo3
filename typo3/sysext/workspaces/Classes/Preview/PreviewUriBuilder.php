@@ -90,7 +90,7 @@ class PreviewUriBuilder
         try {
             $site = $siteFinder->getSiteByPageId($uid);
             try {
-                $language = $site->getLanguageById($languageId);
+                $language = $site->getLanguageByCode($languageId);
             } catch (\InvalidArgumentException $e) {
                 $language = $site->getDefaultLanguage();
             }
@@ -303,7 +303,7 @@ class PreviewUriBuilder
             ->add(GeneralUtility::makeInstance(DeletedRestriction::class))
             ->add(GeneralUtility::makeInstance(WorkspaceRestriction::class, $this->getBackendUser()->workspace));
 
-        $result = $queryBuilder->select('sys_language_uid')
+        $result = $queryBuilder->select('language_tag')
             ->from('pages')
             ->where(
                 $queryBuilder->expr()->eq(
@@ -314,7 +314,7 @@ class PreviewUriBuilder
             ->executeQuery();
 
         while ($row = $result->fetchAssociative()) {
-            $languageId = (int)$row['sys_language_uid'];
+            $languageId = (int)$row['language_tag'];
             // Only add links to active languages the user has access to
             if (isset($systemLanguages[$languageId]) && $this->getBackendUser()->checkLanguageAccess($languageId)) {
                 $languageOptions[$languageId] = $systemLanguages[$languageId]['title'];

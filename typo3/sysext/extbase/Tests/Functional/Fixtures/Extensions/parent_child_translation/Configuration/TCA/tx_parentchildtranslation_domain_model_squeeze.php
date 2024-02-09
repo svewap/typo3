@@ -7,7 +7,7 @@ return [
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'versioningWS' => true,
-        'languageField' => 'sys_language_uid',
+        'languageField' => 'language_tag',
         'transOrigPointerField' => 'l10n_parent',
         'transOrigDiffSourceField' => 'l10n_diffsource',
         'delete' => 'deleted',
@@ -21,11 +21,11 @@ return [
     ],
     'types' => [
         '1' => ['showitem' => 'title, child,
-        --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden',
+        --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, language_tag, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden',
         ],
     ],
     'columns' => [
-        'sys_language_uid' => [
+        'language_tag' => [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
@@ -33,7 +33,7 @@ return [
             ],
         ],
         'l10n_parent' => [
-            'displayCond' => 'FIELD:sys_language_uid:>:0',
+            'displayCond' => 'FIELD:language_tag:>:0',
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'select',
@@ -43,7 +43,7 @@ return [
                     ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => 'tx_parentchildtranslation_domain_model_main',
-                'foreign_table_where' => 'AND {#tx_parentchildtranslation_domain_model_main}.{#pid}=###CURRENT_PID### AND {#tx_parentchildtranslation_domain_model_main}.{#sys_language_uid} IN (-1,0)',
+                'foreign_table_where' => 'AND {#tx_parentchildtranslation_domain_model_main}.{#pid}=###CURRENT_PID### AND {#tx_parentchildtranslation_domain_model_main}.{#language_tag} IN (-1,0)',
             ],
         ],
         'l10n_diffsource' => [
@@ -75,7 +75,7 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'foreign_table' => 'tx_parentchildtranslation_domain_model_child',
-                'foreign_table_where' => 'AND {#tx_parentchildtranslation_domain_model_child}.{#sys_language_uid} IN (0,-1)',
+                'foreign_table_where' => 'AND {#tx_parentchildtranslation_domain_model_child}.{#language_tag} IN (0,-1)',
                 'default' => 0,
                 'minitems' => 0,
                 'maxitems' => 1,

@@ -770,17 +770,17 @@ class Typo3DbQueryParser
         $languageAspect = $querySettings->getLanguageAspect();
 
         $transOrigPointerField = $GLOBALS['TCA'][$tableName]['ctrl']['transOrigPointerField'] ?? '';
-        if (!$transOrigPointerField || !$languageAspect->getContentId()) {
+        if (!$transOrigPointerField || !$languageAspect->getContentLanguageCode()) {
             return $this->queryBuilder->expr()->in(
                 $tableAlias . '.' . $languageField,
-                [$languageAspect->getContentId(), -1]
+                [(string)$languageAspect->getContentLanguageCode(), -1]
             );
         }
 
         if (!$languageAspect->doOverlays()) {
             return $this->queryBuilder->expr()->in(
                 $tableAlias . '.' . $languageField,
-                [$languageAspect->getContentId(), -1]
+                [(string)$languageAspect->getContentLanguageCode(), -1]
             );
         }
 
@@ -801,7 +801,7 @@ class Typo3DbQueryParser
         $andConditions[] = $this->queryBuilder->expr()->eq($tableAlias . '.' . $languageField, -1);
         // translated records where a default language exists
         $andConditions[] = $this->queryBuilder->expr()->and(
-            $this->queryBuilder->expr()->eq($tableAlias . '.' . $languageField, $languageAspect->getContentId()),
+            $this->queryBuilder->expr()->eq($tableAlias . '.' . $languageField, $languageAspect->getContentLanguageCode()),
             $this->queryBuilder->expr()->in(
                 $tableAlias . '.' . $transOrigPointerField,
                 $defaultLanguageRecordsSubSelect->getSQL()
@@ -829,7 +829,7 @@ class Typo3DbQueryParser
                 ->where(
                     $queryBuilderForSubselect->expr()->and(
                         $queryBuilderForSubselect->expr()->gt($translatedOnlyTableAlias . '.' . $transOrigPointerField, 0),
-                        $queryBuilderForSubselect->expr()->eq($translatedOnlyTableAlias . '.' . $languageField, $languageAspect->getContentId())
+                        $queryBuilderForSubselect->expr()->eq($translatedOnlyTableAlias . '.' . $languageField, $languageAspect->getContentLanguageCode())
                     )
                 );
             // records in default language, which do not have a translation

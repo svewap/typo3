@@ -576,16 +576,15 @@ class BackendUserAuthentication extends AbstractUserAuthentication
     /**
      * Checking if a language value (-1, 0 and >0) is allowed to be edited by the user.
      *
-     * @param int $langValue Language value to evaluate
+     * @param string $languageTag Language value to evaluate
      * @return bool Returns TRUE if the language value is allowed, otherwise FALSE.
      */
-    public function checkLanguageAccess($langValue)
+    public function checkLanguageAccess(string $languageTag)
     {
         // The users language list must be non-blank - otherwise all languages are allowed.
         if (trim($this->groupData['allowed_languages']) !== '') {
-            $langValue = (int)$langValue;
             // Language must either be explicitly allowed OR the lang Value be "-1" (all languages)
-            if ($langValue != -1 && !$this->check('allowed_languages', (string)$langValue)) {
+            if ($languageTag != -1 && !$this->check('allowed_languages', $languageTag)) {
                 return false;
             }
         }

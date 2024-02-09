@@ -162,7 +162,7 @@ final class FormInlineAjaxControllerTest extends FunctionalTestCase
         $body = (string)$response->getBody();
         $jsonArray = json_decode($body, true);
 
-        self::assertDoesNotMatchRegularExpression('/<select[^>]* name="data\[tx_testirrecsv_offer\]\[NEW[1-9]+\]\[sys_language_uid\]"[^>]*>/', $jsonArray['data']);
+        self::assertDoesNotMatchRegularExpression('/<select[^>]* name="data\[tx_testirrecsv_offer\]\[NEW[1-9]+\]\[language_tag\]"[^>]*>/', $jsonArray['data']);
     }
 
     protected function getContextForSysLanguageUid(int $sysLanguageUid): array

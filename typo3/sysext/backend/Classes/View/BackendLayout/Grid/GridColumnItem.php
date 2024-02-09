@@ -220,9 +220,9 @@ class GridColumnItem extends AbstractGridObject
         return $this->translations;
     }
 
-    public function addTranslation(int $languageId, GridColumnItem $translation): GridColumnItem
+    public function addTranslation(string $languageTag, GridColumnItem $translation): GridColumnItem
     {
-        $this->translations[$languageId] = $translation;
+        $this->translations[$languageTag] = $translation;
         return $this;
     }
 
@@ -270,7 +270,7 @@ class GridColumnItem extends AbstractGridObject
     {
         $allowInconsistentLanguageHandling = (bool)(BackendUtility::getPagesTSconfig($this->context->getPageId())['mod.']['web_layout.']['allowInconsistentLanguageHandling'] ?? false);
         return !$allowInconsistentLanguageHandling
-            && $this->getSiteLanguage()->getLanguageId() !== 0
+            && $this->getSiteLanguage()->getLanguageCode() !== 0
             && $this->context->getLanguageModeIdentifier() === 'mixed'
             && (int)($this->record[$GLOBALS['TCA'][$this->table]['ctrl']['transOrigPointerField'] ?? null] ?? 0) === 0;
     }
@@ -282,7 +282,7 @@ class GridColumnItem extends AbstractGridObject
 
         return (string)$uriBuilder->buildUriFromRoute('new_content_element_wizard', [
             'id' => $pageId,
-            'sys_language_uid' => $this->context->getSiteLanguage()->getLanguageId(),
+            'language_tag' => $this->context->getSiteLanguage()->getLanguageCode(),
             'colPos' => $this->column->getColumnNumber(),
             'uid_pid' => -$this->record['uid'],
             'returnUrl' => $GLOBALS['TYPO3_REQUEST']->getAttribute('normalizedParams')->getRequestUri(),

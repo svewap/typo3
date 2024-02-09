@@ -143,7 +143,7 @@ final class PolicyProviderTest extends FunctionalTestCase
                 ->withAttribute(
                     'siteLanguage',
                     $languagePreset !== null
-                        ? $site->getLanguageById($this->resolveLanguagePreset($languagePreset)['id'])
+                        ? $site->getLanguageByCode($this->resolveLanguagePreset($languagePreset)['id'])
                         : $site->getDefaultLanguage()
                 );
         }

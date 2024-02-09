@@ -10,7 +10,7 @@ return [
         'hideTable' => true,
         'delete' => 'deleted',
         'versioningWS' => true,
-        'languageField' => 'sys_language_uid',
+        'languageField' => 'language_tag',
         'transOrigPointerField' => 'l10n_parent',
         'transOrigDiffSourceField' => 'l10n_diffsource',
         'rootLevel' => -1,
@@ -27,14 +27,14 @@ return [
         'searchFields' => 'title,description,alternative',
     ],
     'columns' => [
-        'sys_language_uid' => [
+        'language_tag' => [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
                 'type' => 'language',
             ],
         ],
         'l10n_parent' => [
-            'displayCond' => 'FIELD:sys_language_uid:>:0',
+            'displayCond' => 'FIELD:language_tag:>:0',
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'group',
@@ -232,7 +232,7 @@ return [
         ],
         // File palette, hidden but needs to be included all the time
         'filePalette' => [
-            'showitem' => 'uid_local, hidden, sys_language_uid, l10n_parent',
+            'showitem' => 'uid_local, hidden, language_tag, l10n_parent',
             'isHiddenPalette' => true,
         ],
     ],

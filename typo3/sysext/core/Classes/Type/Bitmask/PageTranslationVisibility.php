@@ -50,7 +50,7 @@ final class PageTranslationVisibility extends BitSet
      *
      * Imagine this:
      * - You link to page 23 in language=5 (e.g. italian)
-     * - The page was never translated to language=5 (no pages record with sys_language_uid=5 created)
+     * - The page was never translated to language=5 (no pages record with language_tag=5 created)
      * => Should the fallback kick in or not?
      *
      * The answer depends on your use-case (e.g. fallback of italian to english etc) and can

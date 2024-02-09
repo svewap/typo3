@@ -79,7 +79,7 @@ class NewContentElementController
 
         // Setting internal vars:
         $this->id = (int)($parsedBody['id'] ?? $queryParams['id'] ?? 0);
-        $this->sys_language = (int)($parsedBody['sys_language_uid'] ?? $queryParams['sys_language_uid'] ?? 0);
+        $this->sys_language = ($parsedBody['language_tag'] ?? $queryParams['language_tag'] ?? 0);
         $this->returnUrl = GeneralUtility::sanitizeLocalUrl($parsedBody['returnUrl'] ?? $queryParams['returnUrl'] ?? '');
         $colPos = $parsedBody['colPos'] ?? $queryParams['colPos'] ?? null;
         $this->colPos = $colPos === null ? null : (int)$colPos;
@@ -147,7 +147,7 @@ class NewContentElementController
                                     StringUtility::getUniqueId('NEW') => array_replace($defaultValues, [
                                         'colPos' => $this->colPos,
                                         'pid' => $this->uid_pid,
-                                        'sys_language_uid' => $this->sys_language,
+                                        'language_tag' => $this->sys_language,
                                     ]),
                                 ],
                             ],
@@ -164,7 +164,7 @@ class NewContentElementController
                             'defVals' => [
                                 'tt_content' => array_replace($defaultValues, [
                                     'colPos' => $this->colPos,
-                                    'sys_language_uid' => $this->sys_language,
+                                    'language_tag' => $this->sys_language,
                                 ]),
                             ],
                         ]);
@@ -176,7 +176,7 @@ class NewContentElementController
                             [
                                 'action' => 'positionMap',
                                 'id' => $this->id,
-                                'sys_language_uid' => $this->sys_language,
+                                'language_tag' => $this->sys_language,
                                 'returnUrl' => $this->returnUrl,
                             ]
                         );

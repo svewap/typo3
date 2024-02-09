@@ -87,7 +87,7 @@ CREATE TABLE tt_content (
 
 	KEY parent (pid,sorting),
 	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
-	KEY language (l18n_parent,sys_language_uid)
+	KEY language (l18n_parent,language_tag)
 );
 
 #

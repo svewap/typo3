@@ -40,8 +40,8 @@ final class SlugRedirectChangeItemFactory
         if (!$original) {
             return null;
         }
-        $languageId = (int)$original['sys_language_uid'];
-        $defaultLanguagePageId = (int)$original['sys_language_uid'] > 0 ? (int)$original['l10n_parent'] : $pageId;
+        $languageId = (int)$original['language_tag'];
+        $defaultLanguagePageId = (int)$original['language_tag'] > 0 ? (int)$original['l10n_parent'] : $pageId;
         try {
             $site = $this->siteFinder->getSiteByPageId($defaultLanguagePageId);
         } catch (SiteNotFoundException) {
@@ -49,7 +49,7 @@ final class SlugRedirectChangeItemFactory
             // means that we should not handle the creation of them, thus no need to create a change item.
             return null;
         }
-        $siteLanguage = $site->getLanguageById($languageId);
+        $siteLanguage = $site->getLanguageByCode($languageId);
         // Verify we should process auto redirect creation or slug updating. If not return early avoiding to create
         // a change item which is superflous at all.
         $settings = $site->getSettings();

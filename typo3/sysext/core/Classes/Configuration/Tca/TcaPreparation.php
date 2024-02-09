@@ -84,7 +84,7 @@ class TcaPreparation
 
                 // Initialize default column configuration and merge it with already defined
                 $fieldConfig['config']['size'] ??= 20;
-                $fieldConfig['config']['foreign_table_where'] ??= ' AND {#sys_category}.{#sys_language_uid} IN (-1, 0)';
+                $fieldConfig['config']['foreign_table_where'] ??= ' AND {#sys_category}.{#language_tag} IN (-1, 0)';
 
                 // In case no relationship is given, fall back to "manyToMany"
                 if (empty($fieldConfig['config']['relationship'])) {

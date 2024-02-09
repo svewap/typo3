@@ -194,7 +194,7 @@ final class PageRecordProvider implements SearchProviderInterface
             $flagIconData = [];
             try {
                 $site = $this->siteFinder->getSiteByPageId($row['l10n_source'] > 0 ? $row['l10n_source'] : $row['uid']);
-                $siteLanguage = $site->getLanguageById($row['sys_language_uid']);
+                $siteLanguage = $site->getLanguageByCode($row['language_tag']);
                 $flagIconData = [
                     'identifier' => $siteLanguage->getFlagIdentifier(),
                     'title' => $siteLanguage->getTitle(),
@@ -210,7 +210,7 @@ final class PageRecordProvider implements SearchProviderInterface
                     ->setUrl($this->getShowLink($row)),
             ];
 
-            $pageLanguage = (int)($row['sys_language_uid'] ?? 0);
+            $pageLanguage = ($row['language_tag'] ?? 0);
             $previewUrl = PreviewUriBuilder::create($pageLanguage === 0 ? (int)$row['uid'] : (int)$row['l10n_parent'])
                 ->withRootLine(BackendUtility::BEgetRootLine($row['uid']))
                 ->withLanguage($pageLanguage)

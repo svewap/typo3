@@ -446,7 +446,7 @@ return [
             'Breaking-87193-DeprecatedFunctionalityRemoved.rst',
         ],
     ],
-    'TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController->sys_language_uid' => [
+    'TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController->language_tag' => [
         'restFiles' => [
             'Deprecation-85543-Language-relatedPropertiesInTypoScriptFrontendControllerAndPageRepository.rst',
             'Breaking-87193-DeprecatedFunctionalityRemoved.rst',
@@ -470,7 +470,7 @@ return [
             'Breaking-87193-DeprecatedFunctionalityRemoved.rst',
         ],
     ],
-    'TYPO3\CMS\Frontend\Page\PageRepository->sys_language_uid' => [
+    'TYPO3\CMS\Frontend\Page\PageRepository->language_tag' => [
         'restFiles' => [
             'Deprecation-85543-Language-relatedPropertiesInTypoScriptFrontendControllerAndPageRepository.rst',
             'Breaking-87193-DeprecatedFunctionalityRemoved.rst',

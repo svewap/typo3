@@ -115,7 +115,7 @@ class SiteConfiguration implements SingletonInterface
                 0 => [
                     'title' => 'English',
                     'enabled' => true,
-                    'languageId' => 0,
+                    'languageCode' => 0,
                     'base' => '/',
                     'locale' => 'en_US.UTF-8',
                     'navigationTitle' => 'English',

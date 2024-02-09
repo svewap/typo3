@@ -428,10 +428,10 @@ class DataMapper
         $query->getQuerySettings()->setRespectSysLanguage(false);
 
         $languageAspect = $query->getQuerySettings()->getLanguageAspect();
-        $languageUid = $languageAspect->getContentId();
+        $languageUid = $languageAspect->getContentLanguageCode();
         if ($this->query) {
             $languageAspect = $this->query->getQuerySettings()->getLanguageAspect();
-            $languageUid = $languageAspect->getContentId();
+            $languageUid = $languageAspect->getContentLanguageCode();
             if ($dataMap->getLanguageIdColumnName() !== null && !$this->query->getQuerySettings()->getRespectSysLanguage()) {
                 //pass language of parent record to child objects, so they can be overlaid correctly in case
                 //e.g. findByUid is used.

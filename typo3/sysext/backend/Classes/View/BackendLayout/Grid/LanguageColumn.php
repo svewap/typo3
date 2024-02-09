@@ -93,7 +93,7 @@ class LanguageColumn extends AbstractGridObject
     public function getAllowEditPage(): bool
     {
         return $this->getBackendUser()->check('tables_modify', 'pages')
-            && $this->getBackendUser()->checkLanguageAccess($this->context->getSiteLanguage()->getLanguageId());
+            && $this->getBackendUser()->checkLanguageAccess($this->context->getSiteLanguage()->getLanguageCode());
     }
 
     public function getPageEditTitle(): string
@@ -132,10 +132,10 @@ class LanguageColumn extends AbstractGridObject
     public function getPreviewUrlAttributes(): string
     {
         $pageId = $this->context->getPageId();
-        $languageId = $this->context->getSiteLanguage()->getLanguageId();
+        $languageTag = $this->context->getSiteLanguage()->getLanguageCode();
         return (string)PreviewUriBuilder::create($pageId)
             ->withRootLine(BackendUtility::BEgetRootLine($pageId))
-            ->withLanguage($languageId)
+            ->withLanguage($languageTag)
             ->serializeDispatcherAttributes();
     }
 }

@@ -1675,7 +1675,7 @@ abstract class AbstractMenuContentObject
         $selectSetup = [
             'pidInList' => $pid,
             'orderBy' => $altSortField,
-            'languageField' => 'sys_language_uid',
+            'languageField' => 'language_tag',
             'where' => '',
         ];
 

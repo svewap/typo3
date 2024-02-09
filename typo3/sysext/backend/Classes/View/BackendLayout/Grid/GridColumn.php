@@ -147,7 +147,7 @@ class GridColumn extends AbstractGridObject
         }
         $pageRecord = $this->context->getPageRecord();
         if (!$this->getBackendUser()->doesUserHaveAccess($pageRecord, Permission::CONTENT_EDIT)
-            || !$this->getBackendUser()->checkLanguageAccess($this->context->getSiteLanguage()->getLanguageId())) {
+            || !$this->getBackendUser()->checkLanguageAccess($this->context->getSiteLanguage()->getLanguageCode())) {
             return null;
         }
         $pageTitleParamForAltDoc = '&recTitle=' . rawurlencode(
@@ -165,7 +165,7 @@ class GridColumn extends AbstractGridObject
 
         return (string)$uriBuilder->buildUriFromRoute('new_content_element_wizard', [
             'id' => $pageId,
-            'sys_language_uid' => $this->context->getSiteLanguage()->getLanguageId(),
+            'language_tag' => $this->context->getSiteLanguage()->getLanguageCode(),
             'colPos' => $this->getColumnNumber(),
             'uid_pid' => $pageId,
             'returnUrl' => $GLOBALS['TYPO3_REQUEST']->getAttribute('normalizedParams')->getRequestUri(),
@@ -229,7 +229,7 @@ class GridColumn extends AbstractGridObject
         $pageRecord = $this->context->getPageRecord();
         return !$pageRecord['editlock']
             && $this->getBackendUser()->doesUserHaveAccess($pageRecord, Permission::CONTENT_EDIT)
-            && $this->getBackendUser()->checkLanguageAccess($this->context->getSiteLanguage()->getLanguageId());
+            && $this->getBackendUser()->checkLanguageAccess($this->context->getSiteLanguage()->getLanguageCode());
     }
 
     /**

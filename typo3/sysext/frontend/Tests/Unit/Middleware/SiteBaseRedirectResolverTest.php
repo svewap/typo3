@@ -108,7 +108,7 @@ final class SiteBaseRedirectResolverTest extends UnitTestCase
                 'https://twenty.one/fr/',
                 'https://twenty.one/fr',
                 $site1,
-                $site1->getLanguageById(1),
+                $site1->getLanguageByCode(1),
                 '/',
             ],
             'redirect to subsite by adding a slash' => [
@@ -129,7 +129,7 @@ final class SiteBaseRedirectResolverTest extends UnitTestCase
                 'https://twenty.one/fr/?foo[bar]=foobar&bar=foo',
                 'https://twenty.one/fr?foo%5Bbar%5D=foobar&bar=foo',
                 $site1,
-                $site1->getLanguageById(1),
+                $site1->getLanguageByCode(1),
                 '/',
             ],
         ];
@@ -203,7 +203,7 @@ final class SiteBaseRedirectResolverTest extends UnitTestCase
         // Request to default page
         $request = new ServerRequest($url, 'GET');
         $request = $request->withAttribute('site', $site);
-        $request = $request->withAttribute('language', $site->getLanguageById($languageId));
+        $request = $request->withAttribute('language', $site->getLanguageByCode($languageId));
         $subject = new SiteBaseRedirectResolver();
         $response = $subject->process($request, $this->siteFoundRequestHandler);
         self::assertEquals($expectedStatusCode, $response->getStatusCode());
@@ -230,19 +230,19 @@ final class SiteBaseRedirectResolverTest extends UnitTestCase
             'no redirect for base' => [
                 'https://twenty.one/en/',
                 $site1,
-                $site1->getLanguageById(0),
+                $site1->getLanguageByCode(0),
                 '',
             ],
             'no redirect for base when ID is given' => [
                 'https://twenty.one/index.php?id=2',
                 $site1,
-                $site1->getLanguageById(0),
+                $site1->getLanguageByCode(0),
                 '',
             ],
             'no redirect for base and nested arguments' => [
                 'https://twenty.one/en/?foo[bar]=foobar&bar=foo',
                 $site1,
-                $site1->getLanguageById(0),
+                $site1->getLanguageByCode(0),
                 '',
             ],
         ];

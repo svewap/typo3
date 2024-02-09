@@ -132,14 +132,14 @@ class RecordState
      * otherwise it's the `pid` of the current subject.
      *
      * Example:
-     * + pages: uid: 10, pid: 5, sys_language_uid: 0, l10n_parent: 0  -> returns 5
-     * + pages: uid: 11, pid: 5, sys_language_uid: 1, l10n_parent: 10 -> returns 10
+     * + pages: uid: 10, pid: 5, language_tag: 0, l10n_parent: 0  -> returns 5
+     * + pages: uid: 11, pid: 5, language_tag: 1, l10n_parent: 10 -> returns 10
      * + other: uid: 12, pid: 10 -> returns 10
      */
     public function resolveNodeIdentifier(): string
     {
         if ($this->subject->isNode()
-            && $this->context->getLanguageId() > 0
+            && $this->context->getLanguageCode() > 0
             && $this->languageLink !== null
         ) {
             return $this->languageLink->getHead()->getSubject()->getIdentifier();
@@ -154,15 +154,15 @@ class RecordState
      * the `pid` of the current subject.
      *
      * Example:
-     * + pages: uid: 10, pid: 5, sys_language_uid: 0, l10n_parent: 0  -> returns 10
-     * + pages: uid: 11, pid: 5, sys_language_uid: 1, l10n_parent: 10 -> returns 10
+     * + pages: uid: 10, pid: 5, language_tag: 0, l10n_parent: 0  -> returns 10
+     * + pages: uid: 11, pid: 5, language_tag: 1, l10n_parent: 10 -> returns 10
      * + pages in version, return online page ID
      * + other: uid: 12, pid: 10 -> returns 10
      */
     public function resolveNodeAggregateIdentifier(): string
     {
         if ($this->subject->isNode()
-            && $this->context->getLanguageId() > 0
+            && $this->context->getLanguageCode() > 0
             && $this->languageLink !== null
         ) {
             return $this->languageLink->getHead()->getSubject()->getIdentifier();

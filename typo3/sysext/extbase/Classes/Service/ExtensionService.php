@@ -181,7 +181,7 @@ class ExtensionService implements SingletonInterface
                             $queryBuilder->createNamedParameter('list')
                         ),
                         $queryBuilder->expr()->eq(
-                            'sys_language_uid',
+                            'language_tag',
                             $queryBuilder->createNamedParameter($languageId, Connection::PARAM_INT)
                         )
                     )

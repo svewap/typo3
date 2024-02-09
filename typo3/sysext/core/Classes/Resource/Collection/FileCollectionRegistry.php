@@ -89,7 +89,7 @@ class FileCollectionRegistry implements SingletonInterface
     public function addTypeToTCA($type, $label, $availableFields, array $additionalColumns = [])
     {
         $GLOBALS['TCA']['sys_file_collection']['types'][$type] = [
-            'showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, title, --palette--;;1, type, ' . $availableFields,
+            'showitem' => 'language_tag, l10n_parent, l10n_diffsource, title, --palette--;;1, type, ' . $availableFields,
         ];
 
         // search for existing type when found override label

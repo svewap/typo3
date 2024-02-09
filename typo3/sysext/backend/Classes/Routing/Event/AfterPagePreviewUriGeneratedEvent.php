@@ -29,7 +29,7 @@ final class AfterPagePreviewUriGeneratedEvent
     public function __construct(
         private UriInterface $previewUri,
         private readonly int $pageId,
-        private readonly int $languageId,
+        private readonly string $languageTag,
         private readonly array $rootline,
         private readonly string $section,
         private readonly array $additionalQueryParameters,
@@ -52,9 +52,9 @@ final class AfterPagePreviewUriGeneratedEvent
         return $this->pageId;
     }
 
-    public function getLanguageId(): int
+    public function getLanguageTag(): string
     {
-        return $this->languageId;
+        return $this->languageTag;
     }
 
     public function getRootline(): array
